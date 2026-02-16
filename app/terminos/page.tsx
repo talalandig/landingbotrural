@@ -18,7 +18,7 @@ export default function TerminosPage() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <img src="/BoTRURAL.svg" alt="BotRural" className="h-12" />
+              <img src="/BotRural.svg" alt="BotRural" className="h-12" />
             </Link>
             <div className="hidden md:flex gap-8 items-center">
               <Link href="/#funcionalidades" className="text-white/80 hover:text-white transition-colors text-sm">Funcionalidades</Link>

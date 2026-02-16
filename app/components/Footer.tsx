@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-10 mb-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <img src="/BoTRURAL.svg" alt="BotRural" className="h-10" />
+              <img src="/BotRural.svg" alt="BotRural" className="h-10" />
             </div>
             <p className="text-gray-500 text-sm mb-4">
               Gestion de campo simplificada con inteligencia artificial y WhatsApp.

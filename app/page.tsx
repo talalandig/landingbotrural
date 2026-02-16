@@ -512,7 +512,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <motion.div className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
-  <img src="/BoTRURAL.svg" alt="BotRural" className="h-12" />
+  <img src="/BotRural.svg" alt="BotRural" className="h-12" />
 </motion.div>
 
             <div className="hidden md:flex gap-8 items-center">
@@ -754,7 +754,7 @@ export default function Home() {
                   <div className="bg-white rounded-[2.5rem] overflow-hidden">
                     {/* Header */}
                     <div className="bg-[#075e54] px-4 py-5 flex items-center gap-3">
-  <img src="/BoTRURAL.svg" alt="BotRural" className="w-10 h-10 rounded-full" />
+  <img src="/BotRural.svg" alt="BotRural" className="w-10 h-10 rounded-full" />
   <div>
     <div className="font-bold text-white text-sm">BotRural</div>
     <div className="text-green-200 text-xs">en linea</div>

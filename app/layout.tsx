@@ -171,7 +171,7 @@ export default function RootLayout({
         url: SITE_URL,
         logo: {
           "@type": "ImageObject",
-          url: `${SITE_URL}/BoTRURAL.svg`,
+          url: `${SITE_URL}/BotRural.svg`,
         },
         description:
           "Plataforma de gestion rural con inteligencia artificial y WhatsApp. Ganaderia, agricultura, finanzas y clima en un solo lugar.",
