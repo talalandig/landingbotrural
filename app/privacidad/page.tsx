@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import Header from '../components/Header';
 
 export const metadata: Metadata = {
   title: 'Politica de Privacidad',
@@ -12,26 +13,7 @@ export const metadata: Metadata = {
 export default function PrivacidadPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      {/* Header - same as landing */}
-      <nav className="fixed top-0 w-full z-50 bg-black/95 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <img src="/BotRural.svg" alt="BotRural" className="h-12" />
-            </Link>
-            <div className="hidden md:flex gap-8 items-center">
-              <Link href="/#funcionalidades" className="text-white/80 hover:text-white transition-colors text-sm">Funcionalidades</Link>
-              <Link href="/#whatsapp" className="text-white/80 hover:text-white transition-colors text-sm">WhatsApp</Link>
-              <Link href="/#plataforma" className="text-white/80 hover:text-white transition-colors text-sm">Plataforma</Link>
-              <Link href="/login" className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:bg-purple-700 transition-all">
-                Ingresar
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-      {/* Spacer for fixed nav */}
-      <div className="h-[72px]" />
+      <Header />
 
       {/* Content */}
       <main className="max-w-4xl mx-auto px-6 py-16">
