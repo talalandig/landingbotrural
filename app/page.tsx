@@ -392,7 +392,9 @@ export default function Home() {
   const [autoPlayIndex, setAutoPlayIndex] = useState(0);
   const [userInteracted, setUserInteracted] = useState(false);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  const demoTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
   const whatsappRef = useRef<HTMLDivElement>(null);
+  const activeDemoRef = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -408,49 +410,71 @@ export default function Home() {
   // Auto-loop demos
   const demoOrder = WHATSAPP_FEATURES.map(f => f.demo);
 
-  const scheduleNextDemo = (currentIndex: number) => {
+  const clearAllDemoTimeouts = () => {
+    demoTimeoutsRef.current.forEach(t => clearTimeout(t));
+    demoTimeoutsRef.current = [];
     if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
-    autoPlayRef.current = setTimeout(() => {
-      const nextIndex = (currentIndex + 1) % demoOrder.length;
-      setAutoPlayIndex(nextIndex);
-      startChatDemoAuto(demoOrder[nextIndex], nextIndex);
-    }, 4500);
   };
 
-  const startChatDemoAuto = (demoType: string, index: number) => {
+  const runDemo = (demoType: string, demoIndex: number, sessionId: number) => {
+    clearAllDemoTimeouts();
+    activeDemoRef.current = sessionId;
+
     setSelectedDemo(demoType);
     setChatMessages([]);
+    setIsTyping(false);
 
     const demo = getDemoData(demoType);
-    setTimeout(() => setChatMessages([demo.userMsg]), 300);
-    setTimeout(() => setIsTyping(true), 1200);
-    setTimeout(() => {
+
+    const t1 = setTimeout(() => {
+      if (activeDemoRef.current !== sessionId) return;
+      setChatMessages([demo.userMsg]);
+    }, 300);
+
+    const t2 = setTimeout(() => {
+      if (activeDemoRef.current !== sessionId) return;
+      setIsTyping(true);
+    }, 1200);
+
+    const t3 = setTimeout(() => {
+      if (activeDemoRef.current !== sessionId) return;
       setIsTyping(false);
-      setChatMessages(prev => [...prev, demo.botResponse]);
-      scheduleNextDemo(index);
+      setChatMessages([demo.userMsg, demo.botResponse]);
     }, 2400);
+
+    const t4 = setTimeout(() => {
+      if (activeDemoRef.current !== sessionId) return;
+      const nextIndex = (demoIndex + 1) % demoOrder.length;
+      setAutoPlayIndex(nextIndex);
+      runDemo(demoOrder[nextIndex], nextIndex, sessionId);
+    }, 5000);
+
+    demoTimeoutsRef.current = [t1, t2, t3, t4];
   };
 
   // Start auto-play when whatsapp section is visible
   useEffect(() => {
+    const el = whatsappRef.current;
+    if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !userInteracted) {
-          startChatDemoAuto(demoOrder[0], 0);
-        }
-        if (!entry.isIntersecting) {
-          if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
+        if (entry.isIntersecting) {
+          const session = Date.now();
+          activeDemoRef.current = session;
+          runDemo(demoOrder[0], 0, session);
+        } else {
+          clearAllDemoTimeouts();
         }
       },
       { threshold: 0.3 }
     );
-    if (whatsappRef.current) observer.observe(whatsappRef.current);
+    observer.observe(el);
     return () => {
       observer.disconnect();
-      if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
+      clearAllDemoTimeouts();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInteracted]);
+  }, []);
 
   const getDemoData = (demoType: string) => {
     const demos: Record<string, { userMsg: any; botResponse: any }> = {
@@ -531,24 +555,9 @@ export default function Home() {
   };
 
   const startChatDemo = (demoType: string) => {
-    setUserInteracted(true);
-    if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
-
-    setSelectedDemo(demoType);
-    setChatMessages([]);
-
-    const demo = getDemoData(demoType);
     const clickedIndex = demoOrder.indexOf(demoType);
-
-    setTimeout(() => setChatMessages([demo.userMsg]), 300);
-    setTimeout(() => setIsTyping(true), 1200);
-    setTimeout(() => {
-      setIsTyping(false);
-      setChatMessages(prev => [...prev, demo.botResponse]);
-      // Continue auto-loop from next after user click
-      setUserInteracted(false);
-      scheduleNextDemo(clickedIndex);
-    }, 2400);
+    const session = Date.now();
+    runDemo(demoType, clickedIndex, session);
   };
 
   return (
