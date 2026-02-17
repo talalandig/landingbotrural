@@ -389,6 +389,10 @@ export default function Home() {
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [showMaiz, setShowMaiz] = useState(false);
+  const [autoPlayIndex, setAutoPlayIndex] = useState(0);
+  const [userInteracted, setUserInteracted] = useState(false);
+  const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  const whatsappRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -401,10 +405,54 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const startChatDemo = (demoType: string) => {
+  // Auto-loop demos
+  const demoOrder = WHATSAPP_FEATURES.map(f => f.demo);
+
+  const scheduleNextDemo = (currentIndex: number) => {
+    if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
+    autoPlayRef.current = setTimeout(() => {
+      const nextIndex = (currentIndex + 1) % demoOrder.length;
+      setAutoPlayIndex(nextIndex);
+      startChatDemoAuto(demoOrder[nextIndex], nextIndex);
+    }, 4500);
+  };
+
+  const startChatDemoAuto = (demoType: string, index: number) => {
     setSelectedDemo(demoType);
     setChatMessages([]);
 
+    const demo = getDemoData(demoType);
+    setTimeout(() => setChatMessages([demo.userMsg]), 300);
+    setTimeout(() => setIsTyping(true), 1200);
+    setTimeout(() => {
+      setIsTyping(false);
+      setChatMessages(prev => [...prev, demo.botResponse]);
+      scheduleNextDemo(index);
+    }, 2400);
+  };
+
+  // Start auto-play when whatsapp section is visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !userInteracted) {
+          startChatDemoAuto(demoOrder[0], 0);
+        }
+        if (!entry.isIntersecting) {
+          if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (whatsappRef.current) observer.observe(whatsappRef.current);
+    return () => {
+      observer.disconnect();
+      if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInteracted]);
+
+  const getDemoData = (demoType: string) => {
     const demos: Record<string, { userMsg: any; botResponse: any }> = {
       audio: {
         userMsg: { type: 'audio', sender: 'user', duration: '0:04', timestamp: '10:00' },
@@ -479,18 +527,27 @@ export default function Home() {
         }
       },
     };
+    return demos[demoType] || demos.audio;
+  };
 
-    const demo = demos[demoType] || demos.audio;
+  const startChatDemo = (demoType: string) => {
+    setUserInteracted(true);
+    if (autoPlayRef.current) clearTimeout(autoPlayRef.current);
 
-    setTimeout(() => {
-      setChatMessages([demo.userMsg]);
-    }, 300);
+    setSelectedDemo(demoType);
+    setChatMessages([]);
 
+    const demo = getDemoData(demoType);
+    const clickedIndex = demoOrder.indexOf(demoType);
+
+    setTimeout(() => setChatMessages([demo.userMsg]), 300);
     setTimeout(() => setIsTyping(true), 1200);
-
     setTimeout(() => {
       setIsTyping(false);
       setChatMessages(prev => [...prev, demo.botResponse]);
+      // Continue auto-loop from next after user click
+      setUserInteracted(false);
+      scheduleNextDemo(clickedIndex);
     }, 2400);
   };
 
@@ -668,30 +725,30 @@ export default function Home() {
       {/* ============================================================ */}
       {/* WHATSAPP BOT DEMO */}
       {/* ============================================================ */}
-      <section id="whatsapp" className="py-24 px-6 bg-gray-950 text-white">
+      <section id="whatsapp" ref={whatsappRef} className="py-16 md:py-24 px-4 md:px-6 bg-gray-950 text-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-10 md:mb-16"
           >
-            <span className="bg-[#00934a]/20 text-[#00934a] px-4 py-2 rounded-full text-sm font-semibold mb-4 inline-block">
+            <span className="bg-[#00934a]/20 text-[#00934a] px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4 inline-block">
               WhatsApp + IA
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-6">
               Tan simple como mandar un audio
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-sm md:text-xl text-gray-400 max-w-3xl mx-auto">
               Tu capataz no necesita aprender ninguna app. Manda un audio, un texto o una foto
               por WhatsApp y el bot registra todo con inteligencia artificial.
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
             {/* Feature buttons */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold mb-6 text-gray-300">Toca para ver la demo en vivo:</h3>
+            <div className="space-y-2 md:space-y-4">
+              <h3 className="text-sm md:text-xl font-bold mb-3 md:mb-6 text-gray-300">Toca para ver la demo en vivo:</h3>
               {WHATSAPP_FEATURES.map((feature, index) => (
                 <motion.button
                   key={index}
@@ -701,28 +758,28 @@ export default function Home() {
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.02, x: 5 }}
                   onClick={() => startChatDemo(feature.demo)}
-                  className={`w-full text-left p-5 rounded-2xl transition-all ${
+                  className={`w-full text-left p-3 md:p-5 rounded-xl md:rounded-2xl transition-all ${
                     selectedDemo === feature.demo
                       ? 'bg-[#00934a]/20 border-2 border-[#00934a]'
                       : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
                   }`}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-xl shrink-0 ${
+                  <div className="flex items-center md:items-start gap-3 md:gap-4">
+                    <div className={`p-2 md:p-3 rounded-lg md:rounded-xl shrink-0 ${
                       selectedDemo === feature.demo ? 'bg-[#00934a]' : 'bg-white/10'
                     }`}>
                       {feature.icon}
                     </div>
-                    <div>
-                      <h4 className="font-bold text-lg mb-1">{feature.title}</h4>
-                      <p className="text-gray-400 text-sm">{feature.description}</p>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-sm md:text-lg mb-0 md:mb-1">{feature.title}</h4>
+                      <p className="text-gray-400 text-xs md:text-sm hidden md:block">{feature.description}</p>
                     </div>
                   </div>
                 </motion.button>
               ))}
 
               {/* Extra: WhatsApp examples scrolling */}
-              <div className="mt-8 pt-6 border-t border-white/10">
+              <div className="hidden md:block mt-8 pt-6 border-t border-white/10">
                 <p className="text-gray-500 text-sm mb-4">Ejemplos de lo que podes decirle:</p>
                 <div className="space-y-2">
                   {WHATSAPP_EXAMPLES.slice(0, 5).map((ex, i) => (
@@ -762,7 +819,7 @@ export default function Home() {
 </div>
 
                     {/* Chat */}
-                    <div className="bg-[#ece5dd] min-h-[420px] max-h-[420px] overflow-y-auto p-3 space-y-2">
+                    <div className="bg-[#ece5dd] min-h-[320px] max-h-[320px] md:min-h-[420px] md:max-h-[420px] overflow-y-auto p-3 space-y-2">
                       <AnimatePresence mode="wait">
                         {chatMessages.map((msg, i) => (
                           <motion.div
@@ -867,10 +924,19 @@ export default function Home() {
                       </AnimatePresence>
 
                       {!selectedDemo && (
-                        <div className="flex items-center justify-center h-[380px]">
-                          <p className="text-gray-500 text-sm text-center px-8">
-                            Selecciona un ejemplo para ver como funciona
-                          </p>
+                        <div className="flex items-center justify-center h-[280px] md:h-[380px]">
+                          <div className="text-center px-8">
+                            <div className="flex gap-1.5 justify-center mb-3">
+                              {[0, 1, 2].map(i => (
+                                <motion.div key={i}
+                                  animate={{ y: [0, -4, 0] }}
+                                  transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.15 }}
+                                  className="w-2 h-2 bg-gray-400 rounded-full"
+                                />
+                              ))}
+                            </div>
+                            <p className="text-gray-500 text-xs md:text-sm">Cargando demo...</p>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -899,23 +965,23 @@ export default function Home() {
       {/* ============================================================ */}
       {/* PLATFORM FEATURES GRID */}
       {/* ============================================================ */}
-      <section id="funcionalidades" className="py-24 px-6 bg-white">
+      <section id="funcionalidades" className="py-16 md:py-24 px-4 md:px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-10 md:mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-6 text-gray-900">
               Todo lo que necesitas en un solo lugar
             </h2>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto">
+            <p className="text-sm md:text-xl text-gray-500 max-w-2xl mx-auto">
               Gestion completa de tu establecimiento: ganaderia, finanzas, costos, equipo y mas.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {PLATFORM_FEATURES.map((feature, index) => (
               <motion.div
                 key={index}
@@ -924,16 +990,16 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8 }}
-                className="group bg-white border border-gray-200 p-7 rounded-2xl hover:shadow-xl hover:border-gray-300 transition-all"
+                className="group bg-white border border-gray-200 p-4 md:p-7 rounded-xl md:rounded-2xl hover:shadow-xl hover:border-gray-300 transition-all"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`bg-gradient-to-br ${feature.color} w-12 h-12 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform`}>
+                <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-4">
+                  <div className={`bg-gradient-to-br ${feature.color} w-9 h-9 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform [&>svg]:w-5 [&>svg]:h-5 md:[&>svg]:w-7 md:[&>svg]:h-7`}>
                     {feature.icon}
                   </div>
-                  <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{feature.tag}</span>
+                  <span className="text-[10px] md:text-xs font-semibold text-gray-400 uppercase tracking-wider">{feature.tag}</span>
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-gray-900">{feature.title}</h3>
-                <p className="text-gray-500 leading-relaxed text-sm">{feature.description}</p>
+                <h3 className="text-sm md:text-xl font-bold mb-1 md:mb-2 text-gray-900">{feature.title}</h3>
+                <p className="text-gray-500 leading-relaxed text-xs md:text-sm hidden md:block">{feature.description}</p>
               </motion.div>
             ))}
           </div>
