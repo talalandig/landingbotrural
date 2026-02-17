@@ -252,24 +252,23 @@ function WhatsAppBubble({ text, isUser, delay = 0 }: { text: string; isUser: boo
 // ============================================================
 
 const AGRI_CULTIVOS = [
-  { id: 'tb-lotus', nombre: 'Trebol blanco + Lotus', ha: '145 ha', color: 'bg-emerald-500', colorLight: 'bg-emerald-100', border: 'border-emerald-300', text: 'text-emerald-800', hex: '#10b981', hexLight: '#d1fae5', hexBorder: '#6ee7b7' },
-  { id: 'avena', nombre: 'Avena', ha: '95 ha', color: 'bg-amber-500', colorLight: 'bg-amber-100', border: 'border-amber-300', text: 'text-amber-800', hex: '#f59e0b', hexLight: '#fef3c7', hexBorder: '#fcd34d' },
-  { id: 'sorgo', nombre: 'Sorgo forrajero', ha: '60 ha', color: 'bg-pink-500', colorLight: 'bg-pink-100', border: 'border-pink-300', text: 'text-pink-800', hex: '#ec4899', hexLight: '#fce7f3', hexBorder: '#f9a8d4' },
-  { id: 'campo', nombre: 'Campo natural', ha: '120 ha', color: 'bg-violet-500', colorLight: 'bg-violet-100', border: 'border-violet-300', text: 'text-violet-800', hex: '#8b5cf6', hexLight: '#ede9fe', hexBorder: '#c4b5fd' },
-  { id: 'festuca', nombre: 'Festuca + T. rojo', ha: '80 ha', color: 'bg-cyan-500', colorLight: 'bg-cyan-100', border: 'border-cyan-300', text: 'text-cyan-800', hex: '#06b6d4', hexLight: '#cffafe', hexBorder: '#67e8f9' },
+  { id: 'tb-lotus', nombre: 'Trebol + Lotus', ha: '145 ha', hex: '#10b981', hexLight: '#d1fae5', hexBorder: '#6ee7b7' },
+  { id: 'avena', nombre: 'Avena', ha: '95 ha', hex: '#f59e0b', hexLight: '#fef3c7', hexBorder: '#fcd34d' },
+  { id: 'sorgo', nombre: 'Sorgo', ha: '60 ha', hex: '#ec4899', hexLight: '#fce7f3', hexBorder: '#f9a8d4' },
+  { id: 'campo', nombre: 'Campo natural', ha: '120 ha', hex: '#8b5cf6', hexLight: '#ede9fe', hexBorder: '#c4b5fd' },
+  { id: 'festuca', nombre: 'Festuca', ha: '80 ha', hex: '#06b6d4', hexLight: '#cffafe', hexBorder: '#67e8f9' },
 ];
 
+// Treemap layout: each potrero has a % width and % height relative to the container
 const AGRI_POTREROS = [
-  { nombre: 'Norte', ha: '120', cultivo: 'tb-lotus', col: 'col-span-3', row: 'row-span-2' },
-  { nombre: 'Sur', ha: '95', cultivo: 'avena', col: 'col-span-2', row: 'row-span-2' },
-  { nombre: 'Rincon', ha: '45', cultivo: 'tb-lotus', col: 'col-span-1', row: 'row-span-1' },
-  { nombre: 'Este', ha: '60', cultivo: 'sorgo', col: 'col-span-2', row: 'row-span-1' },
-  { nombre: 'Costa', ha: '80', cultivo: 'campo', col: 'col-span-2', row: 'row-span-1' },
-  { nombre: 'Oeste', ha: '55', cultivo: 'campo', col: 'col-span-2', row: 'row-span-1' },
-  { nombre: 'Bajo', ha: '40', cultivo: 'festuca', col: 'col-span-2', row: 'row-span-1' },
-  { nombre: 'Cuchilla', ha: '35', cultivo: 'avena', col: 'col-span-1', row: 'row-span-1' },
-  { nombre: 'Laguna', ha: '40', cultivo: 'campo', col: 'col-span-2', row: 'row-span-1' },
-  { nombre: 'Cerro', ha: '30', cultivo: 'festuca', col: 'col-span-3', row: 'row-span-1' },
+  { nombre: 'Norte', ha: '120', cultivo: 'tb-lotus', x: 0, y: 0, w: 60, h: 40 },
+  { nombre: 'Sur', ha: '95', cultivo: 'avena', x: 60, y: 0, w: 40, h: 40 },
+  { nombre: 'Rincon', ha: '45', cultivo: 'tb-lotus', x: 0, y: 40, w: 20, h: 30 },
+  { nombre: 'Este', ha: '60', cultivo: 'sorgo', x: 20, y: 40, w: 40, h: 30 },
+  { nombre: 'Costa', ha: '80', cultivo: 'campo', x: 60, y: 40, w: 40, h: 30 },
+  { nombre: 'Oeste', ha: '55', cultivo: 'campo', x: 0, y: 70, w: 35, h: 30 },
+  { nombre: 'Bajo', ha: '40', cultivo: 'festuca', x: 35, y: 70, w: 30, h: 30 },
+  { nombre: 'Cuchilla', ha: '35', cultivo: 'avena', x: 65, y: 70, w: 35, h: 30 },
 ];
 
 function AgriculturaVisual() {
@@ -278,24 +277,44 @@ function AgriculturaVisual() {
   const getCultivoData = (id: string) => AGRI_CULTIVOS.find(c => c.id === id)!;
 
   return (
-    <div className="w-full flex flex-col sm:flex-row gap-4">
+    <div className="w-full flex flex-col lg:flex-row gap-3 md:gap-4">
       {/* Treemap - mapa de potreros */}
-      <div className="sm:w-[60%] bg-white rounded-2xl p-5 sm:p-6 shadow-sm">
-        <div className="text-sm font-bold text-gray-700 mb-4">Superficie por potrero</div>
-        <div className="grid grid-cols-5 grid-rows-5 gap-2 aspect-square">
+      <div className="lg:w-[60%] bg-white rounded-xl md:rounded-2xl p-3 md:p-6 shadow-sm">
+        <div className="text-xs md:text-sm font-bold text-gray-700 mb-2 md:mb-4">Superficie por potrero</div>
+        <div className="relative w-full" style={{ paddingBottom: '75%' }}>
           {AGRI_POTREROS.map((p, i) => {
             const cultivo = getCultivoData(p.cultivo);
             const isActive = !activeCultivo || activeCultivo === p.cultivo;
+            const gap = 2; // px gap between cells
             return (
               <div
                 key={i}
-                className={`${p.col} ${p.row} ${cultivo.colorLight} ${cultivo.border} border-2 rounded-xl flex flex-col items-center justify-center transition-all duration-300 cursor-pointer ${
-                  isActive ? 'opacity-100 scale-100' : 'opacity-20 scale-[0.98]'
-                }`}
+                className="absolute overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all duration-300"
+                style={{
+                  left: `${p.x}%`,
+                  top: `${p.y}%`,
+                  width: `calc(${p.w}% - ${gap}px)`,
+                  height: `calc(${p.h}% - ${gap}px)`,
+                  backgroundColor: isActive ? cultivo.hexLight : '#f9fafb',
+                  border: `2px solid ${isActive ? cultivo.hexBorder : '#e5e7eb'}`,
+                  borderRadius: '8px',
+                  opacity: isActive ? 1 : 0.2,
+                  transform: isActive ? 'scale(1)' : 'scale(0.98)',
+                }}
                 onClick={() => setActiveCultivo(activeCultivo === p.cultivo ? null : p.cultivo)}
               >
-                <span className={`text-sm font-bold ${cultivo.text} leading-tight`}>{p.nombre}</span>
-                <span className={`text-xs ${cultivo.text} opacity-70`}>{p.ha} ha</span>
+                <span
+                  className="font-bold leading-none text-[10px] md:text-xs truncate max-w-full px-1"
+                  style={{ color: cultivo.hex }}
+                >
+                  {p.nombre}
+                </span>
+                <span
+                  className="text-[8px] md:text-[10px] leading-none mt-0.5 opacity-70"
+                  style={{ color: cultivo.hex }}
+                >
+                  {p.ha} ha
+                </span>
               </div>
             );
           })}
@@ -303,13 +322,13 @@ function AgriculturaVisual() {
       </div>
 
       {/* Cultivos - panel lateral */}
-      <div className="sm:w-[40%] bg-white rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col">
+      <div className="lg:w-[40%] bg-white rounded-xl md:rounded-2xl p-3 md:p-6 shadow-sm flex flex-col">
         <div className="flex items-center gap-2 mb-1">
-          <Sprout className="w-4 h-4 text-gray-400" />
-          <span className="text-sm font-bold text-gray-700">Cultivos</span>
+          <Sprout className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-400" />
+          <span className="text-xs md:text-sm font-bold text-gray-700">Cultivos</span>
         </div>
-        <p className="text-[11px] text-gray-400 mb-5">Selecciona un cultivo para filtrar en el mapa</p>
-        <div className="space-y-2 flex-1">
+        <p className="text-[10px] md:text-[11px] text-gray-400 mb-3 md:mb-5">Toca un cultivo para filtrar en el mapa</p>
+        <div className="grid grid-cols-2 lg:grid-cols-1 gap-1.5 md:gap-2 flex-1">
           {AGRI_CULTIVOS.map((c) => {
             const isSelected = activeCultivo === c.id;
             const isDimmed = activeCultivo && !isSelected;
@@ -317,48 +336,33 @@ function AgriculturaVisual() {
               <button
                 key={c.id}
                 onClick={() => setActiveCultivo(isSelected ? null : c.id)}
-                className="w-full text-left flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden"
+                className="text-left flex items-center gap-2 md:gap-3 px-2.5 py-2 md:px-3.5 md:py-3 rounded-lg md:rounded-xl transition-all duration-300 group relative overflow-hidden"
                 style={{
                   backgroundColor: isSelected ? c.hexLight : isDimmed ? '#f9fafb' : `${c.hex}08`,
                   border: `2px solid ${isSelected ? c.hexBorder : 'transparent'}`,
                   opacity: isDimmed ? 0.35 : 1,
-                  transform: isSelected ? 'scale(1.02)' : 'scale(1)',
-                  boxShadow: isSelected ? `0 4px 12px ${c.hex}25` : 'none',
                 }}
               >
                 <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ backgroundColor: `${c.hex}10` }}
+                  className="w-3 h-3 md:w-4 md:h-4 rounded shrink-0 transition-transform duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: c.hex }}
                 />
-                <div
-                  className="w-4 h-4 rounded shrink-0 relative transition-transform duration-300 group-hover:scale-110"
-                  style={{
-                    backgroundColor: c.hex,
-                    boxShadow: isSelected ? `0 0 8px ${c.hex}60` : 'none',
-                  }}
-                />
-                <div className="flex-1 relative">
+                <div className="flex-1 min-w-0">
                   <div
-                    className="text-sm font-semibold leading-tight transition-colors duration-200"
+                    className="text-[11px] md:text-sm font-semibold leading-tight truncate"
                     style={{ color: isSelected ? c.hex : '#374151' }}
                   >
                     {c.nombre}
                   </div>
-                  <div className="text-xs text-gray-400 mt-0.5">{c.ha}</div>
+                  <div className="text-[10px] md:text-xs text-gray-400">{c.ha}</div>
                 </div>
                 {isSelected && (
                   <div
-                    className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 relative"
+                    className="w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center shrink-0"
                     style={{ backgroundColor: c.hex }}
                   >
-                    <Check className="w-3 h-3 text-white" />
+                    <Check className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" />
                   </div>
-                )}
-                {!isSelected && !isDimmed && (
-                  <div
-                    className="w-1.5 h-8 rounded-full shrink-0 relative opacity-30 group-hover:opacity-60 transition-opacity duration-300"
-                    style={{ backgroundColor: c.hex }}
-                  />
                 )}
               </button>
             );
@@ -367,9 +371,9 @@ function AgriculturaVisual() {
         {activeCultivo && (
           <button
             onClick={() => setActiveCultivo(null)}
-            className="mt-4 text-xs text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 px-3 py-2.5 rounded-xl transition-all duration-200 text-center flex items-center justify-center gap-1.5"
+            className="mt-2 md:mt-4 text-[10px] md:text-xs text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 px-2 py-1.5 md:px-3 md:py-2.5 rounded-lg md:rounded-xl transition-all duration-200 text-center flex items-center justify-center gap-1"
           >
-            <X className="w-3 h-3" />
+            <X className="w-2.5 h-2.5 md:w-3 md:h-3" />
             Limpiar filtro
           </button>
         )}
