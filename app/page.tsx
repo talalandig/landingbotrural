@@ -813,83 +813,83 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="relative flex justify-center"
+              className="relative flex justify-center order-first lg:order-last"
             >
-              <div className="relative w-full max-w-sm">
-                <div className="bg-gray-800 rounded-[3rem] p-3 shadow-2xl border-4 border-gray-700">
-                  <div className="bg-white rounded-[2.5rem] overflow-hidden">
+              <div className="relative w-full max-w-[280px] md:max-w-sm">
+                <div className="bg-gray-800 rounded-[2rem] md:rounded-[3rem] p-2 md:p-3 shadow-2xl border-2 md:border-4 border-gray-700">
+                  <div className="bg-white rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden">
                     {/* Header */}
-                    <div className="bg-[#075e54] px-4 py-5 flex items-center gap-3">
-  <img src="/BotRural.svg" alt="BotRural" className="w-10 h-10 rounded-full" />
-  <div>
-    <div className="font-bold text-white text-sm">BotRural</div>
-    <div className="text-green-200 text-xs">en linea</div>
-  </div>
-</div>
+                    <div className="bg-[#075e54] px-3 py-3 md:px-4 md:py-5 flex items-center gap-2 md:gap-3">
+                      <img src="/BotRural.svg" alt="BotRural" className="w-7 h-7 md:w-10 md:h-10 rounded-full" />
+                      <div>
+                        <div className="font-bold text-white text-xs md:text-sm">BotRural</div>
+                        <div className="text-green-200 text-[10px] md:text-xs">en linea</div>
+                      </div>
+                    </div>
 
-                    {/* Chat */}
-                    <div className="bg-[#ece5dd] min-h-[320px] max-h-[320px] md:min-h-[420px] md:max-h-[420px] overflow-y-auto p-3 space-y-2">
+                    {/* Chat - no scroll, auto-fit */}
+                    <div className="bg-[#ece5dd] p-2 md:p-3 space-y-2 min-h-[220px] md:min-h-[420px] flex flex-col justify-end">
                       <AnimatePresence mode="wait">
                         {chatMessages.map((msg, i) => (
                           <motion.div
                             key={`${selectedDemo}-${i}`}
-                            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                           >
                             {msg.type === 'imageWithCaption' ? (
-                              <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none p-1.5 max-w-[75%] shadow-sm">
-                                <div className="bg-gray-200 rounded-md h-28 flex items-center justify-center">
+                              <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none p-1 md:p-1.5 max-w-[80%] shadow-sm">
+                                <div className="bg-gray-200 rounded-md h-16 md:h-28 flex items-center justify-center">
                                   <div className="text-center text-gray-400">
-                                    <Camera className="w-6 h-6 mx-auto mb-1" />
-                                    <span className="text-[10px]">IMG_2847.jpg</span>
+                                    <Camera className="w-4 h-4 md:w-6 md:h-6 mx-auto mb-0.5" />
+                                    <span className="text-[8px] md:text-[10px]">IMG_2847.jpg</span>
                                   </div>
                                 </div>
-                                <p className="text-sm text-gray-800 px-1.5 pt-1.5">{msg.caption}</p>
-                                <div className="text-[10px] text-gray-500 text-right mt-0.5 px-1">{msg.timestamp}</div>
+                                <p className="text-[11px] md:text-sm text-gray-800 px-1 pt-1">{msg.caption}</p>
+                                <div className="text-[8px] md:text-[10px] text-gray-500 text-right mt-0.5 px-1">{msg.timestamp}</div>
                               </div>
                             ) : msg.type === 'audio' ? (
-                              <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none p-3 max-w-[85%] shadow-sm">
-                                <div className="flex items-center gap-2">
-                                  <div className="w-8 h-8 bg-[#00934a] rounded-full flex items-center justify-center">
-                                    <Play className="w-3 h-3 text-white ml-0.5" />
+                              <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none p-2 md:p-3 max-w-[85%] shadow-sm">
+                                <div className="flex items-center gap-1.5 md:gap-2">
+                                  <div className="w-6 h-6 md:w-8 md:h-8 bg-[#00934a] rounded-full flex items-center justify-center shrink-0">
+                                    <Play className="w-2.5 h-2.5 md:w-3 md:h-3 text-white ml-0.5" />
                                   </div>
-                                  <div className="flex-1 flex items-end gap-[2px] h-6">
-                                    {[...Array(25)].map((_, j) => (
-                                      <div key={j} className="w-[3px] bg-[#075e54]/60 rounded-full"
-                                        style={{ height: `${8 + Math.random() * 16}px` }} />
+                                  <div className="flex-1 flex items-end gap-[1px] md:gap-[2px] h-4 md:h-6">
+                                    {[...Array(20)].map((_, j) => (
+                                      <div key={j} className="w-[2px] md:w-[3px] bg-[#075e54]/60 rounded-full"
+                                        style={{ height: `${5 + Math.random() * 11}px` }} />
                                     ))}
                                   </div>
-                                  <span className="text-xs text-gray-500">{msg.duration}</span>
+                                  <span className="text-[10px] md:text-xs text-gray-500">{msg.duration}</span>
                                 </div>
-                                <div className="text-[10px] text-gray-500 text-right mt-1">{msg.timestamp}</div>
+                                <div className="text-[8px] md:text-[10px] text-gray-500 text-right mt-1">{msg.timestamp}</div>
                               </div>
                             ) : msg.type === 'image' ? (
-                              <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none p-1.5 max-w-[75%] shadow-sm">
-                                <div className="bg-gray-200 rounded-md h-36 flex items-center justify-center">
+                              <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none p-1 md:p-1.5 max-w-[75%] shadow-sm">
+                                <div className="bg-gray-200 rounded-md h-20 md:h-36 flex items-center justify-center">
                                   <div className="text-center text-gray-400">
-                                    <Camera className="w-8 h-8 mx-auto mb-1" />
-                                    <span className="text-xs">Factura.jpg</span>
+                                    <Camera className="w-5 h-5 md:w-8 md:h-8 mx-auto mb-0.5" />
+                                    <span className="text-[10px] md:text-xs">Factura.jpg</span>
                                   </div>
                                 </div>
-                                <div className="text-[10px] text-gray-500 text-right mt-1 px-1">{msg.timestamp}</div>
+                                <div className="text-[8px] md:text-[10px] text-gray-500 text-right mt-1 px-1">{msg.timestamp}</div>
                               </div>
                             ) : msg.sender === 'user' ? (
-                              <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none px-3 py-2 max-w-[85%] shadow-sm">
-                                <p className="text-sm text-gray-800">{msg.message}</p>
-                                <div className="text-[10px] text-gray-500 text-right mt-0.5">{msg.timestamp}</div>
+                              <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none px-2 py-1.5 md:px-3 md:py-2 max-w-[85%] shadow-sm">
+                                <p className="text-[11px] md:text-sm text-gray-800">{msg.message}</p>
+                                <div className="text-[8px] md:text-[10px] text-gray-500 text-right mt-0.5">{msg.timestamp}</div>
                               </div>
                             ) : (
-                              <div className="bg-white rounded-lg rounded-tl-none px-3 py-2.5 max-w-[90%] shadow-sm">
-                                <div className="flex items-center gap-1.5 mb-2">
-                                  <span className="text-lg">{msg.text.icon}</span>
-                                  <span className="font-bold text-sm text-gray-800">{msg.text.title}</span>
+                              <div className="bg-white rounded-lg rounded-tl-none px-2 py-1.5 md:px-3 md:py-2.5 max-w-[90%] shadow-sm">
+                                <div className="flex items-center gap-1 md:gap-1.5 mb-1 md:mb-2">
+                                  <span className="text-sm md:text-lg">{msg.text.icon}</span>
+                                  <span className="font-bold text-[11px] md:text-sm text-gray-800">{msg.text.title}</span>
                                 </div>
                                 {msg.text.summary && (
-                                  <p className="text-sm text-gray-700 mb-2">{msg.text.summary}</p>
+                                  <p className="text-[11px] md:text-sm text-gray-700 mb-1 md:mb-2">{msg.text.summary}</p>
                                 )}
                                 {msg.text.data && (
-                                  <div className="space-y-1 text-sm">
+                                  <div className="space-y-0.5 md:space-y-1 text-[11px] md:text-sm">
                                     {msg.text.data.map((item: any, j: number) => (
                                       <div key={j}>
                                         <span className="font-semibold text-gray-700">{item.label}:</span>{' '}
@@ -899,9 +899,9 @@ export default function Home() {
                                   </div>
                                 )}
                                 {msg.text.buttons && (
-                                  <div className="flex gap-2 mt-3 pt-2 border-t border-gray-100">
+                                  <div className="flex flex-wrap gap-1 md:gap-2 mt-1.5 md:mt-3 pt-1 md:pt-2 border-t border-gray-100">
                                     {msg.text.buttons.map((btn: string, j: number) => (
-                                      <span key={j} className={`text-xs px-3 py-1.5 rounded-full font-medium ${
+                                      <span key={j} className={`text-[10px] md:text-xs px-2 py-1 md:px-3 md:py-1.5 rounded-full font-medium ${
                                         j === 0
                                           ? 'bg-[#075e54]/10 text-[#00934a]'
                                           : 'bg-gray-100 text-gray-500'
@@ -909,7 +909,7 @@ export default function Home() {
                                     ))}
                                   </div>
                                 )}
-                                <div className="text-[10px] text-gray-400 text-right mt-1">{msg.timestamp}</div>
+                                <div className="text-[8px] md:text-[10px] text-gray-400 text-right mt-0.5 md:mt-1">{msg.timestamp}</div>
                               </div>
                             )}
                           </motion.div>
@@ -917,13 +917,13 @@ export default function Home() {
 
                         {isTyping && (
                           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-                            <div className="bg-white rounded-lg px-4 py-3 shadow-sm">
-                              <div className="flex gap-1.5">
+                            <div className="bg-white rounded-lg px-3 py-2 md:px-4 md:py-3 shadow-sm">
+                              <div className="flex gap-1 md:gap-1.5">
                                 {[0, 1, 2].map(i => (
                                   <motion.div key={i}
-                                    animate={{ y: [0, -4, 0] }}
+                                    animate={{ y: [0, -3, 0] }}
                                     transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.15 }}
-                                    className="w-2 h-2 bg-gray-400 rounded-full"
+                                    className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-400 rounded-full"
                                   />
                                 ))}
                               </div>
@@ -933,38 +933,38 @@ export default function Home() {
                       </AnimatePresence>
 
                       {!selectedDemo && (
-                        <div className="flex items-center justify-center h-[280px] md:h-[380px]">
-                          <div className="text-center px-8">
-                            <div className="flex gap-1.5 justify-center mb-3">
+                        <div className="flex items-center justify-center min-h-[180px] md:min-h-[380px]">
+                          <div className="text-center px-4">
+                            <div className="flex gap-1 md:gap-1.5 justify-center mb-2">
                               {[0, 1, 2].map(i => (
                                 <motion.div key={i}
-                                  animate={{ y: [0, -4, 0] }}
+                                  animate={{ y: [0, -3, 0] }}
                                   transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.15 }}
-                                  className="w-2 h-2 bg-gray-400 rounded-full"
+                                  className="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-400 rounded-full"
                                 />
                               ))}
                             </div>
-                            <p className="text-gray-500 text-xs md:text-sm">Cargando demo...</p>
+                            <p className="text-gray-500 text-[10px] md:text-sm">Cargando demo...</p>
                           </div>
                         </div>
                       )}
                     </div>
 
                     {/* Input */}
-                    <div className="bg-[#f0f0f0] px-3 py-2.5 flex items-center gap-2">
-                      <div className="flex-1 bg-white rounded-full px-4 py-2 text-gray-400 text-sm">
+                    <div className="bg-[#f0f0f0] px-2 py-1.5 md:px-3 md:py-2.5 flex items-center gap-1.5 md:gap-2">
+                      <div className="flex-1 bg-white rounded-full px-3 py-1.5 md:px-4 md:py-2 text-gray-400 text-[11px] md:text-sm">
                         Mensaje...
                       </div>
-                      <div className="bg-[#075e54] rounded-full p-2.5">
-                        <Mic className="w-5 h-5 text-white" />
+                      <div className="bg-[#075e54] rounded-full p-1.5 md:p-2.5">
+                        <Mic className="w-3.5 h-3.5 md:w-5 md:h-5 text-white" />
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Glows */}
-                <div className="absolute -top-6 -right-6 w-28 h-28 bg-[#00934a]/20 rounded-full blur-3xl" />
-                <div className="absolute -bottom-6 -left-6 w-36 h-36 bg-[#00934a]/15 rounded-full blur-3xl" />
+                <div className="absolute -top-4 -right-4 md:-top-6 md:-right-6 w-20 md:w-28 h-20 md:h-28 bg-[#00934a]/20 rounded-full blur-3xl" />
+                <div className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 w-24 md:w-36 h-24 md:h-36 bg-[#00934a]/15 rounded-full blur-3xl" />
               </div>
             </motion.div>
           </div>
