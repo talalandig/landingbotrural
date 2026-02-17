@@ -575,15 +575,15 @@ export default function Home() {
         animate={{ y: 0 }}
         className="fixed top-0 w-full z-50 transition-all duration-300"
         style={{
-          backgroundColor: scrollY > 50 ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
-          backdropFilter: scrollY > 50 ? 'blur(10px)' : 'none'
+          backgroundColor: scrollY > 50 || mobileMenuOpen ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
+          backdropFilter: scrollY > 50 || mobileMenuOpen ? 'blur(10px)' : 'none'
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
           <div className="flex justify-between items-center">
             <motion.div className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
-  <img src="/BotRural.svg" alt="BotRural" className="h-12" />
-</motion.div>
+              <img src="/BotRural.svg" alt="BotRural" className="h-9 md:h-12" />
+            </motion.div>
 
             <div className="hidden md:flex gap-8 items-center">
               <a href="#funcionalidades" className="text-white/80 hover:text-white transition-colors text-sm">Funcionalidades</a>
@@ -599,8 +599,8 @@ export default function Home() {
               </motion.a>
             </div>
 
-            <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              {mobileMenuOpen ? <X /> : <Menu />}
+            <button className="md:hidden text-white p-1" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
@@ -610,12 +610,14 @@ export default function Home() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="md:hidden mt-4 py-4 flex flex-col gap-4"
+                className="md:hidden overflow-hidden"
               >
-                <a href="#funcionalidades" className="text-white/90">Funcionalidades</a>
-                <a href="#whatsapp" className="text-white/90">WhatsApp</a>
-                <a href="#plataforma" className="text-white/90">Plataforma</a>
-                <a href="/login" className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold text-center">Ingresar</a>
+                <div className="py-4 flex flex-col gap-1 border-t border-white/10 mt-3">
+                  <a href="#funcionalidades" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Funcionalidades</a>
+                  <a href="#whatsapp" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">WhatsApp</a>
+                  <a href="#plataforma" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Plataforma</a>
+                  <a href="/login" onClick={() => setMobileMenuOpen(false)} className="bg-purple-600 text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2">Ingresar</a>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -641,42 +643,42 @@ export default function Home() {
             className="absolute inset-0 w-full h-full object-cover"
             alt="Maiz"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-black/80 via-black/60 to-black/30" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 w-full">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-20 md:pt-20 w-full">
           <div className="max-w-2xl">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
 
               <motion.span
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
-                className="inline-block bg-purple-500/20 text-purple-400 border border-purple-500/30 px-4 py-1.5 rounded-full text-sm font-medium mb-6"
+                className="inline-block bg-purple-500/20 text-purple-400 border border-purple-500/30 px-3 py-1 md:px-4 md:py-1.5 rounded-full text-xs md:text-sm font-medium mb-4 md:mb-6"
               >
                 Plataforma de gestion rural con IA
               </motion.span>
 
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-[1.1]">
+              <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 text-white leading-[1.1]">
                 Gestioná tu campo
                 <br />
                 con <span className="text-[#00934a]">WhatsApp</span>
               </h1>
 
-              <p className="text-lg md:text-xl text-white/80 mb-8 leading-relaxed max-w-lg">
+              <p className="text-sm md:text-lg lg:text-xl text-white/80 mb-5 md:mb-8 leading-relaxed max-w-lg">
                 Registra eventos, facturas y datos con un audio o una foto.
                 Consulta indicadores, genera reportes y controla finanzas — todo desde el celular.
               </p>
 
               {/* Category pills */}
-              <div className="flex flex-wrap gap-3 mb-8">
+              <div className="flex flex-wrap gap-2 md:gap-3 mb-5 md:mb-8">
                 {HERO_CATEGORIES.map((cat, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 + i * 0.1 }}
-                    className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-full text-sm"
+                    className="flex items-center gap-1.5 md:gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-2.5 py-1.5 md:px-4 md:py-2.5 rounded-full text-xs md:text-sm"
                   >
-                    <span className="text-purple-400">{cat.icon}</span>
+                    <span className="text-purple-400 [&>svg]:w-3.5 [&>svg]:h-3.5 md:[&>svg]:w-5 md:[&>svg]:h-5">{cat.icon}</span>
                     <span className="text-white font-medium">{cat.label}</span>
                   </motion.div>
                 ))}
@@ -685,29 +687,29 @@ export default function Home() {
               {/* CTAs */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}
-                className="flex flex-col sm:flex-row gap-4 mb-6"
+                className="flex flex-row gap-3 md:gap-4 mb-4 md:mb-6"
               >
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="group bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg transition-all flex items-center justify-center gap-2"
+                  className="group bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 md:px-8 md:py-4 rounded-xl text-sm md:text-lg font-semibold shadow-lg transition-all flex items-center justify-center gap-2"
                 >
                   Probar gratis
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 rounded-xl text-lg font-semibold bg-white/10 border border-white/30 text-white hover:bg-white/20 backdrop-blur-sm transition-all flex items-center justify-center gap-2"
+                  className="px-5 py-3 md:px-8 md:py-4 rounded-xl text-sm md:text-lg font-semibold bg-white/10 border border-white/30 text-white hover:bg-white/20 backdrop-blur-sm transition-all flex items-center justify-center gap-2"
                 >
-                  <Play className="w-5 h-5" />
+                  <Play className="w-4 h-4 md:w-5 md:h-5" />
                   Ver demo
                 </motion.button>
               </motion.div>
 
-              <p className="text-white/50 text-sm flex items-center gap-2">
-                <span className="w-2 h-2 bg-purple-400 rounded-full" />
-                Sin tarjeta de credito 
+              <p className="text-white/50 text-xs md:text-sm flex items-center gap-2">
+                <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-purple-400 rounded-full" />
+                Sin tarjeta de credito
               </p>
             </motion.div>
           </div>
@@ -718,16 +720,16 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-0 right-0 flex justify-center"
+          className="absolute bottom-4 md:bottom-8 left-0 right-0 flex justify-center"
         >
           <motion.button
             onClick={() => document.getElementById('whatsapp')?.scrollIntoView({ behavior: 'smooth' })}
-            animate={{ y: [0, 10, 0] }}
+            animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-            className="flex flex-col items-center gap-2 text-white/70 hover:text-white transition-colors cursor-pointer"
+            className="flex flex-col items-center gap-1 md:gap-2 text-white/70 hover:text-white transition-colors cursor-pointer"
           >
-            <span className="text-sm font-medium">Ver más</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <span className="text-xs md:text-sm font-medium">Ver más</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-6 md:h-6">
               <path d="M7 13l5 5 5-5" />
               <path d="M7 6l5 5 5-5" />
             </svg>
