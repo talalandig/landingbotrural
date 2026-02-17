@@ -646,7 +646,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-black/80 via-black/60 to-black/30" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-20 md:pt-20 w-full">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-8 md:pt-20 w-full">
           <div className="max-w-2xl">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
 
