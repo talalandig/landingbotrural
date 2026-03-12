@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Politica de Privacidad',
   description: 'Politica de privacidad de BotRural. Como recopilamos, usamos y protegemos tus datos en nuestra plataforma de gestion rural con WhatsApp e IA.',
   alternates: {
-    canonical: 'https://botrural.com/privacidad',
+    canonical: 'https://botrural.app/privacidad',
   },
 };
 
@@ -25,7 +25,7 @@ export default function PrivacidadPage() {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Introduccion</h2>
             <p>
-              En BotRural nos tomamos muy en serio la privacidad de nuestros usuarios. Esta Politica de Privacidad describe como recopilamos, usamos, almacenamos y protegemos su informacion personal cuando utiliza nuestro sitio web (<a href="https://botrural.com" className="text-[#00934a] hover:underline">botrural.com</a>), nuestro bot de WhatsApp y nuestra plataforma web de gestion rural.
+              En BotRural nos tomamos muy en serio la privacidad de nuestros usuarios. Esta Politica de Privacidad describe como recopilamos, usamos, almacenamos y protegemos su informacion personal cuando utiliza nuestro sitio web (<a href="https://botrural.app" className="text-[#00934a] hover:underline">botrural.app</a>), nuestro bot de WhatsApp y nuestra plataforma web de gestion rural.
             </p>
             <p className="mt-3">
               Al utilizar nuestros servicios, usted acepta las practicas descritas en esta politica. Si no esta de acuerdo, por favor no utilice nuestros servicios.
@@ -39,8 +39,8 @@ export default function PrivacidadPage() {
             </p>
             <ul className="list-none mt-3 space-y-1">
               <li><strong>Empresa:</strong> BotRural</li>
-              <li><strong>Sitio web:</strong> <a href="https://botrural.com" className="text-[#00934a] hover:underline">https://botrural.com</a></li>
-              <li><strong>Email de contacto:</strong> <a href="mailto:info@botrural.com" className="text-[#00934a] hover:underline">info@botrural.com</a></li>
+              <li><strong>Sitio web:</strong> <a href="https://botrural.app" className="text-[#00934a] hover:underline">https://botrural.app</a></li>
+              <li><strong>Email de contacto:</strong> <a href="mailto:info@botrural.app" className="text-[#00934a] hover:underline">info@botrural.app</a></li>
               <li><strong>Ubicacion:</strong> Uruguay</li>
             </ul>
           </section>
@@ -144,7 +144,7 @@ export default function PrivacidadPage() {
               <li><strong>Revocacion:</strong> retirar su consentimiento en cualquier momento.</li>
             </ul>
             <p className="mt-3">
-              Para ejercer cualquiera de estos derechos, contactenos a <a href="mailto:info@botrural.com" className="text-[#00934a] hover:underline">info@botrural.com</a>.
+              Para ejercer cualquiera de estos derechos, contactenos a <a href="mailto:info@botrural.app" className="text-[#00934a] hover:underline">info@botrural.app</a>.
             </p>
           </section>
 
@@ -196,8 +196,8 @@ export default function PrivacidadPage() {
               Si tiene preguntas, dudas o solicitudes relacionadas con esta Politica de Privacidad o el tratamiento de sus datos personales, contactenos:
             </p>
             <ul className="list-none mt-3 space-y-1">
-              <li><strong>Email:</strong> <a href="mailto:info@botrural.com" className="text-[#00934a] hover:underline">info@botrural.com</a></li>
-              <li><strong>Sitio web:</strong> <a href="https://botrural.com" className="text-[#00934a] hover:underline">https://botrural.com</a></li>
+              <li><strong>Email:</strong> <a href="mailto:info@botrural.app" className="text-[#00934a] hover:underline">info@botrural.app</a></li>
+              <li><strong>Sitio web:</strong> <a href="https://botrural.app" className="text-[#00934a] hover:underline">https://botrural.app</a></li>
             </ul>
           </section>
 
