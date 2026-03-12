@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://botrural.com";
+const SITE_URL = "https://botrural.app";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -181,12 +181,12 @@ export default function RootLayout({
           "https://instagram.com/botrural",
           "https://linkedin.com/company/botrural",
         ],
-        email: "info@botrural.com",
+        email: "info@botrural.app",
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "customer service",
-          email: "info@botrural.com",
-          url: "https://botrural.com",
+          email: "info@botrural.app",
+          url: "https://botrural.app",
           availableLanguage: ["Spanish"],
         },
       },
@@ -315,6 +315,9 @@ export default function RootLayout({
         <meta name="coverage" content="Latinoamerica" />
         <meta name="distribution" content="global" />
         <meta name="rating" content="general" />
+
+        {/* Facebook domain verification */}
+        <meta name="facebook-domain-verification" content="gfnfqh77jzujdq0m98txr5erp7icb0" />
 
         {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
