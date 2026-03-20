@@ -32,7 +32,7 @@ export default function TerminosPage() {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Descripcion del Servicio</h2>
             <p>
-              BotRural es una plataforma de gestion rural que permite registrar y consultar datos de su campo a traves de WhatsApp e inteligencia artificial. El servicio incluye:
+              BOTRURAL SAS (RUT: 220775390019) es una plataforma de gestion rural que permite registrar y consultar datos de su campo a traves de WhatsApp e inteligencia artificial. El servicio incluye:
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
               <li>Registro de eventos ganaderos, agricolas, climaticos y financieros mediante mensajes de texto, audios y fotos por WhatsApp.</li>
