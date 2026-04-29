@@ -20,6 +20,7 @@ export default function Header() {
               <Link href="/#funcionalidades" className="text-white/80 hover:text-white transition-colors text-sm">Funcionalidades</Link>
               <Link href="/#whatsapp" className="text-white/80 hover:text-white transition-colors text-sm">WhatsApp</Link>
               <Link href="/#plataforma" className="text-white/80 hover:text-white transition-colors text-sm">Plataforma</Link>
+              <a href="https://pricing.botrural.app" className="text-white/80 hover:text-white transition-colors text-sm">Precios</a>
               <a href="https://app.botrural.app/login" className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:bg-purple-700 transition-all">
                 Ingresar
               </a>
@@ -35,6 +36,7 @@ export default function Header() {
               <Link href="/#funcionalidades" className="text-white/90" onClick={() => setMobileMenuOpen(false)}>Funcionalidades</Link>
               <Link href="/#whatsapp" className="text-white/90" onClick={() => setMobileMenuOpen(false)}>WhatsApp</Link>
               <Link href="/#plataforma" className="text-white/90" onClick={() => setMobileMenuOpen(false)}>Plataforma</Link>
+              <a href="https://pricing.botrural.app" className="text-white/90" onClick={() => setMobileMenuOpen(false)}>Precios</a>
               <a href="https://app.botrural.app/login" className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold text-center" onClick={() => setMobileMenuOpen(false)}>Ingresar</a>
             </div>
           )}

@@ -589,6 +589,7 @@ export default function Home() {
               <a href="#funcionalidades" className="text-white/80 hover:text-white transition-colors text-sm">Funcionalidades</a>
               <a href="#whatsapp" className="text-white/80 hover:text-white transition-colors text-sm">WhatsApp</a>
               <a href="#plataforma" className="text-white/80 hover:text-white transition-colors text-sm">Plataforma</a>
+              <a href="https://pricing.botrural.app" className="text-white/80 hover:text-white transition-colors text-sm">Precios</a>
               <motion.a
                 href="https://app.botrural.app/login"
                 whileHover={{ scale: 1.05 }}
@@ -616,6 +617,7 @@ export default function Home() {
                   <a href="#funcionalidades" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Funcionalidades</a>
                   <a href="#whatsapp" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">WhatsApp</a>
                   <a href="#plataforma" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Plataforma</a>
+                  <a href="https://pricing.botrural.app" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Precios</a>
                   <a href="https://app.botrural.app/login" onClick={() => setMobileMenuOpen(false)} className="bg-purple-600 text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2">Ingresar</a>
                 </div>
               </motion.div>
