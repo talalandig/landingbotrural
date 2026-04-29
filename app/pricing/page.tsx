@@ -1,10 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Check, Info, Minus, Plus } from 'lucide-react'
-
-const FREE_FIELDS = 2
-const EXTRA_FIELD_MONTHLY = 9.99
+import { Check, Info } from 'lucide-react'
 
 type PlanId = 'PLAN_500' | 'PLAN_1000' | 'PLAN_2000' | 'PLAN_5000' | 'PLAN_7500' | 'PLAN_10000'
 
@@ -28,29 +25,21 @@ const APP_URL = 'https://app.botrural.app'
 export default function PricingPage() {
   const [selectedPlan, setSelectedPlan] = useState<PlanId>('PLAN_500')
   const [cycle, setCycle] = useState<'monthly' | 'annual'>('monthly')
-  const [campos, setCampos] = useState<number>(FREE_FIELDS)
 
   const plan = useMemo(
     () => PLANS.find((p) => p.id === selectedPlan)!,
     [selectedPlan]
   )
 
-  // Campos extra (más allá de los 2 incluidos)
-  const extraFields = Math.max(0, campos - FREE_FIELDS)
-  const extrasMonthly = extraFields * EXTRA_FIELD_MONTHLY
-
-  // Anual = monthly × 10 (2 meses gratis), tanto base como extras
+  // Anual = monthly × 10 (2 meses gratis)
   const baseMonthly = plan.monthly
   const baseAnnual = plan.monthly * 10
-  const extrasAnnual = extrasMonthly * 10
 
-  const totalPrice =
-    cycle === 'monthly' ? baseMonthly + extrasMonthly : baseAnnual + extrasAnnual
+  const totalPrice = cycle === 'monthly' ? baseMonthly : baseAnnual
   const totalLabel = cycle === 'monthly' ? '/mes' : '/año'
-  const monthlyEquivalent =
-    cycle === 'annual' ? (baseAnnual + extrasAnnual) / 12 : null
+  const monthlyEquivalent = cycle === 'annual' ? baseAnnual / 12 : null
 
-  const checkoutUrl = `${APP_URL}/checkout?plan=${selectedPlan}&cycle=${cycle}&campos=${campos}`
+  const checkoutUrl = `${APP_URL}/checkout?plan=${selectedPlan}&cycle=${cycle}`
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white text-gray-900">
@@ -167,37 +156,12 @@ export default function PricingPage() {
             </p>
           </div>
 
-          {/* Paso 2: Campos */}
-          <div className="mt-8 border-t pt-6">
-            <h2 className="text-xl font-bold mb-2">Paso 2: Seleccioná el número de campos</h2>
-            <p className="text-sm text-gray-600 mb-4">
-              Los primeros {FREE_FIELDS} campos están incluidos gratis. Cada campo adicional cuesta USD {EXTRA_FIELD_MONTHLY.toFixed(2)}/mes.
+          <div className="mt-3 flex items-start gap-2 text-sm text-gray-600 bg-green-50 border border-green-200 rounded-lg p-3">
+            <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+            <p>
+              Podés crear <strong>todos los campos / establecimientos que quieras</strong> sin costo extra.
+              El límite de hectáreas es global del plan.
             </p>
-            <div className="inline-flex items-stretch border border-gray-300 rounded-xl overflow-hidden bg-white">
-              <button
-                onClick={() => setCampos((c) => Math.max(1, c - 1))}
-                disabled={campos <= 1}
-                className="px-4 py-3 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
-                aria-label="Restar campo"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-              <div className="px-8 py-3 min-w-[60px] text-center font-semibold text-gray-900 border-x border-gray-300">
-                {campos}
-              </div>
-              <button
-                onClick={() => setCampos((c) => c + 1)}
-                className="px-4 py-3 hover:bg-gray-50 transition"
-                aria-label="Sumar campo"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-            {extraFields > 0 && (
-              <p className="text-xs text-gray-500 mt-2">
-                {extraFields} campo{extraFields > 1 ? 's' : ''} adicional{extraFields > 1 ? 'es' : ''} = USD {extrasMonthly.toFixed(2)}/mes
-              </p>
-            )}
           </div>
 
           {/* Beneficios */}
@@ -206,6 +170,7 @@ export default function PricingPage() {
             <ul className="space-y-2 text-sm text-gray-700">
               {[
                 'Bot de WhatsApp con IA para registrar datos',
+                'Campos / establecimientos ilimitados',
                 'Gestión de potreros, animales y cultivos',
                 'Pastoreo rotativo y cálculo de descansos',
                 'Eventos de siembra, cosecha y sanidad',
@@ -235,28 +200,9 @@ export default function PricingPage() {
                 <span className="font-medium text-gray-900">{plan.rango}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Suscripción base</span>
-                <span className="font-medium text-gray-900">
-                  USD {(cycle === 'monthly' ? baseMonthly : baseAnnual).toFixed(2)}{totalLabel}
-                </span>
-              </div>
-              <div className="flex justify-between">
                 <span className="text-gray-600">Campos</span>
-                <span className="font-medium text-gray-900">{campos} campo{campos !== 1 ? 's' : ''}</span>
+                <span className="font-medium text-gray-900">Ilimitados</span>
               </div>
-              {extraFields > 0 ? (
-                <div className="flex justify-between">
-                  <span className="text-gray-600">+ {extraFields} adicional{extraFields > 1 ? 'es' : ''}</span>
-                  <span className="font-medium text-gray-900">
-                    USD {(cycle === 'monthly' ? extrasMonthly : extrasAnnual).toFixed(2)}{totalLabel}
-                  </span>
-                </div>
-              ) : (
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Primeros {FREE_FIELDS} campos gratis</span>
-                  <span className="font-medium text-gray-900">USD 0.00{totalLabel}</span>
-                </div>
-              )}
               <div className="flex justify-between">
                 <span className="text-gray-600">Facturación</span>
                 <span className="font-medium text-gray-900">
