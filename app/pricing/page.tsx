@@ -1,7 +1,10 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Check, Info } from 'lucide-react'
+import { Check, Info, Minus, Plus } from 'lucide-react'
+
+const FREE_FIELDS = 2
+const EXTRA_FIELD_MONTHLY = 9.99
 
 type PlanId = 'PLAN_500' | 'PLAN_1000' | 'PLAN_2000' | 'PLAN_5000' | 'PLAN_7500' | 'PLAN_10000'
 
@@ -25,19 +28,29 @@ const APP_URL = 'https://app.botrural.app'
 export default function PricingPage() {
   const [selectedPlan, setSelectedPlan] = useState<PlanId>('PLAN_500')
   const [cycle, setCycle] = useState<'monthly' | 'annual'>('monthly')
+  const [campos, setCampos] = useState<number>(FREE_FIELDS)
 
   const plan = useMemo(
     () => PLANS.find((p) => p.id === selectedPlan)!,
     [selectedPlan]
   )
 
-  // Anual = monthly × 10 (2 meses gratis)
-  const annualPrice = plan.monthly * 10
-  const totalPrice = cycle === 'monthly' ? plan.monthly : annualPrice
-  const totalLabel = cycle === 'monthly' ? '/mes' : '/año'
-  const monthlyEquivalent = cycle === 'annual' ? annualPrice / 12 : null
+  // Campos extra (más allá de los 2 incluidos)
+  const extraFields = Math.max(0, campos - FREE_FIELDS)
+  const extrasMonthly = extraFields * EXTRA_FIELD_MONTHLY
 
-  const checkoutUrl = `${APP_URL}/checkout?plan=${selectedPlan}&cycle=${cycle}`
+  // Anual = monthly × 10 (2 meses gratis), tanto base como extras
+  const baseMonthly = plan.monthly
+  const baseAnnual = plan.monthly * 10
+  const extrasAnnual = extrasMonthly * 10
+
+  const totalPrice =
+    cycle === 'monthly' ? baseMonthly + extrasMonthly : baseAnnual + extrasAnnual
+  const totalLabel = cycle === 'monthly' ? '/mes' : '/año'
+  const monthlyEquivalent =
+    cycle === 'annual' ? (baseAnnual + extrasAnnual) / 12 : null
+
+  const checkoutUrl = `${APP_URL}/checkout?plan=${selectedPlan}&cycle=${cycle}&campos=${campos}`
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white text-gray-900">
@@ -154,6 +167,39 @@ export default function PricingPage() {
             </p>
           </div>
 
+          {/* Paso 2: Campos */}
+          <div className="mt-8 border-t pt-6">
+            <h2 className="text-xl font-bold mb-2">Paso 2: Seleccioná el número de campos</h2>
+            <p className="text-sm text-gray-600 mb-4">
+              Los primeros {FREE_FIELDS} campos están incluidos gratis. Cada campo adicional cuesta USD {EXTRA_FIELD_MONTHLY.toFixed(2)}/mes.
+            </p>
+            <div className="inline-flex items-stretch border border-gray-300 rounded-xl overflow-hidden bg-white">
+              <button
+                onClick={() => setCampos((c) => Math.max(1, c - 1))}
+                disabled={campos <= 1}
+                className="px-4 py-3 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                aria-label="Restar campo"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+              <div className="px-8 py-3 min-w-[60px] text-center font-semibold text-gray-900 border-x border-gray-300">
+                {campos}
+              </div>
+              <button
+                onClick={() => setCampos((c) => c + 1)}
+                className="px-4 py-3 hover:bg-gray-50 transition"
+                aria-label="Sumar campo"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+            {extraFields > 0 && (
+              <p className="text-xs text-gray-500 mt-2">
+                {extraFields} campo{extraFields > 1 ? 's' : ''} adicional{extraFields > 1 ? 'es' : ''} = USD {extrasMonthly.toFixed(2)}/mes
+              </p>
+            )}
+          </div>
+
           {/* Beneficios */}
           <div className="mt-8 border-t pt-6">
             <h3 className="font-semibold mb-3 text-gray-900">Todo lo que incluye:</h3>
@@ -189,11 +235,28 @@ export default function PricingPage() {
                 <span className="font-medium text-gray-900">{plan.rango}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Plan</span>
-                <span className="font-medium text-gray-900 uppercase">
-                  {plan.id.replace('PLAN_', '')} ha
+                <span className="text-gray-600">Suscripción base</span>
+                <span className="font-medium text-gray-900">
+                  USD {(cycle === 'monthly' ? baseMonthly : baseAnnual).toFixed(2)}{totalLabel}
                 </span>
               </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Campos</span>
+                <span className="font-medium text-gray-900">{campos} campo{campos !== 1 ? 's' : ''}</span>
+              </div>
+              {extraFields > 0 ? (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">+ {extraFields} adicional{extraFields > 1 ? 'es' : ''}</span>
+                  <span className="font-medium text-gray-900">
+                    USD {(cycle === 'monthly' ? extrasMonthly : extrasAnnual).toFixed(2)}{totalLabel}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Primeros {FREE_FIELDS} campos gratis</span>
+                  <span className="font-medium text-gray-900">USD 0.00{totalLabel}</span>
+                </div>
+              )}
               <div className="flex justify-between">
                 <span className="text-gray-600">Facturación</span>
                 <span className="font-medium text-gray-900">
@@ -223,13 +286,6 @@ export default function PricingPage() {
               className="w-full block text-center bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition shadow-md"
             >
               Suscribirme
-            </a>
-
-            <a
-              href={`${APP_URL}/register`}
-              className="w-full block text-center mt-2 border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 rounded-xl font-medium transition text-sm"
-            >
-              Probar gratis primero
             </a>
 
             <p className="text-xs text-center text-gray-400 mt-4">
