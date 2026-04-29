@@ -20,9 +20,9 @@ export default function Header() {
               <Link href="/#funcionalidades" className="text-white/80 hover:text-white transition-colors text-sm">Funcionalidades</Link>
               <Link href="/#whatsapp" className="text-white/80 hover:text-white transition-colors text-sm">WhatsApp</Link>
               <Link href="/#plataforma" className="text-white/80 hover:text-white transition-colors text-sm">Plataforma</Link>
-              <Link href="/login" className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:bg-purple-700 transition-all">
+              <a href="https://app.botrural.app/login" className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:bg-purple-700 transition-all">
                 Ingresar
-              </Link>
+              </a>
             </div>
 
             <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -35,7 +35,7 @@ export default function Header() {
               <Link href="/#funcionalidades" className="text-white/90" onClick={() => setMobileMenuOpen(false)}>Funcionalidades</Link>
               <Link href="/#whatsapp" className="text-white/90" onClick={() => setMobileMenuOpen(false)}>WhatsApp</Link>
               <Link href="/#plataforma" className="text-white/90" onClick={() => setMobileMenuOpen(false)}>Plataforma</Link>
-              <Link href="/login" className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold text-center">Ingresar</Link>
+              <a href="https://app.botrural.app/login" className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold text-center" onClick={() => setMobileMenuOpen(false)}>Ingresar</a>
             </div>
           )}
         </div>

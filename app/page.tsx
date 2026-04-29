@@ -590,7 +590,7 @@ export default function Home() {
               <a href="#whatsapp" className="text-white/80 hover:text-white transition-colors text-sm">WhatsApp</a>
               <a href="#plataforma" className="text-white/80 hover:text-white transition-colors text-sm">Plataforma</a>
               <motion.a
-                href="/login"
+                href="https://app.botrural.app/login"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:bg-purple-700 transition-all"
@@ -616,7 +616,7 @@ export default function Home() {
                   <a href="#funcionalidades" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Funcionalidades</a>
                   <a href="#whatsapp" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">WhatsApp</a>
                   <a href="#plataforma" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Plataforma</a>
-                  <a href="/login" onClick={() => setMobileMenuOpen(false)} className="bg-purple-600 text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2">Ingresar</a>
+                  <a href="https://app.botrural.app/login" onClick={() => setMobileMenuOpen(false)} className="bg-purple-600 text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2">Ingresar</a>
                 </div>
               </motion.div>
             )}
@@ -689,14 +689,15 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}
                 className="flex flex-row gap-3 md:gap-4 mb-4 md:mb-6"
               >
-                <motion.button
+                <motion.a
+                  href="https://app.botrural.app/register"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="group bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 md:px-8 md:py-4 rounded-xl text-sm md:text-lg font-semibold shadow-lg transition-all flex items-center justify-center gap-2"
                 >
                   Probar gratis
                   <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
-                </motion.button>
+                </motion.a>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -1241,14 +1242,15 @@ export default function Home() {
               En 2 minutos tenes tu campo configurado. Sin tarjeta, sin compromiso.
               Tu equipo registra datos por WhatsApp desde el primer dia.
             </p>
-            <motion.button
+            <motion.a
+              href="https://app.botrural.app/register"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="group bg-purple-500 hover:bg-purple-600 text-white px-10 py-5 rounded-xl text-xl font-bold shadow-lg transition-all inline-flex items-center gap-3"
             >
               Crear cuenta gratis
               <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-            </motion.button>
+            </motion.a>
           </div>
         </motion.div>
       </section>
