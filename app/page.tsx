@@ -544,12 +544,12 @@ function getCentroid(d: string): { x: number; y: number } {
 // ============================================================
 
 const EVENTOS = [
-  { icon: <CloudRain className="w-4 h-4" />, color: 'bg-blue-100 text-blue-600', tipo: 'LLUVIA', desc: '25 mm en Norte', hora: 'Hace 2 h', via: 'WhatsApp · texto' },
-  { icon: <Sprout className="w-4 h-4" />, color: 'bg-emerald-100 text-emerald-700', tipo: 'NACIMIENTO', desc: '3 terneros en Sur', hora: 'Hoy 09:14', via: 'WhatsApp · audio' },
-  { icon: <Stethoscope className="w-4 h-4" />, color: 'bg-green-100 text-green-700', tipo: 'TRATAMIENTO', desc: 'Vacuna aftosa a 50 vacas', hora: 'Ayer 17:30', via: 'WhatsApp · audio' },
-  { icon: <ArrowRightLeft className="w-4 h-4" />, color: 'bg-amber-100 text-amber-700', tipo: 'MOVIMIENTO', desc: '30 novillos Norte → Sur', hora: 'Ayer 11:00', via: 'WhatsApp · texto' },
-  { icon: <Activity className="w-4 h-4" />, color: 'bg-rose-100 text-rose-700', tipo: 'TACTO', desc: '120 vacas, 78% preñez', hora: 'Lun 16:00', via: 'Web' },
-  { icon: <Scale className="w-4 h-4" />, color: 'bg-slate-100 text-slate-700', tipo: 'PESAJE', desc: '40 novillos · 376 kg promedio', hora: 'Sáb 09:00', via: 'WhatsApp · audio' },
+  { emoji: '🌧️', bg: 'bg-blue-50', tipo: 'Lluvia', desc: '25 mm registrados en Norte', hora: 'Hace 2 h', via: 'WhatsApp · texto' },
+  { emoji: '➕', bg: 'bg-emerald-50', tipo: 'Nacimiento', desc: '3 terneros · categoría Ternero · potrero Sur', hora: 'Hoy 09:14', via: 'WhatsApp · audio' },
+  { emoji: '✋', bg: 'bg-rose-50', tipo: 'Tacto', desc: '120 vacas tactadas · 94 preñadas (78%)', hora: 'Ayer 16:00', via: 'Web' },
+  { emoji: '🧴', bg: 'bg-amber-50', tipo: 'Pulverización', desc: 'Glifosato 200L en Soja · Sur', hora: 'Ayer 11:30', via: 'WhatsApp · audio' },
+  { emoji: '💉', bg: 'bg-red-50', tipo: 'Tratamiento', desc: 'Vacuna aftosa · 50 vacas · potrero Norte', hora: 'Lun 17:30', via: 'WhatsApp · audio' },
+  { emoji: '⚖️', bg: 'bg-slate-50', tipo: 'Pesaje', desc: '40 novillos · 376 kg promedio', hora: 'Sáb 09:00', via: 'WhatsApp · audio' },
 ];
 
 // ============================================================
@@ -1450,13 +1450,13 @@ export default function Home() {
                 {EVENTOS.map((e, i) => (
                   <motion.div key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                     className="flex items-start gap-3 bg-white rounded-xl p-3 shadow-sm">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${e.color}`}>{e.icon}</div>
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 text-lg ${e.bg}`}>{e.emoji}</div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-bold text-gray-800">{e.tipo}</span>
                         <span className="text-[10px] text-gray-400">· {e.hora}</span>
                       </div>
-                      <p className="text-sm text-gray-600 truncate">{e.desc}</p>
+                      <p className="text-sm text-gray-600">{e.desc}</p>
                       <p className="text-[10px] text-gray-400 mt-0.5">{e.via}</p>
                     </div>
                   </motion.div>
