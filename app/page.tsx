@@ -556,12 +556,12 @@ const EVENTOS = [
 // INSUMOS MOCKUP
 // ============================================================
 
-const INSUMOS_CATEGORIAS = [
-  { nombre: 'Sanidad y Manejo', color: '#dc2626', items: 12, ejemplo: 'Vacuna aftosa, antiparasitarios' },
-  { nombre: 'Alimentación Animal', color: '#ef4444', items: 8, ejemplo: 'Sal mineral, ración, fardos' },
-  { nombre: 'Insumos Pasturas', color: '#84cc16', items: 6, ejemplo: 'Semillas, fertilizantes' },
-  { nombre: 'Insumos de Cultivos', color: '#22c55e', items: 9, ejemplo: 'Glifosato, urea, semilla maíz' },
-  { nombre: 'Combustible', color: '#f97316', items: 3, ejemplo: 'Gasoil, nafta' },
+const INSUMOS_STOCK = [
+  { nombre: 'Sal mineral', unidad: 'kg', ingresos: 500, usos: 180, stock: 320 },
+  { nombre: 'Vacuna aftosa', unidad: 'dosis', ingresos: 200, usos: 100, stock: 100 },
+  { nombre: 'Glifosato', unidad: 'L', ingresos: 400, usos: 120, stock: 280 },
+  { nombre: 'Urea', unidad: 'kg', ingresos: 5000, usos: 0, stock: 5000 },
+  { nombre: 'Gasoil', unidad: 'L', ingresos: 800, usos: 520, stock: 280 },
 ];
 
 // ============================================================
@@ -569,11 +569,12 @@ const INSUMOS_CATEGORIAS = [
 // ============================================================
 
 const FIN_GASTOS = [
-  { fecha: '28/01', proveedor: 'Veterinaria Sur', concepto: 'Vacunas aftosa x100', categoria: 'Sanidad y Manejo', cat_color: '#dc2626', sector: 'GANADERÍA', monto: 15000, usd: 380, pagado: true, factura: true },
-  { fecha: '27/01', proveedor: 'Coop. Agraria', concepto: 'Glifosato 200L', categoria: 'Insumos de Cultivos', cat_color: '#22c55e', sector: 'AGRICULTURA', monto: 48000, usd: 1218, pagado: false, factura: true },
-  { fecha: '25/01', proveedor: 'Estación Esso', concepto: 'Gasoil tractor', categoria: 'Combustible', cat_color: '#f97316', sector: 'MIXTO', monto: 9200, usd: 233, pagado: true, factura: true },
-  { fecha: '23/01', proveedor: 'Forrajera', concepto: 'Sal mineral 500kg', categoria: 'Alimentación Animal', cat_color: '#ef4444', sector: 'GANADERÍA', monto: 18500, usd: 469, pagado: true, factura: true },
-  { fecha: '20/01', proveedor: 'Estudio Cr. Pérez', concepto: 'Honorarios Enero', categoria: 'Asesoramiento', cat_color: '#06b6d4', sector: 'ESTRUCTURA', monto: 12000, usd: 305, pagado: false, factura: true },
+  { fecha: '28/01', proveedor: 'Veterinaria Sur', concepto: 'Vacunas aftosa x100', categoria: 'Sanidad y Manejo', cat_color: '#dc2626', sector: 'GANADERÍA', cultivo: null, monto: 15000, usd: 380, pagado: true, factura: true },
+  { fecha: '27/01', proveedor: 'Coop. Agraria', concepto: 'Urea 5 tn', categoria: 'Insumos de Cultivos', cat_color: '#22c55e', sector: 'AGRICULTURA', cultivo: 'Maíz · Norte', monto: 48000, usd: 1218, pagado: false, factura: true },
+  { fecha: '26/01', proveedor: 'Agroquímicos UY', concepto: 'Glifosato 200L', categoria: 'Insumos de Cultivos', cat_color: '#22c55e', sector: 'AGRICULTURA', cultivo: 'Soja · Sur', monto: 32000, usd: 811, pagado: true, factura: true },
+  { fecha: '25/01', proveedor: 'Estación Esso', concepto: 'Gasoil tractor', categoria: 'Combustible', cat_color: '#f97316', sector: 'GENERAL EMPRESA', cultivo: null, monto: 9200, usd: 233, pagado: true, factura: true },
+  { fecha: '23/01', proveedor: 'Forrajera', concepto: 'Sal mineral 500kg', categoria: 'Alimentación Animal', cat_color: '#ef4444', sector: 'GANADERÍA', cultivo: null, monto: 18500, usd: 469, pagado: true, factura: true },
+  { fecha: '20/01', proveedor: 'Estudio Cr. Pérez', concepto: 'Honorarios Enero', categoria: 'Asesoramiento', cat_color: '#06b6d4', sector: 'GENERAL EMPRESA', cultivo: null, monto: 12000, usd: 305, pagado: false, factura: true },
 ];
 
 const FIN_INGRESOS = [
@@ -583,9 +584,8 @@ const FIN_INGRESOS = [
 
 const FIN_SECTORES = [
   { sector: 'GANADERÍA', total: 33500, color: '#16a34a' },
-  { sector: 'AGRICULTURA', total: 48000, color: '#22c55e' },
-  { sector: 'MIXTO', total: 9200, color: '#f97316' },
-  { sector: 'ESTRUCTURA', total: 12000, color: '#06b6d4' },
+  { sector: 'AGRICULTURA', total: 80000, color: '#22c55e' },
+  { sector: 'GENERAL EMPRESA', total: 21200, color: '#06b6d4' },
 ];
 
 function FinanzasVisual() {
@@ -626,7 +626,7 @@ function FinanzasVisual() {
       {tab === 'gastos' && (
         <>
           {/* Sectores */}
-          <div className="p-3 md:p-4 border-b border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="p-3 md:p-4 border-b border-gray-100 grid grid-cols-3 gap-2">
             {FIN_SECTORES.map((s, i) => (
               <div key={i} className="rounded-lg p-2.5 border" style={{ backgroundColor: `${s.color}10`, borderColor: `${s.color}30` }}>
                 <div className="text-[9px] font-bold uppercase tracking-wider" style={{ color: s.color }}>{s.sector}</div>
@@ -655,7 +655,14 @@ function FinanzasVisual() {
                     <td className="px-3 py-2.5 text-gray-500">{g.fecha}</td>
                     <td className="px-3 py-2.5">
                       <div className="font-semibold text-gray-800">{g.proveedor}</div>
-                      <div className="text-gray-500 text-[10px]">{g.concepto}</div>
+                      <div className="text-gray-500 text-[10px]">
+                        {g.concepto}
+                        {g.cultivo && (
+                          <span className="ml-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-medium">
+                            <Sprout className="w-2.5 h-2.5" />{g.cultivo}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-3 py-2.5 hidden md:table-cell">
                       <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-medium"
@@ -1499,37 +1506,49 @@ export default function Home() {
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
                 <div className="flex items-center gap-2">
                   <Package className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-bold text-gray-700">Insumos por categoría</span>
+                  <span className="text-sm font-bold text-gray-700">Stock de insumos</span>
                 </div>
-                <span className="text-xs text-gray-400">{INSUMOS_CATEGORIAS.length} categorías</span>
+                <span className="text-xs text-gray-400">Ingresos · usos · stock</span>
               </div>
-              <div className="space-y-2.5">
-                {INSUMOS_CATEGORIAS.map((c, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                    className="flex items-center gap-3 bg-gray-50 rounded-xl p-3 hover:bg-gray-100 transition-colors">
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${c.color}20`, color: c.color }}>
-                      <Package className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-gray-800">{c.nombre}</div>
-                      <div className="text-[11px] text-gray-500 truncate">{c.ejemplo}</div>
-                    </div>
-                    <span className="text-xs font-bold px-2 py-1 rounded-md shrink-0" style={{ backgroundColor: `${c.color}15`, color: c.color }}>
-                      {c.items}
-                    </span>
-                  </motion.div>
-                ))}
+              <div className="overflow-x-auto -mx-2">
+                <table className="w-full text-[11px] md:text-xs">
+                  <thead className="text-gray-400 uppercase tracking-wider">
+                    <tr>
+                      <th className="text-left px-2 py-2 font-semibold">Insumo</th>
+                      <th className="text-right px-2 py-2 font-semibold">Ingresos</th>
+                      <th className="text-right px-2 py-2 font-semibold">Usos</th>
+                      <th className="text-right px-2 py-2 font-semibold">Stock</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {INSUMOS_STOCK.map((it, i) => (
+                      <motion.tr key={i} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
+                        <td className="px-2 py-2.5 font-semibold text-gray-800">{it.nombre}</td>
+                        <td className="px-2 py-2.5 text-right text-green-600 font-medium">+{fmt(it.ingresos)}</td>
+                        <td className="px-2 py-2.5 text-right text-rose-600">−{fmt(it.usos)}</td>
+                        <td className="px-2 py-2.5 text-right">
+                          <span className="font-bold text-gray-900">{fmt(it.stock)}</span>
+                          <span className="text-gray-400 text-[10px] ml-1">{it.unidad}</span>
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-2 text-[11px] text-gray-500">
+                <MessageSquare className="w-3.5 h-3.5 text-green-600" />
+                <span>"<span className="text-gray-700 italic">usé 50kg de sal en el norte</span>" → stock actualizado</span>
               </div>
             </div>
 
             <div className="order-1 lg:order-2">
               <span className="inline-block bg-lime-100 text-lime-700 px-3 py-1 rounded-full text-xs font-semibold mb-3">Insumos</span>
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tus insumos, ordenados por categoría</h3>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Stock de insumos al día, sin planillas</h3>
               <p className="text-lg text-gray-500 mb-6">
-                Sanidad, alimentación, pasturas, cultivos, combustible. Cada gasto se asigna a la categoría correcta y queda enlazado con su factura.
+                Cargá los <strong>ingresos</strong>, registrá los <strong>usos</strong> y el sistema calcula el <strong>stock actual</strong>. Lo hacés por WhatsApp o desde la web.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
-                {['Categorías reales del campo: ganadería, agricultura, mixtas', 'Cada insumo se vincula a una categoría de gasto', 'Foto de factura por WhatsApp → insumo cargado solo', 'Filtrá y exportá por categoría desde la web'].map((it, i) => (
+                {['Registrá ingresos de insumos al campo', 'Cargá los usos cuando se aplican', 'Stock actual calculado automáticamente', 'Mismo dato accesible desde WhatsApp y web'].map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
                     <span>{it}</span>
