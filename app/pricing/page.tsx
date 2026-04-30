@@ -66,7 +66,7 @@ export default function PricingPage() {
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-12 pb-8 text-center">
         <img
-          src="/BoTRURAL.svg"
+          src="/BotRural-hero.svg"
           alt="BotRural"
           className="mx-auto mb-6 h-20 md:h-24 w-auto"
         />
