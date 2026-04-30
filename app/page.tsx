@@ -36,6 +36,11 @@ import {
   Smartphone,
   Monitor,
   TrendingUp,
+  ArrowRightLeft,
+  Scale,
+  Activity,
+  Receipt,
+  Banknote,
 } from 'lucide-react';
 
 // ============================================================
@@ -539,24 +544,228 @@ function getCentroid(d: string): { x: number; y: number } {
 // ============================================================
 
 const EVENTOS = [
-  { icon: <CloudRain className="w-4 h-4" />, color: 'bg-blue-100 text-blue-600', tipo: 'Lluvia', desc: '25 mm en Norte', hora: 'Hace 2 h', via: 'WhatsApp' },
-  { icon: <Heart className="w-4 h-4" />, color: 'bg-pink-100 text-pink-600', tipo: 'Parición', desc: '3 terneros nacieron en Sur', hora: 'Hoy 09:14', via: 'WhatsApp · audio' },
-  { icon: <Stethoscope className="w-4 h-4" />, color: 'bg-emerald-100 text-emerald-600', tipo: 'Sanidad', desc: 'Vacuna aftosa a 50 vacas', hora: 'Ayer 17:30', via: 'WhatsApp · audio' },
-  { icon: <Truck className="w-4 h-4" />, color: 'bg-amber-100 text-amber-600', tipo: 'Movimiento', desc: '30 novillos Norte → Sur', hora: 'Ayer 11:00', via: 'WhatsApp' },
-  { icon: <Camera className="w-4 h-4" />, color: 'bg-rose-100 text-rose-600', tipo: 'Mortandad', desc: '1 ternero en Norte (con foto)', hora: 'Ayer 08:42', via: 'WhatsApp · foto' },
+  { icon: <CloudRain className="w-4 h-4" />, color: 'bg-blue-100 text-blue-600', tipo: 'LLUVIA', desc: '25 mm en Norte', hora: 'Hace 2 h', via: 'WhatsApp · texto' },
+  { icon: <Sprout className="w-4 h-4" />, color: 'bg-emerald-100 text-emerald-700', tipo: 'NACIMIENTO', desc: '3 terneros en Sur', hora: 'Hoy 09:14', via: 'WhatsApp · audio' },
+  { icon: <Stethoscope className="w-4 h-4" />, color: 'bg-green-100 text-green-700', tipo: 'TRATAMIENTO', desc: 'Vacuna aftosa a 50 vacas', hora: 'Ayer 17:30', via: 'WhatsApp · audio' },
+  { icon: <ArrowRightLeft className="w-4 h-4" />, color: 'bg-amber-100 text-amber-700', tipo: 'MOVIMIENTO', desc: '30 novillos Norte → Sur', hora: 'Ayer 11:00', via: 'WhatsApp · texto' },
+  { icon: <Activity className="w-4 h-4" />, color: 'bg-rose-100 text-rose-700', tipo: 'TACTO', desc: '120 vacas, 78% preñez', hora: 'Lun 16:00', via: 'Web' },
+  { icon: <Scale className="w-4 h-4" />, color: 'bg-slate-100 text-slate-700', tipo: 'PESAJE', desc: '40 novillos · 376 kg promedio', hora: 'Sáb 09:00', via: 'WhatsApp · audio' },
 ];
 
 // ============================================================
 // INSUMOS MOCKUP
 // ============================================================
 
-const INSUMOS = [
-  { nombre: 'Sal mineral', stock: 320, max: 500, unidad: 'kg', categoria: 'Nutrición' },
-  { nombre: 'Vacuna aftosa', stock: 45, max: 200, unidad: 'dosis', categoria: 'Sanidad', alerta: true },
-  { nombre: 'Antiparasitario', stock: 18, max: 50, unidad: 'L', categoria: 'Sanidad' },
-  { nombre: 'Glifosato', stock: 280, max: 400, unidad: 'L', categoria: 'Agrícolas' },
-  { nombre: 'Semilla Avena', stock: 12, max: 80, unidad: 'bolsas', categoria: 'Agrícolas', alerta: true },
+const INSUMOS_CATEGORIAS = [
+  { nombre: 'Sanidad y Manejo', color: '#dc2626', items: 12, ejemplo: 'Vacuna aftosa, antiparasitarios' },
+  { nombre: 'Alimentación Animal', color: '#ef4444', items: 8, ejemplo: 'Sal mineral, ración, fardos' },
+  { nombre: 'Insumos Pasturas', color: '#84cc16', items: 6, ejemplo: 'Semillas, fertilizantes' },
+  { nombre: 'Insumos de Cultivos', color: '#22c55e', items: 9, ejemplo: 'Glifosato, urea, semilla maíz' },
+  { nombre: 'Combustible', color: '#f97316', items: 3, ejemplo: 'Gasoil, nafta' },
 ];
+
+// ============================================================
+// FINANZAS MOCKUP — gastos reales con sector + categoría + factura
+// ============================================================
+
+const FIN_GASTOS = [
+  { fecha: '28/01', proveedor: 'Veterinaria Sur', concepto: 'Vacunas aftosa x100', categoria: 'Sanidad y Manejo', cat_color: '#dc2626', sector: 'GANADERÍA', monto: 15000, usd: 380, pagado: true, factura: true },
+  { fecha: '27/01', proveedor: 'Coop. Agraria', concepto: 'Glifosato 200L', categoria: 'Insumos de Cultivos', cat_color: '#22c55e', sector: 'AGRICULTURA', monto: 48000, usd: 1218, pagado: false, factura: true },
+  { fecha: '25/01', proveedor: 'Estación Esso', concepto: 'Gasoil tractor', categoria: 'Combustible', cat_color: '#f97316', sector: 'MIXTO', monto: 9200, usd: 233, pagado: true, factura: true },
+  { fecha: '23/01', proveedor: 'Forrajera', concepto: 'Sal mineral 500kg', categoria: 'Alimentación Animal', cat_color: '#ef4444', sector: 'GANADERÍA', monto: 18500, usd: 469, pagado: true, factura: true },
+  { fecha: '20/01', proveedor: 'Estudio Cr. Pérez', concepto: 'Honorarios Enero', categoria: 'Asesoramiento', cat_color: '#06b6d4', sector: 'ESTRUCTURA', monto: 12000, usd: 305, pagado: false, factura: true },
+];
+
+const FIN_INGRESOS = [
+  { fecha: '28/01', concepto: '30 novillos · Frigorífico', categoria: 'Venta hacienda', cat_color: '#10b981', monto: 1850000, usd: 46900, cobrado: false },
+  { fecha: '15/01', concepto: 'Consignación lana', categoria: 'Venta lana', cat_color: '#06b6d4', monto: 320000, usd: 8120, cobrado: true },
+];
+
+const FIN_SECTORES = [
+  { sector: 'GANADERÍA', total: 33500, color: '#16a34a' },
+  { sector: 'AGRICULTURA', total: 48000, color: '#22c55e' },
+  { sector: 'MIXTO', total: 9200, color: '#f97316' },
+  { sector: 'ESTRUCTURA', total: 12000, color: '#06b6d4' },
+];
+
+function FinanzasVisual() {
+  const [tab, setTab] = useState<'gastos' | 'ingresos'>('gastos');
+  const [showFactura, setShowFactura] = useState<number | null>(null);
+  const totalGastos = FIN_GASTOS.reduce((s, g) => s + g.monto, 0);
+  const totalIngresos = FIN_INGRESOS.reduce((s, g) => s + g.monto, 0);
+
+  return (
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-green-700 to-emerald-700 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-white">
+          <Receipt className="w-4 h-4" />
+          <span className="font-bold text-sm">Finanzas · Enero 2026</span>
+        </div>
+        <span className="text-xs text-green-100 hidden sm:inline">Cotización USD: $39.46</span>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex border-b border-gray-200 bg-gray-50">
+        <button onClick={() => setTab('gastos')}
+          className={`flex-1 px-4 py-3 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
+            tab === 'gastos' ? 'text-green-700 border-b-2 border-green-700 bg-white' : 'text-gray-500 hover:text-gray-700'
+          }`}>
+          <Banknote className="w-4 h-4" /> Gastos
+          <span className="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded-full font-bold">{FIN_GASTOS.length}</span>
+        </button>
+        <button onClick={() => setTab('ingresos')}
+          className={`flex-1 px-4 py-3 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
+            tab === 'ingresos' ? 'text-green-700 border-b-2 border-green-700 bg-white' : 'text-gray-500 hover:text-gray-700'
+          }`}>
+          <DollarSign className="w-4 h-4" /> Ingresos
+          <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-bold">{FIN_INGRESOS.length}</span>
+        </button>
+      </div>
+
+      {tab === 'gastos' && (
+        <>
+          {/* Sectores */}
+          <div className="p-3 md:p-4 border-b border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-2">
+            {FIN_SECTORES.map((s, i) => (
+              <div key={i} className="rounded-lg p-2.5 border" style={{ backgroundColor: `${s.color}10`, borderColor: `${s.color}30` }}>
+                <div className="text-[9px] font-bold uppercase tracking-wider" style={{ color: s.color }}>{s.sector}</div>
+                <div className="text-sm md:text-base font-bold text-gray-900">${(s.total / 1000).toFixed(1)}k</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tabla gastos */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-[10px] md:text-xs">
+              <thead className="bg-gray-50 text-gray-500 uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-3 py-2 font-semibold">Fecha</th>
+                  <th className="text-left px-3 py-2 font-semibold">Proveedor / Concepto</th>
+                  <th className="text-left px-3 py-2 font-semibold hidden md:table-cell">Categoría</th>
+                  <th className="text-left px-3 py-2 font-semibold hidden lg:table-cell">Sector</th>
+                  <th className="text-right px-3 py-2 font-semibold">Monto</th>
+                  <th className="text-center px-3 py-2 font-semibold">Estado</th>
+                  <th className="text-center px-2 py-2 font-semibold"></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {FIN_GASTOS.map((g, i) => (
+                  <tr key={i} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-3 py-2.5 text-gray-500">{g.fecha}</td>
+                    <td className="px-3 py-2.5">
+                      <div className="font-semibold text-gray-800">{g.proveedor}</div>
+                      <div className="text-gray-500 text-[10px]">{g.concepto}</div>
+                    </td>
+                    <td className="px-3 py-2.5 hidden md:table-cell">
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-medium"
+                        style={{ backgroundColor: `${g.cat_color}15`, color: g.cat_color }}>
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: g.cat_color }} />
+                        {g.categoria}
+                      </span>
+                    </td>
+                    <td className="px-3 py-2.5 hidden lg:table-cell text-[10px] font-bold text-gray-500">{g.sector}</td>
+                    <td className="px-3 py-2.5 text-right">
+                      <div className="font-bold text-gray-900">${fmt(g.monto)}</div>
+                      <div className="text-[9px] text-gray-400">USD {fmt(g.usd)}</div>
+                    </td>
+                    <td className="px-3 py-2.5 text-center">
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
+                        g.pagado ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                      }`}>{g.pagado ? 'Pagado' : 'Pendiente'}</span>
+                    </td>
+                    <td className="px-2 py-2.5 text-center">
+                      {g.factura && (
+                        <button onClick={() => setShowFactura(showFactura === i ? null : i)}
+                          className="text-green-700 hover:text-green-800 transition-colors" title="Ver factura">
+                          <Camera className="w-4 h-4" />
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+                <tr className="bg-gray-100 font-bold">
+                  <td colSpan={4} className="px-3 py-2.5 text-gray-900 text-right hidden md:table-cell">TOTAL</td>
+                  <td className="px-3 py-2.5 text-gray-900 text-left md:hidden" colSpan={2}>TOTAL</td>
+                  <td className="px-3 py-2.5 text-right text-gray-900">${fmt(totalGastos)}</td>
+                  <td colSpan={2}></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mini factura preview */}
+          {showFactura !== null && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+              className="border-t border-gray-200 p-4 bg-gray-50">
+              <div className="flex items-start gap-3">
+                <div className="w-20 h-24 bg-white rounded border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 shrink-0">
+                  <Camera className="w-5 h-5 mb-1" />
+                  <span className="text-[8px]">Factura.jpg</span>
+                </div>
+                <div className="flex-1 text-xs">
+                  <div className="font-bold text-gray-800 mb-1">{FIN_GASTOS[showFactura].proveedor}</div>
+                  <div className="text-gray-500 mb-2">Adjuntada por WhatsApp · OCR automático</div>
+                  <div className="space-y-0.5 text-[11px]">
+                    <div><span className="text-gray-500">Concepto:</span> <span className="text-gray-800 font-medium">{FIN_GASTOS[showFactura].concepto}</span></div>
+                    <div><span className="text-gray-500">Categoría:</span> <span className="text-gray-800 font-medium">{FIN_GASTOS[showFactura].categoria}</span></div>
+                    <div><span className="text-gray-500">Monto:</span> <span className="text-gray-800 font-medium">${fmt(FIN_GASTOS[showFactura].monto)}</span></div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </>
+      )}
+
+      {tab === 'ingresos' && (
+        <div className="overflow-x-auto">
+          <table className="w-full text-[10px] md:text-xs">
+            <thead className="bg-gray-50 text-gray-500 uppercase tracking-wider">
+              <tr>
+                <th className="text-left px-3 py-2 font-semibold">Fecha</th>
+                <th className="text-left px-3 py-2 font-semibold">Concepto</th>
+                <th className="text-left px-3 py-2 font-semibold hidden md:table-cell">Categoría</th>
+                <th className="text-right px-3 py-2 font-semibold">Monto</th>
+                <th className="text-center px-3 py-2 font-semibold">Estado</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {FIN_INGRESOS.map((g, i) => (
+                <tr key={i} className="hover:bg-gray-50">
+                  <td className="px-3 py-2.5 text-gray-500">{g.fecha}</td>
+                  <td className="px-3 py-2.5 font-semibold text-gray-800">{g.concepto}</td>
+                  <td className="px-3 py-2.5 hidden md:table-cell">
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-medium"
+                      style={{ backgroundColor: `${g.cat_color}15`, color: g.cat_color }}>
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: g.cat_color }} />
+                      {g.categoria}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2.5 text-right">
+                    <div className="font-bold text-gray-900">${fmt(g.monto)}</div>
+                    <div className="text-[9px] text-gray-400">USD {fmt(g.usd)}</div>
+                  </td>
+                  <td className="px-3 py-2.5 text-center">
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
+                      g.cobrado ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                    }`}>{g.cobrado ? 'Cobrado' : 'Por cobrar'}</span>
+                  </td>
+                </tr>
+              ))}
+              <tr className="bg-gray-100 font-bold">
+                <td colSpan={3} className="px-3 py-2.5 text-gray-900 text-right hidden md:table-cell">TOTAL</td>
+                <td className="px-3 py-2.5 text-gray-900 text-left md:hidden" colSpan={2}>TOTAL</td>
+                <td className="px-3 py-2.5 text-right text-gray-900">${fmt(totalIngresos)}</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
 
 // ============================================================
 // AGENDA MOCKUP
@@ -1251,6 +1460,37 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============================================================ FINANZAS DETALLADA */}
+      <section className="py-20 md:py-24 px-4 md:px-6 bg-gradient-to-b from-white to-green-50/40">
+        <div className="max-w-7xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10 md:mb-12">
+            <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold mb-3">Finanzas</span>
+            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Gastos e ingresos como en una planilla, pero viva</h3>
+            <p className="text-base md:text-lg text-gray-500 max-w-2xl mx-auto">
+              Cada gasto con su <strong>categoría real</strong>, su <strong>sector</strong> (Ganadería, Agricultura, Mixto, Estructura) y su <strong>factura adjunta</strong>. Cargás todo desde WhatsApp.
+            </p>
+          </motion.div>
+
+          <FinanzasVisual />
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mt-8">
+            {[
+              { icon: <Receipt className="w-5 h-5" />, title: 'Categorías reales', desc: 'Sanidad, Alimentación, Insumos de Cultivos, Combustible, Asesoramiento, etc.' },
+              { icon: <Banknote className="w-5 h-5" />, title: 'Sector + tipo', desc: 'Variable o fijo, ganadería o agricultura, asignable o puro.' },
+              { icon: <Camera className="w-5 h-5" />, title: 'Factura adjunta', desc: 'Foto por WhatsApp = gasto cargado con OCR.' },
+              { icon: <DollarSign className="w-5 h-5" />, title: 'Pesos + dólares', desc: 'Cotización del día anterior incluida en cada movimiento.' },
+            ].map((it, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                <div className="w-9 h-9 bg-green-100 text-green-700 rounded-lg flex items-center justify-center mb-2">{it.icon}</div>
+                <div className="font-bold text-sm text-gray-900 mb-1">{it.title}</div>
+                <div className="text-xs text-gray-500">{it.desc}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ============================================================ INSUMOS */}
       <section className="py-20 md:py-24 px-4 md:px-6 bg-gray-50">
         <div className="max-w-7xl mx-auto">
@@ -1259,42 +1499,37 @@ export default function Home() {
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
                 <div className="flex items-center gap-2">
                   <Package className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-bold text-gray-700">Stock de insumos</span>
+                  <span className="text-sm font-bold text-gray-700">Insumos por categoría</span>
                 </div>
-                <span className="text-xs text-gray-400">5 ítems · 2 alertas</span>
+                <span className="text-xs text-gray-400">{INSUMOS_CATEGORIAS.length} categorías</span>
               </div>
-              <div className="space-y-3">
-                {INSUMOS.map((it, i) => {
-                  const pct = (it.stock / it.max) * 100;
-                  return (
-                    <motion.div key={i} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="text-sm font-medium text-gray-800 truncate">{it.nombre}</span>
-                          {it.alerta && <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0" />}
-                        </div>
-                        <span className="text-xs text-gray-500 shrink-0">{it.stock} / {it.max} {it.unidad}</span>
-                      </div>
-                      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div className={`h-full rounded-full ${it.alerta ? 'bg-amber-500' : 'bg-green-500'}`} style={{ width: `${pct}%` }} />
-                      </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[10px] text-gray-400">{it.categoria}</span>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+              <div className="space-y-2.5">
+                {INSUMOS_CATEGORIAS.map((c, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, x: -8 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                    className="flex items-center gap-3 bg-gray-50 rounded-xl p-3 hover:bg-gray-100 transition-colors">
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${c.color}20`, color: c.color }}>
+                      <Package className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-semibold text-gray-800">{c.nombre}</div>
+                      <div className="text-[11px] text-gray-500 truncate">{c.ejemplo}</div>
+                    </div>
+                    <span className="text-xs font-bold px-2 py-1 rounded-md shrink-0" style={{ backgroundColor: `${c.color}15`, color: c.color }}>
+                      {c.items}
+                    </span>
+                  </motion.div>
+                ))}
               </div>
             </div>
 
             <div className="order-1 lg:order-2">
               <span className="inline-block bg-lime-100 text-lime-700 px-3 py-1 rounded-full text-xs font-semibold mb-3">Insumos</span>
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">No te quedás sin sal otra vez</h3>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tus insumos, ordenados por categoría</h3>
               <p className="text-lg text-gray-500 mb-6">
-                Controlá el stock de medicamentos, fertilizantes, semillas, alimento. El sistema te avisa antes de que se acabe.
+                Sanidad, alimentación, pasturas, cultivos, combustible. Cada gasto se asigna a la categoría correcta y queda enlazado con su factura.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
-                {['Stock por categoría: nutrición, sanidad, agrícolas', 'Alertas automáticas de stock bajo', 'Cada gasto descuenta del stock automáticamente', 'Foto de la factura → insumo cargado'].map((it, i) => (
+                {['Categorías reales del campo: ganadería, agricultura, mixtas', 'Cada insumo se vincula a una categoría de gasto', 'Foto de factura por WhatsApp → insumo cargado solo', 'Filtrá y exportá por categoría desde la web'].map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
                     <span>{it}</span>
@@ -1456,42 +1691,6 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
-
-      {/* ============================================================ FOOTER */}
-      <footer className="bg-gray-950 text-gray-400 py-12 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div className="md:col-span-2">
-              <img src="/BotRural.svg" alt="BotRural" className="h-10 mb-4" />
-              <p className="text-sm max-w-md">
-                Gestión agropecuaria por WhatsApp. Registrá, consultá y reportá todo desde el celular, con IA.
-              </p>
-            </div>
-            <div>
-              <h5 className="text-white font-semibold mb-3 text-sm">Producto</h5>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#funcionalidades" className="hover:text-white transition">Funcionalidades</a></li>
-                <li><a href="#whatsapp" className="hover:text-white transition">WhatsApp</a></li>
-                <li><a href="https://pricing.botrural.app" className="hover:text-white transition">Precios</a></li>
-                <li><a href="https://app.botrural.app/login" className="hover:text-white transition">Ingresar</a></li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="text-white font-semibold mb-3 text-sm">Contacto y legal</h5>
-              <ul className="space-y-2 text-sm">
-                <li><a href="https://wa.me/59899123456" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">WhatsApp +598 99 123 456</a></li>
-                <li><a href="mailto:botruraluy@gmail.com" className="hover:text-white transition">botruraluy@gmail.com</a></li>
-                <li><a href="/terminos" className="hover:text-white transition">Términos</a></li>
-                <li><a href="/privacidad" className="hover:text-white transition">Privacidad</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-6 border-t border-white/10 text-xs text-gray-500 flex flex-col md:flex-row justify-between gap-2">
-            <span>© {new Date().getFullYear()} BotRural · Uruguay</span>
-            <span>Hecho con ♥ en el campo</span>
-          </div>
-        </div>
-      </footer>
 
     </div>
   );
