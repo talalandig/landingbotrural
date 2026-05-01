@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
+import IconoEvento from './components/IconoEvento';
 import {
   ArrowRight,
   Check,
@@ -544,12 +545,12 @@ function getCentroid(d: string): { x: number; y: number } {
 // ============================================================
 
 const EVENTOS = [
-  { emoji: '🌧️', bg: 'bg-blue-50', tipo: 'Lluvia', desc: '25 mm registrados en Norte', hora: 'Hace 2 h', via: 'WhatsApp · texto' },
-  { emoji: '➕', bg: 'bg-emerald-50', tipo: 'Nacimiento', desc: '3 terneros · categoría Ternero · potrero Sur', hora: 'Hoy 09:14', via: 'WhatsApp · audio' },
-  { emoji: '✋', bg: 'bg-rose-50', tipo: 'Tacto', desc: '120 vacas tactadas · 94 preñadas (78%)', hora: 'Ayer 16:00', via: 'Web' },
-  { emoji: '🧴', bg: 'bg-amber-50', tipo: 'Pulverización', desc: 'Glifosato 200L en Soja · Sur', hora: 'Ayer 11:30', via: 'WhatsApp · audio' },
-  { emoji: '💉', bg: 'bg-red-50', tipo: 'Tratamiento', desc: 'Vacuna aftosa · 50 vacas · potrero Norte', hora: 'Lun 17:30', via: 'WhatsApp · audio' },
-  { emoji: '⚖️', bg: 'bg-slate-50', tipo: 'Pesaje', desc: '40 novillos · 376 kg promedio', hora: 'Sáb 09:00', via: 'WhatsApp · audio' },
+  { tipo: 'lluvia',         label: 'Lluvia',         color: 'text-sky-600',    bg: 'bg-sky-50',     desc: '25 mm registrados en Norte',                hora: 'Hace 2 h',  via: 'WhatsApp · texto' },
+  { tipo: 'nacimiento',     label: 'Nacimiento',     color: 'text-emerald-600',bg: 'bg-emerald-50', desc: '3 terneros · categoría Ternero · potrero Sur', hora: 'Hoy 09:14', via: 'WhatsApp · audio' },
+  { tipo: 'tacto',          label: 'Tacto',          color: 'text-rose-600',   bg: 'bg-rose-50',    desc: '120 vacas tactadas · 94 preñadas (78%)',    hora: 'Ayer 16:00',via: 'Web' },
+  { tipo: 'pulverizacion',  label: 'Pulverización',  color: 'text-green-700',  bg: 'bg-green-50',   desc: 'Glifosato 200L en Soja · Sur',              hora: 'Ayer 11:30',via: 'WhatsApp · audio' },
+  { tipo: 'tratamiento',    label: 'Tratamiento',    color: 'text-red-600',    bg: 'bg-red-50',     desc: 'Vacuna aftosa · 50 vacas · potrero Norte',  hora: 'Lun 17:30', via: 'WhatsApp · audio' },
+  { tipo: 'pesaje',         label: 'Pesaje',         color: 'text-slate-700',  bg: 'bg-slate-100',  desc: '40 novillos · 376 kg promedio',             hora: 'Sáb 09:00', via: 'WhatsApp · audio' },
 ];
 
 // ============================================================
@@ -1450,10 +1451,12 @@ export default function Home() {
                 {EVENTOS.map((e, i) => (
                   <motion.div key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                     className="flex items-start gap-3 bg-white rounded-xl p-3 shadow-sm">
-                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 text-lg ${e.bg}`}>{e.emoji}</div>
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${e.bg} ${e.color}`}>
+                      <IconoEvento tipo={e.tipo} className="w-5 h-5" />
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-bold text-gray-800">{e.tipo}</span>
+                        <span className="text-sm font-bold text-gray-800">{e.label}</span>
                         <span className="text-[10px] text-gray-400">· {e.hora}</span>
                       </div>
                       <p className="text-sm text-gray-600">{e.desc}</p>
