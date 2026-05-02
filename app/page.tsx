@@ -346,26 +346,214 @@ function AgriculturaVisual() {
 }
 
 // ============================================================
-// VENTAS VISUAL — tabla BOVINO/OVINO + donut (estilo dashboard real)
+// VENTAS VISUAL — tabs por sector (estilo dashboard real)
+// Datos con precios y rindes realistas de Uruguay (zafra 2025).
 // ============================================================
-
-const VENTAS_BOVINO = [
-  { cat: 'Novillos +3 años', n: 40, kg: 2.0, kgAn: 333, usAn: 666, kgTot: 13320, bruto: 26640, color: '#3b82f6' },
-  { cat: 'Vacas Gordas', n: 2, kg: 33.0, kgAn: 23, usAn: 759, kgTot: 46, bruto: 1518, color: '#ef4444' },
-  { cat: 'Novillo', n: 292, kg: 2.98, kgAn: 376, usAn: 1121, kgTot: 109909, bruto: 327418, color: '#10b981' },
-  { cat: 'Terneros', n: 140, kg: 3.10, kgAn: 264, usAn: 817, kgTot: 36890, bruto: 114433, color: '#f59e0b' },
-  { cat: 'Vaca', n: 692, kg: 1.64, kgAn: 475, usAn: 779, kgTot: 328656, bruto: 538791, color: '#8b5cf6' },
-  { cat: 'Vaquillona', n: 84, kg: 2.19, kgAn: 429, usAn: 940, kgTot: 36000, bruto: 78983, color: '#ec4899' },
-  { cat: 'Ternero', n: 69, kg: 3.0, kgAn: 196, usAn: 588, kgTot: 13524, bruto: 40572, color: '#06b6d4' },
-];
 
 function fmt(n: number) {
   return n.toLocaleString('es-UY', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 }
 
-function Donut({ data, metric }: { data: typeof VENTAS_BOVINO; metric: 'usd' | 'kg' | 'anim' }) {
-  const values = data.map(d => metric === 'usd' ? d.bruto : metric === 'kg' ? d.kgTot : d.n);
-  const total = values.reduce((s, v) => s + v, 0);
+type Col = { key: string; label: string; align?: 'left' | 'right'; hide?: 'sm' | 'md' | 'lg'; fmt?: (v: number) => string };
+type Row = { cat: string; color: string; [k: string]: number | string };
+type Sector = {
+  id: string;
+  label: string;
+  headerBg: string;
+  headerText: string;
+  headerLabel: string;
+  cols: Col[];
+  rows: Row[];
+  totals: Record<string, number | string>;
+  metrics?: { key: string; label: string; rowKey: string }[]; // toggle de donut
+  defaultMetric?: string;
+};
+
+// ===== BOVINO (precios pie ~2025: novillo gancho ~US$4.50 → pie ~US$2.50)
+const BOVINO_ROWS: Row[] = [
+  { cat: 'Novillo gordo',     color: '#10b981', n: 285, kgKg: 2.55, kgAn: 478, usAn: 1219, kgTot: 136230, bruto: 347386 },
+  { cat: 'Vaca gorda',        color: '#8b5cf6', n: 142, kgKg: 2.20, kgAn: 440, usAn: 968,  kgTot: 62480,  bruto: 137456 },
+  { cat: 'Vaquillona',        color: '#ec4899', n: 96,  kgKg: 2.45, kgAn: 365, usAn: 894,  kgTot: 35040,  bruto: 85848  },
+  { cat: 'Ternero',           color: '#f59e0b', n: 180, kgKg: 3.30, kgAn: 185, usAn: 611,  kgTot: 33300,  bruto: 109890 },
+  { cat: 'Ternera',           color: '#06b6d4', n: 95,  kgKg: 2.90, kgAn: 170, usAn: 493,  kgTot: 16150,  bruto: 46835  },
+  { cat: 'Vaca de invernada', color: '#ef4444', n: 64,  kgKg: 1.75, kgAn: 425, usAn: 744,  kgTot: 27200,  bruto: 47600  },
+  { cat: 'Toro',              color: '#3b82f6', n: 4,   kgKg: 1.95, kgAn: 720, usAn: 1404, kgTot: 2880,   bruto: 5616   },
+];
+const BOVINO_TOT = BOVINO_ROWS.reduce((s, r) => ({
+  n: s.n + (r.n as number), kgTot: s.kgTot + (r.kgTot as number), bruto: s.bruto + (r.bruto as number)
+}), { n: 0, kgTot: 0, bruto: 0 });
+
+// ===== OVINO (precios pie 2025: cordero pesado ~US$4.20/kg)
+const OVINO_ROWS: Row[] = [
+  { cat: 'Cordero pesado',   color: '#10b981', n: 320, kgKg: 4.20, kgAn: 38, usAn: 160, kgTot: 12160, bruto: 51072 },
+  { cat: 'Cordero liviano',  color: '#f59e0b', n: 240, kgKg: 4.00, kgAn: 28, usAn: 112, kgTot: 6720,  bruto: 26880 },
+  { cat: 'Borrego',          color: '#06b6d4', n: 110, kgKg: 3.20, kgAn: 42, usAn: 134, kgTot: 4620,  bruto: 14784 },
+  { cat: 'Capón',            color: '#8b5cf6', n: 90,  kgKg: 2.80, kgAn: 50, usAn: 140, kgTot: 4500,  bruto: 12600 },
+  { cat: 'Oveja de descarte',color: '#ef4444', n: 180, kgKg: 1.90, kgAn: 45, usAn: 86,  kgTot: 8100,  bruto: 15390 },
+  { cat: 'Carnero',          color: '#3b82f6', n: 6,   kgKg: 2.20, kgAn: 70, usAn: 154, kgTot: 420,   bruto: 924   },
+];
+const OVINO_TOT = OVINO_ROWS.reduce((s, r) => ({
+  n: s.n + (r.n as number), kgTot: s.kgTot + (r.kgTot as number), bruto: s.bruto + (r.bruto as number)
+}), { n: 0, kgTot: 0, bruto: 0 });
+
+// ===== LANA (zafra 2025: Merino fino ~US$8/kg, Corriedale ~US$2.6/kg)
+const LANA_ROWS: Row[] = [
+  { cat: 'Merino fino (18-19μ)',  color: '#10b981', n: 420, kgAn: 4.5,  usKg: 8.50, kgTot: 1890, bruto: 16065 },
+  { cat: 'Cruza fina (24-25μ)',   color: '#06b6d4', n: 380, kgAn: 4.2,  usKg: 4.20, kgTot: 1596, bruto: 6703  },
+  { cat: 'Corriedale (26-28μ)',   color: '#f59e0b', n: 540, kgAn: 4.8,  usKg: 2.60, kgTot: 2592, bruto: 6739  },
+  { cat: 'Romney (29-32μ)',       color: '#ef4444', n: 210, kgAn: 5.2,  usKg: 1.80, kgTot: 1092, bruto: 1965  },
+  { cat: 'Vellones de cordero',   color: '#8b5cf6', n: 480, kgAn: 2.5,  usKg: 3.00, kgTot: 1200, bruto: 3600  },
+];
+const LANA_TOT = LANA_ROWS.reduce((s, r) => ({
+  n: s.n + (r.n as number), kgTot: s.kgTot + (r.kgTot as number), bruto: s.bruto + (r.bruto as number)
+}), { n: 0, kgTot: 0, bruto: 0 });
+
+// ===== AGRICULTURA (precios FOB UY 2025, rindes promedio nacionales)
+const AGRI_ROWS: Row[] = [
+  { cat: 'Soja',              color: '#10b981', has: 320, rinde: 2700, usTn: 360, tnTot: 864,  bruto: 311040 },
+  { cat: 'Maíz',              color: '#f59e0b', has: 180, rinde: 7500, usTn: 200, tnTot: 1350, bruto: 270000 },
+  { cat: 'Trigo',             color: '#06b6d4', has: 240, rinde: 3800, usTn: 210, tnTot: 912,  bruto: 191520 },
+  { cat: 'Cebada cervecera',  color: '#8b5cf6', has: 120, rinde: 4500, usTn: 240, tnTot: 540,  bruto: 129600 },
+  { cat: 'Sorgo',             color: '#ef4444', has: 90,  rinde: 5500, usTn: 180, tnTot: 495,  bruto: 89100  },
+  { cat: 'Colza',             color: '#3b82f6', has: 80,  rinde: 1800, usTn: 480, tnTot: 144,  bruto: 69120  },
+];
+const AGRI_TOT = AGRI_ROWS.reduce((s, r) => ({
+  has: s.has + (r.has as number), tnTot: s.tnTot + (r.tnTot as number), bruto: s.bruto + (r.bruto as number)
+}), { has: 0, tnTot: 0, bruto: 0 });
+
+// ===== OTROS INGRESOS
+const OTROS_ROWS: Row[] = [
+  { cat: 'Alquiler de campo',     color: '#10b981', cant: 250, unidad: 'ha/año',     usUn: 75, bruto: 18750 },
+  { cat: 'Venta de fardos',       color: '#f59e0b', cant: 800, unidad: 'fardos',     usUn: 18, bruto: 14400 },
+  { cat: 'Servicio de pastoreo',  color: '#06b6d4', cant: 1200,unidad: 'cab/mes',    usUn: 8,  bruto: 9600  },
+  { cat: 'Servicio de cosecha',   color: '#8b5cf6', cant: 120, unidad: 'ha',         usUn: 75, bruto: 9000  },
+  { cat: 'Venta de leña',         color: '#ef4444', cant: 80,  unidad: 'm³',         usUn: 35, bruto: 2800  },
+];
+const OTROS_TOT = OTROS_ROWS.reduce((s, r) => ({ bruto: s.bruto + (r.bruto as number) }), { bruto: 0 });
+
+const SECTORS: Sector[] = [
+  {
+    id: 'bovino',
+    label: 'Bovino',
+    headerBg: 'bg-yellow-400',
+    headerText: 'text-gray-900',
+    headerLabel: 'BOVINO',
+    cols: [
+      { key: 'cat', label: 'Categoría', align: 'left' },
+      { key: 'n', label: 'Nº Anim.', align: 'right' },
+      { key: 'kgKg', label: 'US$/KG', align: 'right', hide: 'sm', fmt: (v) => v.toFixed(2) },
+      { key: 'kgAn', label: 'KG/Anim', align: 'right', hide: 'md', fmt: fmt },
+      { key: 'usAn', label: 'US$/Anim', align: 'right', hide: 'lg', fmt: fmt },
+      { key: 'kgTot', label: 'KG Tot.', align: 'right', hide: 'md', fmt: fmt },
+      { key: 'bruto', label: 'US$ Bruto', align: 'right', fmt: fmt },
+    ],
+    rows: BOVINO_ROWS,
+    totals: {
+      cat: 'TOTAL', n: BOVINO_TOT.n,
+      kgKg: (BOVINO_TOT.bruto / BOVINO_TOT.kgTot).toFixed(2),
+      kgAn: fmt(BOVINO_TOT.kgTot / BOVINO_TOT.n),
+      usAn: fmt(BOVINO_TOT.bruto / BOVINO_TOT.n),
+      kgTot: fmt(BOVINO_TOT.kgTot), bruto: fmt(BOVINO_TOT.bruto),
+    },
+    metrics: [{ key: 'usd', label: 'U$S', rowKey: 'bruto' }, { key: 'kg', label: 'KG', rowKey: 'kgTot' }, { key: 'anim', label: 'Animales', rowKey: 'n' }],
+    defaultMetric: 'usd',
+  },
+  {
+    id: 'ovino',
+    label: 'Ovino',
+    headerBg: 'bg-rose-400',
+    headerText: 'text-white',
+    headerLabel: 'OVINO',
+    cols: [
+      { key: 'cat', label: 'Categoría', align: 'left' },
+      { key: 'n', label: 'Nº Anim.', align: 'right' },
+      { key: 'kgKg', label: 'US$/KG', align: 'right', hide: 'sm', fmt: (v) => v.toFixed(2) },
+      { key: 'kgAn', label: 'KG/Anim', align: 'right', hide: 'md', fmt: fmt },
+      { key: 'usAn', label: 'US$/Anim', align: 'right', hide: 'lg', fmt: fmt },
+      { key: 'kgTot', label: 'KG Tot.', align: 'right', hide: 'md', fmt: fmt },
+      { key: 'bruto', label: 'US$ Bruto', align: 'right', fmt: fmt },
+    ],
+    rows: OVINO_ROWS,
+    totals: {
+      cat: 'TOTAL', n: OVINO_TOT.n,
+      kgKg: (OVINO_TOT.bruto / OVINO_TOT.kgTot).toFixed(2),
+      kgAn: fmt(OVINO_TOT.kgTot / OVINO_TOT.n),
+      usAn: fmt(OVINO_TOT.bruto / OVINO_TOT.n),
+      kgTot: fmt(OVINO_TOT.kgTot), bruto: fmt(OVINO_TOT.bruto),
+    },
+    metrics: [{ key: 'usd', label: 'U$S', rowKey: 'bruto' }, { key: 'kg', label: 'KG', rowKey: 'kgTot' }, { key: 'anim', label: 'Animales', rowKey: 'n' }],
+    defaultMetric: 'usd',
+  },
+  {
+    id: 'lana',
+    label: 'Lana',
+    headerBg: 'bg-amber-100',
+    headerText: 'text-amber-900',
+    headerLabel: 'LANA · Zafra 2025',
+    cols: [
+      { key: 'cat', label: 'Tipo / Finura', align: 'left' },
+      { key: 'n', label: 'Nº Anim.', align: 'right' },
+      { key: 'kgAn', label: 'KG/Vellón', align: 'right', hide: 'sm', fmt: (v) => v.toFixed(1) },
+      { key: 'usKg', label: 'US$/KG', align: 'right', hide: 'md', fmt: (v) => v.toFixed(2) },
+      { key: 'kgTot', label: 'KG Tot.', align: 'right', hide: 'md', fmt: fmt },
+      { key: 'bruto', label: 'US$ Bruto', align: 'right', fmt: fmt },
+    ],
+    rows: LANA_ROWS,
+    totals: {
+      cat: 'TOTAL', n: LANA_TOT.n, kgAn: '—',
+      usKg: (LANA_TOT.bruto / LANA_TOT.kgTot).toFixed(2),
+      kgTot: fmt(LANA_TOT.kgTot), bruto: fmt(LANA_TOT.bruto),
+    },
+    metrics: [{ key: 'usd', label: 'U$S', rowKey: 'bruto' }, { key: 'kg', label: 'KG', rowKey: 'kgTot' }, { key: 'anim', label: 'Animales', rowKey: 'n' }],
+    defaultMetric: 'usd',
+  },
+  {
+    id: 'agri',
+    label: 'Agricultura',
+    headerBg: 'bg-green-600',
+    headerText: 'text-white',
+    headerLabel: 'AGRICULTURA · Zafra 24/25',
+    cols: [
+      { key: 'cat', label: 'Cultivo', align: 'left' },
+      { key: 'has', label: 'Hás', align: 'right' },
+      { key: 'rinde', label: 'kg/ha', align: 'right', hide: 'sm', fmt: fmt },
+      { key: 'usTn', label: 'US$/Tn', align: 'right', hide: 'md' },
+      { key: 'tnTot', label: 'Tn Tot.', align: 'right', hide: 'md', fmt: fmt },
+      { key: 'bruto', label: 'US$ Bruto', align: 'right', fmt: fmt },
+    ],
+    rows: AGRI_ROWS,
+    totals: {
+      cat: 'TOTAL', has: AGRI_TOT.has,
+      rinde: '—',
+      usTn: fmt(AGRI_TOT.bruto / AGRI_TOT.tnTot),
+      tnTot: fmt(AGRI_TOT.tnTot), bruto: fmt(AGRI_TOT.bruto),
+    },
+    metrics: [{ key: 'usd', label: 'U$S', rowKey: 'bruto' }, { key: 'tn', label: 'Tn', rowKey: 'tnTot' }, { key: 'has', label: 'Hás', rowKey: 'has' }],
+    defaultMetric: 'usd',
+  },
+  {
+    id: 'otros',
+    label: 'Otros',
+    headerBg: 'bg-slate-700',
+    headerText: 'text-white',
+    headerLabel: 'OTROS INGRESOS',
+    cols: [
+      { key: 'cat', label: 'Concepto', align: 'left' },
+      { key: 'cant', label: 'Cantidad', align: 'right', fmt: fmt },
+      { key: 'unidad', label: 'Unidad', align: 'right', hide: 'sm' },
+      { key: 'usUn', label: 'US$/Un.', align: 'right', hide: 'md', fmt: fmt },
+      { key: 'bruto', label: 'US$ Bruto', align: 'right', fmt: fmt },
+    ],
+    rows: OTROS_ROWS,
+    totals: { cat: 'TOTAL', cant: '—', unidad: '—', usUn: '—', bruto: fmt(OTROS_TOT.bruto) },
+    metrics: [{ key: 'usd', label: 'U$S', rowKey: 'bruto' }],
+    defaultMetric: 'usd',
+  },
+];
+
+function Donut({ data, valueKey }: { data: Row[]; valueKey: string }) {
+  const values = data.map(d => Number(d[valueKey] || 0));
+  const total = values.reduce((s, v) => s + v, 0) || 1;
   const r = 60, c = 2 * Math.PI * r;
   let acc = 0;
   return (
@@ -389,86 +577,116 @@ function Donut({ data, metric }: { data: typeof VENTAS_BOVINO; metric: 'usd' | '
   );
 }
 
+function hideCls(h?: 'sm' | 'md' | 'lg') {
+  return h === 'sm' ? 'hidden sm:table-cell' : h === 'md' ? 'hidden md:table-cell' : h === 'lg' ? 'hidden lg:table-cell' : '';
+}
+
 function VentasVisual() {
-  const [metric, setMetric] = useState<'usd' | 'kg' | 'anim'>('usd');
-  const total = VENTAS_BOVINO.reduce((s, r) => ({
-    n: s.n + r.n, kgTot: s.kgTot + r.kgTot, bruto: s.bruto + r.bruto,
-  }), { n: 0, kgTot: 0, bruto: 0 });
-  const usPromKg = total.bruto / total.kgTot;
-  const kgPromAn = total.kgTot / total.n;
-  const usPromAn = total.bruto / total.n;
+  const [tab, setTab] = useState(0);
+  const [metric, setMetric] = useState<string>('usd');
+  const sector = SECTORS[tab];
+  const activeMetric = sector.metrics?.find(m => m.key === metric) ?? sector.metrics?.[0];
+  const donutKey = activeMetric?.rowKey ?? 'bruto';
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
-      {/* Header amarillo */}
-      <div className="bg-yellow-400 px-4 md:px-6 py-3 md:py-4">
-        <h4 className="font-bold text-gray-900 text-sm md:text-base tracking-wide">BOVINO</h4>
+    <div>
+      {/* Tabs */}
+      <div className="flex gap-1.5 mb-3 overflow-x-auto pb-1 -mx-1 px-1">
+        {SECTORS.map((s, i) => (
+          <button
+            key={s.id}
+            onClick={() => { setTab(i); setMetric(s.defaultMetric ?? 'usd'); }}
+            className={`shrink-0 text-xs md:text-sm px-3.5 py-1.5 rounded-full font-semibold transition border ${
+              i === tab
+                ? 'bg-gray-900 text-white border-gray-900 shadow-sm'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
       </div>
 
-      <div className="grid lg:grid-cols-[1fr_280px] gap-0">
-        {/* Tabla */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-[10px] md:text-xs">
-            <thead className="bg-gray-50 text-gray-500 uppercase tracking-wider">
-              <tr>
-                <th className="text-left px-3 md:px-4 py-2 md:py-3 font-semibold">Categoría</th>
-                <th className="text-right px-2 py-2 md:py-3 font-semibold">Nº Anim.</th>
-                <th className="text-right px-2 py-2 md:py-3 font-semibold hidden sm:table-cell">US$/KG</th>
-                <th className="text-right px-2 py-2 md:py-3 font-semibold hidden md:table-cell">KG/Anim</th>
-                <th className="text-right px-2 py-2 md:py-3 font-semibold hidden lg:table-cell">US$/Anim</th>
-                <th className="text-right px-2 py-2 md:py-3 font-semibold hidden md:table-cell">KG Tot.</th>
-                <th className="text-right px-3 md:px-4 py-2 md:py-3 font-semibold">US$ Bruto</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {VENTAS_BOVINO.map((row, i) => (
-                <tr key={i} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-3 md:px-4 py-2 md:py-2.5 text-gray-700 font-medium">
-                    <span className="inline-block w-2 h-2 rounded-full mr-2" style={{ backgroundColor: row.color }} />
-                    {row.cat}
-                  </td>
-                  <td className="text-right px-2 py-2 md:py-2.5 text-gray-600">{row.n}</td>
-                  <td className="text-right px-2 py-2 md:py-2.5 text-gray-600 hidden sm:table-cell">{row.kg.toFixed(2)}</td>
-                  <td className="text-right px-2 py-2 md:py-2.5 text-gray-600 hidden md:table-cell">{fmt(row.kgAn)}</td>
-                  <td className="text-right px-2 py-2 md:py-2.5 text-gray-600 hidden lg:table-cell">{fmt(row.usAn)}</td>
-                  <td className="text-right px-2 py-2 md:py-2.5 text-gray-600 hidden md:table-cell">{fmt(row.kgTot)}</td>
-                  <td className="text-right px-3 md:px-4 py-2 md:py-2.5 font-bold text-gray-900">{fmt(row.bruto)}</td>
-                </tr>
-              ))}
-              <tr className="bg-gray-100 font-bold">
-                <td className="px-3 md:px-4 py-2.5 text-gray-900">TOTAL</td>
-                <td className="text-right px-2 py-2.5 text-gray-900">{total.n}</td>
-                <td className="text-right px-2 py-2.5 text-gray-900 hidden sm:table-cell">{usPromKg.toFixed(2)}</td>
-                <td className="text-right px-2 py-2.5 text-gray-900 hidden md:table-cell">{fmt(kgPromAn)}</td>
-                <td className="text-right px-2 py-2.5 text-gray-900 hidden lg:table-cell">{fmt(usPromAn)}</td>
-                <td className="text-right px-2 py-2.5 text-gray-900 hidden md:table-cell">{fmt(total.kgTot)}</td>
-                <td className="text-right px-3 md:px-4 py-2.5 text-gray-900">{fmt(total.bruto)}</td>
-              </tr>
-            </tbody>
-          </table>
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+        <div className={`${sector.headerBg} px-4 md:px-6 py-3 md:py-4`}>
+          <h4 className={`font-bold ${sector.headerText} text-sm md:text-base tracking-wide`}>{sector.headerLabel}</h4>
         </div>
 
-        {/* Donut */}
-        <div className="border-t lg:border-t-0 lg:border-l border-gray-100 p-4 md:p-6 bg-gray-50/50">
-          <div className="flex gap-1 mb-3 md:mb-4 justify-center">
-            {([
-              ['usd', 'U$S'], ['kg', 'KG'], ['anim', 'Animales'],
-            ] as const).map(([k, label]) => (
-              <button key={k} onClick={() => setMetric(k)}
-                className={`text-[10px] md:text-xs px-2.5 py-1 rounded-md font-medium transition ${
-                  metric === k ? 'bg-gray-900 text-white' : 'bg-white text-gray-600 border border-gray-200'
-                }`}
-              >{label}</button>
-            ))}
+        <div className="grid lg:grid-cols-[1fr_280px] gap-0">
+          {/* Tabla */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-[10px] md:text-xs">
+              <thead className="bg-gray-50 text-gray-500 uppercase tracking-wider">
+                <tr>
+                  {sector.cols.map((c) => (
+                    <th
+                      key={c.key}
+                      className={`${c.align === 'left' ? 'text-left' : 'text-right'} px-2 md:px-3 py-2 md:py-3 font-semibold ${hideCls(c.hide)} ${c.key === 'cat' ? 'pl-3 md:pl-4' : ''} ${c.key === 'bruto' ? 'pr-3 md:pr-4' : ''}`}
+                    >
+                      {c.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {sector.rows.map((row, i) => (
+                  <tr key={i} className="hover:bg-gray-50 transition-colors">
+                    {sector.cols.map((c) => {
+                      const raw = row[c.key];
+                      const display = typeof raw === 'number' && c.fmt ? c.fmt(raw) : raw;
+                      return (
+                        <td
+                          key={c.key}
+                          className={`${c.align === 'left' ? 'text-left' : 'text-right'} px-2 md:px-3 py-2 md:py-2.5 ${hideCls(c.hide)} ${c.key === 'cat' ? 'pl-3 md:pl-4 text-gray-700 font-medium' : c.key === 'bruto' ? 'pr-3 md:pr-4 font-bold text-gray-900' : 'text-gray-600'}`}
+                        >
+                          {c.key === 'cat' && (
+                            <span className="inline-block w-2 h-2 rounded-full mr-2" style={{ backgroundColor: row.color }} />
+                          )}
+                          {display}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+                <tr className="bg-gray-100 font-bold">
+                  {sector.cols.map((c) => {
+                    const v = sector.totals[c.key];
+                    return (
+                      <td
+                        key={c.key}
+                        className={`${c.align === 'left' ? 'text-left' : 'text-right'} px-2 md:px-3 py-2.5 text-gray-900 ${hideCls(c.hide)} ${c.key === 'cat' ? 'pl-3 md:pl-4' : ''} ${c.key === 'bruto' ? 'pr-3 md:pr-4' : ''}`}
+                      >
+                        {v as any}
+                      </td>
+                    );
+                  })}
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <Donut data={VENTAS_BOVINO} metric={metric} />
-          <div className="grid grid-cols-2 gap-x-2 gap-y-1 mt-3 md:mt-4 text-[9px] md:text-[10px]">
-            {VENTAS_BOVINO.map((row, i) => (
-              <div key={i} className="flex items-center gap-1.5 truncate">
-                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: row.color }} />
-                <span className="text-gray-600 truncate">{row.cat}</span>
+
+          {/* Donut */}
+          <div className="border-t lg:border-t-0 lg:border-l border-gray-100 p-4 md:p-6 bg-gray-50/50">
+            {sector.metrics && sector.metrics.length > 1 && (
+              <div className="flex gap-1 mb-3 md:mb-4 justify-center">
+                {sector.metrics.map((m) => (
+                  <button key={m.key} onClick={() => setMetric(m.key)}
+                    className={`text-[10px] md:text-xs px-2.5 py-1 rounded-md font-medium transition ${
+                      metric === m.key ? 'bg-gray-900 text-white' : 'bg-white text-gray-600 border border-gray-200'
+                    }`}
+                  >{m.label}</button>
+                ))}
               </div>
-            ))}
+            )}
+            <Donut data={sector.rows} valueKey={donutKey} />
+            <div className="grid grid-cols-2 gap-x-2 gap-y-1 mt-3 md:mt-4 text-[9px] md:text-[10px]">
+              {sector.rows.map((row, i) => (
+                <div key={i} className="flex items-center gap-1.5 truncate">
+                  <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: row.color }} />
+                  <span className="text-gray-600 truncate">{row.cat}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
