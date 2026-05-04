@@ -61,7 +61,6 @@ export const metadata: Metadata = {
     "agro uruguay",
     "agro argentina",
     "agro latinoamerica",
-    "fielddata",
     "botrural",
     "gestion de potreros",
     "control de insumos agro",

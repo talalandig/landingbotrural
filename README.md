@@ -1,6 +1,6 @@
 # 🤖 BotRural Landing Page
 
-Landing page profesional con animaciones interactivas estilo FieldData, lista para desplegar en Vercel.
+Landing page profesional con animaciones interactivas, lista para desplegar en Vercel.
 
 ## ✨ Características Implementadas
 

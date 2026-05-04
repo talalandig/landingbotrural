@@ -173,10 +173,10 @@ const DETAILED_SECTIONS = [
   {
     badge: 'Agricultura',
     title: 'Gestiona tus potreros, cultivos y labores',
-    subtitle: 'Registra siembras, pulverizaciones y labores desde FieldData. Visualiza que hay sembrado en cada potrero, filtra por cultivo y controla gastos y ventas agricolas.',
+    subtitle: 'Registra siembras, pulverizaciones y labores desde WhatsApp. Visualiza que hay sembrado en cada potrero, filtra por cultivo y controla gastos y ventas agricolas.',
     items: [
       'Treemap interactivo: clickea un cultivo y se iluminan los potreros donde esta sembrado',
-      'Registra siembras, pulverizaciones, cosechas y mas desde FieldData',
+      'Registra siembras, pulverizaciones, cosechas y mas desde WhatsApp',
       'Gastos y ventas vinculados a cada labor agricola',
       'Superficie total por cultivo con detalle por potrero',
     ],
