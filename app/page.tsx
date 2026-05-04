@@ -157,20 +157,6 @@ const DETAILED_SECTIONS = [
     visual: 'indicadores',
   },
   {
-    badge: 'Finanzas',
-    title: 'Cada peso de tu campo, controlado',
-    subtitle: 'Gestiona gastos, ingresos, facturas y pagos. Exporta un Excel completo con todo.',
-    items: [
-      'Gastos pendientes vs pagados — filtra con un click',
-      'Ingresos por cobrar vs cobrados por firma',
-      'Foto de factura por WhatsApp = gasto registrado',
-      'Excel con hojas de Ventas y Gastos, cada una con link a la factura adjunta',
-      'Cotizacion del dolar del dia anterior incluida en cada registro',
-      'Estado de cuenta por consignatario',
-    ],
-    visual: 'finanzas',
-  },
-  {
     badge: 'Pastoreo',
     title: 'Reporte de Pastoreo Rotativo en un click',
     subtitle: 'Historial completo de movimientos por modulo. Genera el PDF desde WhatsApp.',
