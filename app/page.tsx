@@ -709,44 +709,83 @@ const MAPA_POTREROS = [
   { id: 'cuchilla', nombre: 'Cuchilla', ha: 35, color: '#f59e0b', d: 'M 340,330 L 350,240 L 440,200 L 430,330 Z' },
 ];
 
+// Capas reales del mapa de Los Álamos (screenshots de la app)
+const MAPA_CAPAS = [
+  { id: 'mapa',    label: 'Mapa',    src: '/mapa-los-alamos/mapa.jpeg',    desc: 'Potreros dibujados sobre satélite' },
+  { id: 'ndvi',    label: 'NDVI',    src: '/mapa-los-alamos/ndvi.jpeg',    desc: 'Índice de verdor por satélite (Sentinel-2)' },
+  { id: 'curvas',  label: 'Curvas',  src: '/mapa-los-alamos/curvas.jpeg',  desc: 'Curvas de nivel y relieve del campo' },
+  { id: 'coneat', label: 'CONEAT',  src: '/mapa-los-alamos/coneat.jpeg',  desc: 'Índice CONEAT y aptitud del suelo' },
+];
+
 function MapaVisual() {
-  const [hovered, setHovered] = useState<string | null>(null);
-  const sel = MAPA_POTREROS.find(p => p.id === hovered);
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(() => {
+      setActive((i) => (i + 1) % MAPA_CAPAS.length);
+    }, 5000);
+    return () => clearInterval(id);
+  }, [paused]);
+
+  const capa = MAPA_CAPAS[active];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+    <div
+      className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className="bg-gradient-to-br from-emerald-50 to-green-100 px-4 py-3 border-b border-gray-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <MapPin className="w-4 h-4 text-green-700" />
-          <span className="text-sm font-bold text-gray-800">Mapa del campo</span>
+          <span className="text-sm font-bold text-gray-800">Los Álamos</span>
         </div>
-        <span className="text-xs text-gray-500">530 ha · 8 potreros</span>
+        <span className="text-xs text-gray-500">{capa.desc}</span>
       </div>
-      <div className="relative bg-gradient-to-br from-green-50 via-white to-emerald-50 aspect-[3/2] md:aspect-[16/10]">
-        <svg viewBox="0 0 500 360" className="w-full h-full">
-          {/* Ríos / fondo */}
-          <path d="M 0,180 Q 250,200 500,170" stroke="#bfdbfe" strokeWidth="6" fill="none" opacity="0.6" />
-          {MAPA_POTREROS.map((p) => (
-            <g key={p.id} onMouseEnter={() => setHovered(p.id)} onMouseLeave={() => setHovered(null)} style={{ cursor: 'pointer' }}>
-              <path d={p.d} fill={p.color} fillOpacity={hovered === p.id ? 0.8 : 0.45}
-                stroke={p.color} strokeWidth={hovered === p.id ? 3 : 1.5} className="transition-all" />
-              <text x={(parseFloat(p.d.split(' ')[1].split(',')[0]) + 100)} y="0"
-                style={{ pointerEvents: 'none' }} fill="#1f2937" fontSize="14" fontWeight="600"
-                textAnchor="middle" dominantBaseline="middle"
-                transform={`translate(${getCentroid(p.d).x},${getCentroid(p.d).y})`}
-              >{p.nombre}</text>
-              <text style={{ pointerEvents: 'none' }} fill="#374151" fontSize="11" textAnchor="middle"
-                transform={`translate(${getCentroid(p.d).x},${getCentroid(p.d).y + 16})`}
-              >{p.ha} ha</text>
-            </g>
+
+      {/* Tabs */}
+      <div className="flex gap-1.5 px-3 pt-3 pb-2 overflow-x-auto bg-white">
+        {MAPA_CAPAS.map((c, i) => (
+          <button
+            key={c.id}
+            onClick={() => { setActive(i); setPaused(true); }}
+            className={`shrink-0 text-xs md:text-sm px-3.5 py-1.5 rounded-full font-semibold transition border ${
+              i === active
+                ? 'bg-green-600 text-white border-green-600 shadow-sm'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Imagen */}
+      <div className="relative bg-gray-100 aspect-[16/10] overflow-hidden">
+        {MAPA_CAPAS.map((c, i) => (
+          <img
+            key={c.id}
+            src={c.src}
+            alt={c.label}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+              i === active ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
+
+        {/* Indicador de progreso */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-2.5 py-1.5">
+          {MAPA_CAPAS.map((c, i) => (
+            <span
+              key={c.id}
+              className={`block h-1.5 rounded-full transition-all ${
+                i === active ? 'w-6 bg-white' : 'w-1.5 bg-white/50'
+              }`}
+            />
           ))}
-        </svg>
-        {sel && (
-          <div className="absolute top-2 right-2 bg-white rounded-lg shadow-lg border border-gray-200 px-3 py-2 text-xs">
-            <div className="font-bold text-gray-900">{sel.nombre}</div>
-            <div className="text-gray-500">{sel.ha} ha</div>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

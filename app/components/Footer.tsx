@@ -26,11 +26,6 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4 text-gray-200">Contacto</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li>
-                <a href="https://wa.me/59899123456" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-colors">
-                  WhatsApp +598 99 123 456
-                </a>
-              </li>
               <li><a href="mailto:botruraluy@gmail.com" className="hover:text-green-400 transition-colors">botruraluy@gmail.com</a></li>
               <li><a href="https://app.botrural.app/login" className="hover:text-green-400 transition-colors">Ingresar</a></li>
             </ul>
