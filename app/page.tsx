@@ -1201,7 +1201,7 @@ export default function Home() {
 
               <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 text-white leading-[1.1]">
                 Gestioná tu campo<br />
-                con <span className="text-[#00934a]">WhatsApp</span>
+                con <span className="text-[#00934a]">WhatsApp</span> e <span className="text-[#00934a]">inteligencia artificial</span>
               </h1>
 
               <p className="text-sm md:text-lg lg:text-xl text-white/80 mb-5 md:mb-8 leading-relaxed max-w-lg">
