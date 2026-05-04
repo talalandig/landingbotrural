@@ -258,7 +258,6 @@ function AgriculturaVisual() {
   return (
     <div className="w-full flex flex-col lg:flex-row gap-3 md:gap-4">
       <div className="lg:w-[60%] bg-white rounded-xl md:rounded-2xl p-3 md:p-6 shadow-sm">
-        <div className="text-xs md:text-sm font-bold text-gray-700 mb-2 md:mb-4">Superficie por potrero</div>
         <div className="relative w-full" style={{ paddingBottom: '75%' }}>
           {AGRI_POTREROS.map((p, i) => {
             const cultivo = getCultivoData(p.cultivo);
@@ -288,11 +287,6 @@ function AgriculturaVisual() {
       </div>
 
       <div className="lg:w-[40%] bg-white rounded-xl md:rounded-2xl p-3 md:p-6 shadow-sm flex flex-col">
-        <div className="flex items-center gap-2 mb-1">
-          <Sprout className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-400" />
-          <span className="text-xs md:text-sm font-bold text-gray-700">Cultivos</span>
-        </div>
-        <p className="text-[10px] md:text-[11px] text-gray-400 mb-3 md:mb-5">Toca un cultivo para filtrar en el mapa</p>
         <div className="grid grid-cols-2 lg:grid-cols-1 gap-1.5 md:gap-2 flex-1">
           {AGRI_CULTIVOS.map((c) => {
             const isSelected = activeCultivo === c.id;
