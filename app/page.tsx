@@ -711,7 +711,7 @@ const MAPA_POTREROS = [
 
 // Capas reales del mapa de Los Álamos (screenshots de la app)
 const MAPA_CAPAS = [
-  { id: 'mapa',    label: 'Mapa',    src: '/mapa-los-alamos/mapa.jpeg',    desc: 'Potreros dibujados sobre satélite' },
+  { id: 'mapa',    label: 'Mapa',    src: '/mapa-los-alamos/mapa.jpeg',    desc: 'Potreros dibujados sobre satélite con visualización de los animales presentes' },
   { id: 'ndvi',    label: 'NDVI',    src: '/mapa-los-alamos/ndvi.jpeg',    desc: 'Índice de verdor por satélite (Sentinel-2)' },
   { id: 'curvas',  label: 'Curvas',  src: '/mapa-los-alamos/curvas.jpeg',  desc: 'Curvas de nivel y relieve del campo' },
   { id: 'coneat', label: 'CONEAT',  src: '/mapa-los-alamos/coneat.jpeg',  desc: 'Índice CONEAT y aptitud del suelo' },
