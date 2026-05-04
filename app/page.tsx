@@ -740,7 +740,7 @@ function MapaVisual() {
       <div className="bg-gradient-to-br from-emerald-50 to-green-100 px-4 py-3 border-b border-gray-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <MapPin className="w-4 h-4 text-green-700" />
-          <span className="text-sm font-bold text-gray-800">Los Álamos</span>
+          <span className="text-sm font-bold text-gray-800">Campo Rodazo</span>
         </div>
         <span className="text-xs text-gray-500">{capa.desc}</span>
       </div>
