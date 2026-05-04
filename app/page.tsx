@@ -121,14 +121,14 @@ const PLATFORM_FEATURES = [
   {
     icon: <ClipboardList className="w-7 h-7" />,
     title: 'Stock y categorias',
-    description: 'Controla el stock por potrero y categoria. Nacimientos, mortandad, ventas y compras actualizan automaticamente. Integracion SNIG.',
+    description: 'Controla el stock por potrero y categoria. Nacimientos, mortandad, ventas y compras actualizan automaticamente.',
     color: 'from-lime-500 to-green-600',
     tag: 'Ganaderia',
   },
   {
     icon: <BarChart3 className="w-7 h-7" />,
     title: 'Costos desglosados',
-    description: 'Costos variables, fijos y financieros. Asignacion automatica por especie. Costo por hectarea y por UG. Sabes exactamente cuanto te sale cada animal.',
+    description: 'Costos directos vinculados a diferentes rubros y cultivos, costos generales de la empresa claros. Costo por hectarea y por UG. Sabes exactamente cuanto te sale cada animal.',
     color: 'from-rose-500 to-pink-600',
     tag: 'Economia',
   },
