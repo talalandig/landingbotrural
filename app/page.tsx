@@ -1974,7 +1974,7 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mt-8">
             {[
               { icon: <Receipt className="w-5 h-5" />, title: 'Categorías reales', desc: 'Sanidad, Alimentación, Insumos de Cultivos, Combustible, Asesoramiento, etc.' },
-              { icon: <Banknote className="w-5 h-5" />, title: 'Sector + tipo', desc: 'Variable o fijo, ganadería o agricultura, asignable o puro.' },
+              { icon: <Banknote className="w-5 h-5" />, title: 'Sector + tipo', desc: 'Costos directos (ganadería y agricultura) o costos globales de la empresa.' },
               { icon: <Camera className="w-5 h-5" />, title: 'Factura adjunta', desc: 'Foto por WhatsApp = gasto cargado con OCR.' },
               { icon: <DollarSign className="w-5 h-5" />, title: 'Pesos + dólares', desc: 'Cotización actual incluida en cada movimiento.' },
             ].map((it, i) => (
