@@ -252,7 +252,7 @@ const PLATFORM_FEATURES: {
   {
     icon: <ScanLine className="w-7 h-7" />,
     title: 'Trazabilidad por caravana',
-    description: 'Que el trabajo en campo con el lector no sea en vano: vinculá eventos, tratamientos, pesajes, tactos, compras y ventas.',
+    description: 'Importá el Excel del lector. Cada caravana con su historial en la web.',
     color: 'from-[#1e454c] to-[#2D5C64]',
     tag: 'Trazabilidad',
     module: 'ganaderia',
@@ -354,14 +354,12 @@ const DETAILED_SECTIONS: {
   {
     badge: 'Trazabilidad',
     title: 'Que el trabajo en campo con el lector no sea en vano',
-    subtitle: 'Vinculá eventos de los animales, tratamientos, pesajes, tactos, compras y ventas en un historial por caravana.',
+    subtitle: 'Importá el Excel del lector y seguí cada caravana desde la web.',
     module: 'ganaderia',
     items: [
-      'Cada animal con su historial completo desde la compra hasta la venta',
-      'Tratamientos y pesajes registrados por caravana',
-      'Tactos y datos reproductivos vinculados',
-      'Compras y ventas conectadas al historial del animal',
-      'Carga desde Excel del lector o registro por WhatsApp',
+      'Tabla de caravanas con último dato de cada animal',
+      'Historial por caravana: tratamientos, pesajes, tactos, compras, ventas',
+      'Madre, padre, sexo y datos de identificación',
     ],
     visual: 'trazabilidad',
   },
@@ -1938,42 +1936,23 @@ export default function Home() {
                     </div>
                   )}
                   {section.visual === 'trazabilidad' && (
-                    <div className="w-full space-y-3">
-                      <div className="bg-white rounded-xl p-4 shadow-sm">
-                        <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
-                          <div>
-                            <div className="text-[10px] text-gray-400 uppercase tracking-wide">Caravana</div>
-                            <div className="text-sm font-bold text-gray-800">UY 0123456789</div>
+                    <div className="w-full">
+                      <div className="bg-white rounded-xl p-4 shadow-sm overflow-hidden">
+                        <div className="text-sm font-bold text-gray-700 mb-3">Caravanas</div>
+                        <div className="grid grid-cols-3 gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-wide border-b border-gray-100 pb-2 mb-2">
+                          <span>Caravana</span><span>Sexo</span><span className="text-right">Último dato</span>
+                        </div>
+                        {[
+                          { id: 'UY 0123456789', sexo: 'Macho', ultimo: 'Tratamiento · 18/01' },
+                          { id: 'UY 0987654321', sexo: 'Hembra', ultimo: 'Pesaje · 385 kg' },
+                          { id: 'UY 0555123456', sexo: 'Hembra', ultimo: 'Tacto · Preñada' },
+                        ].map((row, i) => (
+                          <div key={i} className={`grid grid-cols-3 gap-2 text-xs py-2 ${i > 0 ? 'border-t border-gray-50' : ''}`}>
+                            <span className="font-semibold text-[#2D5C64]">{row.id}</span>
+                            <span className="text-gray-600">{row.sexo}</span>
+                            <span className="text-gray-500 text-right truncate">{row.ultimo}</span>
                           </div>
-                          <span className="text-[10px] px-2 py-1 rounded-full bg-[#F0E8D8] text-[#2D5C64] font-semibold">Novillo · Norte</span>
-                        </div>
-                        <div className="space-y-2.5">
-                          {[
-                            { fecha: '05/01', tipo: 'Compra', desc: 'Ingreso al rodeo · 320 kg', icon: <Truck className="w-3.5 h-3.5" />, color: 'text-blue-600 bg-blue-50' },
-                            { fecha: '18/01', tipo: 'Tratamiento', desc: 'Ivermectina 1%', icon: <Stethoscope className="w-3.5 h-3.5" />, color: 'text-rose-600 bg-rose-50' },
-                            { fecha: '02/02', tipo: 'Pesaje', desc: '385 kg', icon: <Scale className="w-3.5 h-3.5" />, color: 'text-amber-600 bg-amber-50' },
-                            { fecha: '14/02', tipo: 'Tacto', desc: 'Preñada', icon: <Heart className="w-3.5 h-3.5" />, color: 'text-pink-600 bg-pink-50' },
-                            { fecha: '28/02', tipo: 'Venta', desc: 'Frigorífico Sur · 410 kg', icon: <TrendingUp className="w-3.5 h-3.5" />, color: 'text-[#02C951] bg-[#F0E8D8]' },
-                          ].map((ev, i) => (
-                            <div key={i} className="flex items-start gap-2.5 text-xs">
-                              <span className="text-gray-400 w-10 shrink-0 pt-0.5">{ev.fecha}</span>
-                              <span className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${ev.color}`}>{ev.icon}</span>
-                              <div className="min-w-0">
-                                <span className="font-semibold text-gray-700">{ev.tipo}</span>
-                                <span className="text-gray-500"> · {ev.desc}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="bg-white rounded-xl p-3 shadow-sm flex items-center gap-3">
-                        <div className="w-8 h-8 bg-[#2D5C64] rounded-lg flex items-center justify-center">
-                          <ScanLine className="w-4 h-4 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-700">Lector en campo → historial en la web</div>
-                          <div className="text-xs text-gray-400">Excel del bastón o registro por WhatsApp</div>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   )}
