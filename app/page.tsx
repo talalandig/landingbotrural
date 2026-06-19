@@ -96,6 +96,7 @@ type ModuleId = 'ganaderia' | 'agricultura' | 'insumos' | 'finanzas' | 'agenda' 
 const NAV_LINKS = [
   { href: '#funcionalidades', label: 'Funcionalidades' },
   { href: '#whatsapp', label: 'WhatsApp' },
+  { href: 'https://www.youtube.com/watch?v=6E3wScs0ru0', label: 'Cómo empezar', external: true },
   { href: 'https://pricing.botrural.app', label: 'Precios' },
 ];
 
@@ -1302,6 +1303,9 @@ export default function Home() {
                 <a
                   key={link.href}
                   href={link.href}
+                  {...('external' in link && link.external
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
                   className={`font-medium text-white/70 hover:text-white transition-all duration-300 tracking-wide ${
                     scrollY > 24 || mobileMenuOpen
                       ? 'px-3 py-1.5 text-[12px] md:text-[13px]'
@@ -1350,6 +1354,9 @@ export default function Home() {
                     <a
                       key={link.href}
                       href={link.href}
+                      {...('external' in link && link.external
+                        ? { target: '_blank', rel: 'noopener noreferrer' }
+                        : {})}
                       onClick={() => setMobileMenuOpen(false)}
                       className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors"
                     >
