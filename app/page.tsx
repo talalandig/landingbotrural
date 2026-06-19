@@ -1160,7 +1160,6 @@ export default function Home() {
   const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [showMaiz, setShowMaiz] = useState(false);
   const [autoPlayIndex, setAutoPlayIndex] = useState(0);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
   const demoTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
@@ -1179,11 +1178,6 @@ export default function Home() {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => setShowMaiz(prev => !prev), 3400);
-    return () => clearInterval(interval);
   }, []);
 
   const demoOrder = WHATSAPP_FEATURES.map(f => f.demo);
@@ -1380,10 +1374,12 @@ export default function Home() {
       {/* ============================================================ HERO */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <motion.img animate={{ opacity: showMaiz ? 0 : 1 }} transition={{ duration: 1.5 }}
-            src="campo.jpg" className="absolute inset-0 w-full h-full object-cover scale-105" alt="Campo" />
-          <motion.img animate={{ opacity: showMaiz ? 1 : 0 }} transition={{ duration: 1.5 }}
-            src="maiz.jpg" className="absolute inset-0 w-full h-full object-cover scale-105" alt="Maiz" />
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
+            style={{ backgroundImage: 'url(/campo.jpg)' }}
+            role="img"
+            aria-label="Vacunos en el campo"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/25 md:to-transparent" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_40%,_#02C95114_0%,_transparent_55%)]" />
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/40 to-transparent" />
