@@ -7,8 +7,6 @@ import { Menu, X } from 'lucide-react';
 const NAV_LINKS = [
   { href: '/#funcionalidades', label: 'Funcionalidades' },
   { href: '/#whatsapp', label: 'WhatsApp' },
-  { href: '/#plataforma', label: 'Plataforma' },
-  { href: '/#mapa', label: 'Mapa' },
   { href: 'https://pricing.botrural.app', label: 'Precios' },
 ];
 

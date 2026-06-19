@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import IconoEvento from './components/IconoEvento';
 import {
@@ -91,21 +91,48 @@ function IconMapa({ className }: { className?: string }) {
   );
 }
 
+type ModuleId = 'ganaderia' | 'agricultura' | 'insumos' | 'finanzas' | 'calendario' | 'mapa';
+
 const NAV_LINKS = [
   { href: '#funcionalidades', label: 'Funcionalidades' },
   { href: '#whatsapp', label: 'WhatsApp' },
-  { href: '#plataforma', label: 'Plataforma' },
-  { href: '#mapa', label: 'Mapa' },
   { href: 'https://pricing.botrural.app', label: 'Precios' },
 ];
 
-const HERO_CATEGORIES = [
-  { icon: <IconGanaderia className="w-5 h-5" />, label: 'Ganaderia' },
-  { icon: <Wheat className="w-5 h-5" />, label: 'Agricultura' },
-  { icon: <Sprout className="w-5 h-5" />, label: 'Insumos' },
-  { icon: <DollarSign className="w-5 h-5" />, label: 'Finanzas' },
-  { icon: <Calendar className="w-5 h-5" />, label: 'Calendario' },
-  { icon: <IconMapa className="w-5 h-5" />, label: 'Mapa' },
+const MODULE_BANNERS: Record<ModuleId, { title: string; subtitle: string }> = {
+  ganaderia: {
+    title: 'Ganadería',
+    subtitle: 'Indicadores, stock, ventas de hacienda, pastoreo rotativo y registro de eventos del rodeo.',
+  },
+  agricultura: {
+    title: 'Agricultura',
+    subtitle: 'Potreros, cultivos, labores y control de gastos y ventas por rubro agrícola.',
+  },
+  insumos: {
+    title: 'Insumos',
+    subtitle: 'Ingresos, usos y stock actual de cada insumo — cargado por WhatsApp o web.',
+  },
+  finanzas: {
+    title: 'Finanzas',
+    subtitle: 'Gastos, ingresos, facturas con foto y costos desglosados por sector.',
+  },
+  calendario: {
+    title: 'Calendario y agenda',
+    subtitle: 'Recordatorios con IA, tareas programadas y calendario mensual del campo.',
+  },
+  mapa: {
+    title: 'Mapa interactivo',
+    subtitle: 'Potreros dibujados, capas satélite, NDVI, curvas de nivel y CONEAT.',
+  },
+};
+
+const HERO_CATEGORIES: { id: ModuleId; icon: ReactNode; label: string }[] = [
+  { id: 'ganaderia', icon: <IconGanaderia className="w-5 h-5" />, label: 'Ganaderia' },
+  { id: 'agricultura', icon: <Wheat className="w-5 h-5" />, label: 'Agricultura' },
+  { id: 'insumos', icon: <Sprout className="w-5 h-5" />, label: 'Insumos' },
+  { id: 'finanzas', icon: <DollarSign className="w-5 h-5" />, label: 'Finanzas' },
+  { id: 'calendario', icon: <Calendar className="w-5 h-5" />, label: 'Calendario' },
+  { id: 'mapa', icon: <IconMapa className="w-5 h-5" />, label: 'Mapa' },
 ];
 
 const WHATSAPP_FEATURES = [
@@ -141,20 +168,21 @@ const WHATSAPP_FEATURES = [
   },
 ];
 
-const PLATFORM_FEATURES = [
+const PLATFORM_FEATURES: {
+  icon: ReactNode;
+  title: string;
+  description: string;
+  color: string;
+  tag: string;
+  module: ModuleId;
+}[] = [
   {
     icon: <PieChart className="w-7 h-7" />,
     title: 'Indicadores en tiempo real',
     description: 'Eficiencia tecnica, indicadores ganaderos y economicos. Carga animal por hectarea, costo por UG, rentabilidad — todo calculado automaticamente.',
     color: 'from-[#2D5C64] to-[#1e454c]',
     tag: 'Dashboard',
-  },
-  {
-    icon: <DollarSign className="w-7 h-7" />,
-    title: 'Finanzas completas',
-    description: 'Gastos pendientes y pagados, ingresos por cobrar y cobrados. Filtra por categoria, proveedor, fecha. Vincula facturas con fotos.',
-    color: 'from-[#02C951] to-[#019a42]',
-    tag: 'Finanzas',
+    module: 'ganaderia',
   },
   {
     icon: <RefreshCw className="w-7 h-7" />,
@@ -162,6 +190,7 @@ const PLATFORM_FEATURES = [
     description: 'Genera el historial de movimientos por modulo: dias de pastoreo, dias de descanso, hectareas. Exporta como PDF desde WhatsApp o la web.',
     color: 'from-[#2D5C64] to-[#02C951]',
     tag: 'Reportes',
+    module: 'ganaderia',
   },
   {
     icon: <ClipboardList className="w-7 h-7" />,
@@ -169,28 +198,71 @@ const PLATFORM_FEATURES = [
     description: 'Controla el stock por potrero y categoria. Nacimientos, mortandad, ventas y compras actualizan automaticamente.',
     color: 'from-[#019a42] to-[#02C951]',
     tag: 'Ganaderia',
+    module: 'ganaderia',
+  },
+  {
+    icon: <Wheat className="w-7 h-7" />,
+    title: 'Cultivos y labores',
+    description: 'Registra siembras, pulverizaciones y cosechas. Visualiza que hay sembrado en cada potrero y filtra por cultivo.',
+    color: 'from-[#02C951] to-[#2D5C64]',
+    tag: 'Agricultura',
+    module: 'agricultura',
+  },
+  {
+    icon: <Package className="w-7 h-7" />,
+    title: 'Stock de insumos',
+    description: 'Ingresos, usos y saldo actual de cada insumo. Actualizado desde WhatsApp o la web.',
+    color: 'from-[#1e454c] to-[#2D5C64]',
+    tag: 'Insumos',
+    module: 'insumos',
+  },
+  {
+    icon: <DollarSign className="w-7 h-7" />,
+    title: 'Finanzas completas',
+    description: 'Gastos pendientes y pagados, ingresos por cobrar y cobrados. Filtra por categoria, proveedor, fecha. Vincula facturas con fotos.',
+    color: 'from-[#02C951] to-[#019a42]',
+    tag: 'Finanzas',
+    module: 'finanzas',
   },
   {
     icon: <BarChart3 className="w-7 h-7" />,
     title: 'Costos desglosados',
-    description: 'Costos directos vinculados a diferentes rubros y cultivos, costos generales de la empresa claros. Costo por hectarea y por UG. Sabes exactamente cuanto te sale cada animal.',
+    description: 'Costos directos vinculados a diferentes rubros y cultivos, costos generales de la empresa claros. Costo por hectarea y por UG.',
     color: 'from-[#1e454c] to-[#2D5C64]',
     tag: 'Economia',
+    module: 'finanzas',
   },
   {
-    icon: <Users className="w-7 h-7" />,
-    title: 'Equipo y roles',
-    description: 'Suma a tu capataz, veterinario o contador. Cada uno con su rol y permisos. Todos cargan datos por WhatsApp, vos controlas desde la web.',
+    icon: <Calendar className="w-7 h-7" />,
+    title: 'Agenda con IA',
+    description: 'Programa tareas con un mensaje. El bot arma el calendario y te recuerda por WhatsApp.',
     color: 'from-[#02C951] to-[#2D5C64]',
-    tag: 'Equipo',
+    tag: 'Calendario',
+    module: 'calendario',
+  },
+  {
+    icon: <IconMapa className="w-7 h-7" />,
+    title: 'Mapa interactivo',
+    description: 'Potreros dibujados, capas satelite, NDVI, curvas de nivel y visualizacion de pastoreo.',
+    color: 'from-[#2D5C64] to-[#02C951]',
+    tag: 'Mapa',
+    module: 'mapa',
   },
 ];
 
-const DETAILED_SECTIONS = [
+const DETAILED_SECTIONS: {
+  badge: string;
+  title: string;
+  subtitle: string;
+  items: string[];
+  visual: string;
+  module: ModuleId;
+}[] = [
   {
     badge: 'Indicadores',
     title: 'Toma decisiones con datos, no con intuicion',
     subtitle: 'Indicadores ganaderos, de eficiencia tecnica y economicos actualizados en tiempo real.',
+    module: 'ganaderia',
     items: [
       'Carga animal por hectarea (UG/ha) con equivalencias personalizables',
       'Porcentaje de preñez, destete y señalada',
@@ -205,6 +277,7 @@ const DETAILED_SECTIONS = [
     badge: 'Pastoreo',
     title: 'Reporte de Pastoreo Rotativo en un click',
     subtitle: 'Historial completo de movimientos por modulo. Genera el PDF desde WhatsApp.',
+    module: 'ganaderia',
     items: [
       'Fecha de entrada y salida por modulo',
       'Dias de pastoreo y dias de descanso calculados',
@@ -217,6 +290,7 @@ const DETAILED_SECTIONS = [
     badge: 'Agricultura',
     title: 'Gestiona tus potreros, cultivos y labores',
     subtitle: 'Registra siembras, pulverizaciones y labores desde WhatsApp. Visualiza que hay sembrado en cada potrero, filtra por cultivo y controla gastos y ventas agricolas.',
+    module: 'agricultura',
     items: [
       'Treemap interactivo: clickea un cultivo y se iluminan los potreros donde esta sembrado',
       'Registra siembras, pulverizaciones, cosechas y mas desde WhatsApp',
@@ -1073,6 +1147,7 @@ const AGENDA_TAREAS = [
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [activeModule, setActiveModule] = useState<ModuleId>('ganaderia');
   const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -1081,7 +1156,15 @@ export default function Home() {
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
   const demoTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
   const whatsappRef = useRef<HTMLDivElement>(null);
+  const funcionalidadesRef = useRef<HTMLDivElement>(null);
   const activeDemoRef = useRef(0);
+
+  const selectModule = (id: ModuleId) => {
+    setActiveModule(id);
+    setTimeout(() => {
+      funcionalidadesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -1313,18 +1396,24 @@ export default function Home() {
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-8 lg:hidden">
                 {HERO_CATEGORIES.map((cat, i) => (
-                  <motion.div
-                    key={i}
+                  <motion.button
+                    key={cat.id}
+                    type="button"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 + i * 0.06 }}
-                    className="flex items-center gap-2.5 bg-white/[0.06] backdrop-blur-md border border-white/10 rounded-xl px-3 py-2.5"
+                    onClick={() => selectModule(cat.id)}
+                    className={`flex items-center gap-2.5 backdrop-blur-md border rounded-xl px-3 py-2.5 text-left transition-colors cursor-pointer ${
+                      activeModule === cat.id
+                        ? 'bg-[#02C951]/20 border-[#02C951]/50'
+                        : 'bg-white/[0.06] border-white/10 hover:bg-white/10'
+                    }`}
                   >
                     <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#02C951]/15 text-[#02C951] shrink-0 [&>svg]:w-4 [&>svg]:h-4">
                       {cat.icon}
                     </span>
                     <span className="text-xs font-medium text-white/90">{cat.label}</span>
-                  </motion.div>
+                  </motion.button>
                 ))}
               </div>
             </motion.div>
@@ -1341,18 +1430,24 @@ export default function Home() {
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   {HERO_CATEGORIES.map((cat, i) => (
-                    <motion.div
-                      key={i}
+                    <motion.button
+                      key={cat.id}
+                      type="button"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.35 + i * 0.07 }}
-                      className="group flex items-center gap-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.08] hover:border-white/15 px-4 py-3.5 transition-colors"
+                      onClick={() => selectModule(cat.id)}
+                      className={`group flex items-center gap-3 rounded-xl border px-4 py-3.5 transition-colors text-left cursor-pointer ${
+                        activeModule === cat.id
+                          ? 'bg-[#02C951]/20 border-[#02C951]/45'
+                          : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/[0.08] hover:border-white/15'
+                      }`}
                     >
                       <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#02C951]/12 text-[#02C951] shrink-0 group-hover:bg-[#02C951]/20 transition-colors [&>svg]:w-5 [&>svg]:h-5">
                         {cat.icon}
                       </span>
                       <span className="text-sm font-medium text-white/90">{cat.label}</span>
-                    </motion.div>
+                    </motion.button>
                   ))}
                 </div>
                 <p className="mt-5 pt-5 border-t border-white/10 text-xs text-white/45 leading-relaxed">
@@ -1556,19 +1651,51 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============================================================ PLATFORM FEATURES GRID */}
-      <section id="funcionalidades" className="py-16 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/25">
+      {/* ============================================================ MÓDULOS / FUNCIONALIDADES */}
+      <section id="funcionalidades" ref={funcionalidadesRef} className="py-16 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/25 scroll-mt-20">
         <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10 md:mb-16">
-            <span className="inline-block bg-white text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-4 shadow-sm">Plataforma</span>
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-6 text-[#2D5C64]">Todo lo que necesitás en un solo lugar</h2>
-            <p className="text-sm md:text-xl text-gray-500 max-w-2xl mx-auto">
-              Gestión completa de tu establecimiento: ganadería, finanzas, costos, equipo y más.
-            </p>
-          </motion.div>
+          <div className="sticky top-16 md:top-[68px] z-30 -mx-4 px-4 md:mx-0 md:px-0 py-3 mb-8 bg-[#F0E8D8]/90 backdrop-blur-xl border-b border-[#2D5C64]/10">
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+              {HERO_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => selectModule(cat.id)}
+                  className={`shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-full text-xs md:text-sm font-semibold transition-all cursor-pointer ${
+                    activeModule === cat.id
+                      ? 'bg-[#2D5C64] text-white shadow-sm'
+                      : 'bg-white text-[#2D5C64]/70 border border-[#2D5C64]/15 hover:border-[#2D5C64]/30 hover:text-[#2D5C64]'
+                  }`}
+                >
+                  <span className={`[&>svg]:w-4 [&>svg]:h-4 ${activeModule === cat.id ? 'text-[#02C951]' : 'text-[#02C951]'}`}>
+                    {cat.icon}
+                  </span>
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-            {PLATFORM_FEATURES.map((feature, index) => (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeModule}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+              className="rounded-2xl md:rounded-3xl bg-[#2D5C64] text-white p-6 md:p-10 mb-10 md:mb-14 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#02C951]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+              <div className="relative">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#02C951] mb-3 block">Módulo activo</span>
+                <h2 className="text-2xl md:text-4xl font-bold mb-3">{MODULE_BANNERS[activeModule].title}</h2>
+                <p className="text-sm md:text-lg text-white/75 max-w-3xl">{MODULE_BANNERS[activeModule].subtitle}</p>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-14 md:mb-20">
+            {PLATFORM_FEATURES.filter((f) => f.module === activeModule).map((feature, index) => (
               <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8 }}
                 className="group bg-white border border-[#2D5C64]/10 p-4 md:p-7 rounded-xl md:rounded-2xl hover:shadow-xl hover:border-[#02C951]/40 transition-all">
@@ -1583,13 +1710,17 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ============================================================ DETAILED SECTIONS */}
-      <section id="plataforma" className="py-24 px-6 bg-white">
-        <div className="max-w-7xl mx-auto space-y-32">
-          {DETAILED_SECTIONS.map((section, index) => (
+          <AnimatePresence mode="wait">
+          <motion.div
+            key={activeModule}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-20 md:space-y-28"
+          >
+          {DETAILED_SECTIONS.filter((s) => s.module === activeModule).map((section, index) => (
             <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }}
               className={section.visual === 'agricultura' ? '' : `grid lg:grid-cols-2 gap-16 items-center`}>
               <div className={index % 2 === 1 && section.visual !== 'agricultura' ? 'lg:order-2' : ''}>
@@ -1721,11 +1852,9 @@ export default function Home() {
               </div>
             </motion.div>
           ))}
-        </div>
-      </section>
 
-      {/* ============================================================ VENTAS / GANADERIA */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-white">
+          {activeModule === 'ganaderia' && (
+      <div className="py-4 md:py-8">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-[400px_1fr] gap-10 lg:gap-12 items-center">
             <div>
@@ -1746,34 +1875,11 @@ export default function Home() {
             <VentasVisual />
           </motion.div>
         </div>
-      </section>
+      </div>
+          )}
 
-      {/* ============================================================ MAPA */}
-      <section id="mapa" className="py-20 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/30">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
-            <MapaVisual />
-            <div>
-              <span className="inline-block bg-white text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3 shadow-sm">Mapa interactivo</span>
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tu campo dibujado, no en una libreta</h3>
-              <p className="text-lg text-gray-500 mb-6">
-                Dibujá los potreros una vez y todo se conecta: animales, cultivos, lluvias, pastoreo. Un click y ves qué hay en cada potrero hoy.
-              </p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                {['Polígonos de cada potrero con superficie real', 'Filtrá por cultivo, categoría animal o evento', 'Visualización del pastoreo rotativo en el mapa', 'Compartilo con tu equipo en segundos'].map((it, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
-                    <span>{it}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ============================================================ EVENTOS */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-white">
+          {activeModule === 'ganaderia' && (
+      <div className="py-4 md:py-8 bg-white/60 rounded-2xl px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
@@ -1821,10 +1927,11 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </div>
+          )}
 
-      {/* ============================================================ FINANZAS DETALLADA */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-gradient-to-b from-white to-[#F0E8D8]/50">
+          {activeModule === 'finanzas' && (
+      <div className="py-4 md:py-8 bg-gradient-to-b from-white/80 to-[#F0E8D8]/40 rounded-2xl px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10 md:mb-12">
             <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Finanzas</span>
@@ -1852,10 +1959,11 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </div>
+          )}
 
-      {/* ============================================================ INSUMOS */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/25">
+          {activeModule === 'insumos' && (
+      <div className="py-4 md:py-8">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
             <div className="bg-white rounded-2xl p-5 md:p-6 border border-[#2D5C64]/10 shadow-sm order-2 lg:order-1">
@@ -1914,10 +2022,11 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </div>
+          )}
 
-      {/* ============================================================ AGENDA */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-white">
+          {activeModule === 'calendario' && (
+      <div className="py-4 md:py-8 bg-white/70 rounded-2xl px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
@@ -1972,6 +2081,37 @@ export default function Home() {
               </div>
             </div>
           </motion.div>
+        </div>
+      </div>
+          )}
+
+          {activeModule === 'mapa' && (
+      <div className="py-4 md:py-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
+            <MapaVisual />
+            <div>
+              <span className="inline-block bg-white text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3 shadow-sm">Mapa interactivo</span>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tu campo dibujado, no en una libreta</h3>
+              <p className="text-lg text-gray-500 mb-6">
+                Dibujá los potreros una vez y todo se conecta: animales, cultivos, lluvias, pastoreo. Un click y ves qué hay en cada potrero hoy.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                {['Polígonos de cada potrero con superficie real', 'Filtrá por cultivo, categoría animal o evento', 'Visualización del pastoreo rotativo en el mapa', 'Compartilo con tu equipo en segundos'].map((it, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+          )}
+
+          </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 

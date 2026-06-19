@@ -19,7 +19,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-white/70">
               <li><a href="/#funcionalidades" className="hover:text-[#02C951] transition-colors">Funcionalidades</a></li>
               <li><a href="/#whatsapp" className="hover:text-[#02C951] transition-colors">Bot de WhatsApp</a></li>
-              <li><a href="/#plataforma" className="hover:text-[#02C951] transition-colors">Plataforma</a></li>
+              <li><a href="/#funcionalidades" className="hover:text-[#02C951] transition-colors">Módulos</a></li>
               <li><a href="https://pricing.botrural.app" className="hover:text-[#02C951] transition-colors">Precios</a></li>
             </ul>
           </div>
