@@ -282,8 +282,8 @@ const PLATFORM_FEATURES: {
   },
   {
     icon: <TrendingUp className="w-7 h-7" />,
-    title: 'Ventas de hacienda',
-    description: 'Enviá la factura de venta por WhatsApp y queda todo cargado automáticamente.',
+    title: 'Ventas e ingresos',
+    description: 'Ganado, lana, granos u otros ingresos. Mandá la factura por WhatsApp o cargala en el panel.',
     color: 'from-[#02C951] to-[#2D5C64]',
     tag: 'Ventas',
     module: 'finanzas',
@@ -503,6 +503,19 @@ function AgriculturaVisual() {
 // Datos con precios y rindes realistas de Uruguay (zafra 2025).
 // ============================================================
 
+const VENTAS_SECTION = {
+  badge: 'Ventas e ingresos',
+  title: 'Tus ingresos del campo, claros como un Excel',
+  description:
+    'Mandá la factura por WhatsApp o subila en el panel. Ganado, lana, granos y otros ingresos quedan en tablas con totales y gráfico.',
+  bullets: [
+    'Vacunos, ovinos, lana y granos',
+    'Otros ingresos: servicios agrícolas, pastoreo u otros',
+    'Totales por categoría — en US$, kg o cantidad',
+    'La factura queda guardada en cada venta',
+  ],
+};
+
 function fmt(n: number) {
   return n.toLocaleString('es-UY', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 }
@@ -574,13 +587,13 @@ const AGRI_TOT = AGRI_ROWS.reduce((s, r) => ({
   has: s.has + (r.has as number), tnTot: s.tnTot + (r.tnTot as number), bruto: s.bruto + (r.bruto as number)
 }), { has: 0, tnTot: 0, bruto: 0 });
 
-// ===== OTROS INGRESOS
+// ===== OTROS INGRESOS (subcategorías reales de la app)
 const OTROS_ROWS: Row[] = [
-  { cat: 'Alquiler de campo',     color: '#10b981', cant: 250, unidad: 'ha/año',     usUn: 75, bruto: 18750 },
-  { cat: 'Venta de fardos',       color: '#f59e0b', cant: 800, unidad: 'fardos',     usUn: 18, bruto: 14400 },
-  { cat: 'Servicio de pastoreo',  color: '#06b6d4', cant: 1200,unidad: 'cab/mes',    usUn: 8,  bruto: 9600  },
-  { cat: 'Servicio de cosecha',   color: '#8b5cf6', cant: 120, unidad: 'ha',         usUn: 75, bruto: 9000  },
-  { cat: 'Venta de leña',         color: '#ef4444', cant: 80,  unidad: 'm³',         usUn: 35, bruto: 2800  },
+  { cat: 'Servicios Agrícolas · Cosecha',        color: '#10b981', cant: 120, unidad: 'ha',      usUn: 75, bruto: 9000  },
+  { cat: 'Servicios Agrícolas · Pulverización', color: '#22c55e', cant: 85,  unidad: 'ha',      usUn: 42, bruto: 3570  },
+  { cat: 'Pastoreo · enero',                    color: '#06b6d4', cant: 1200,unidad: 'cab/mes', usUn: 8,  bruto: 9600  },
+  { cat: 'Otros · Venta de fardos',             color: '#f59e0b', cant: 800, unidad: 'fardos',  usUn: 18, bruto: 14400 },
+  { cat: 'Otros · Alquiler de campo',           color: '#8b5cf6', cant: 250, unidad: 'ha/año',  usUn: 75, bruto: 18750 },
 ];
 const OTROS_TOT = OTROS_ROWS.reduce((s, r) => ({ bruto: s.bruto + (r.bruto as number) }), { bruto: 0 });
 
@@ -662,10 +675,10 @@ const SECTORS: Sector[] = [
   },
   {
     id: 'agri',
-    label: 'Agricultura',
+    label: 'Granos',
     headerBg: 'bg-[#2D5C64]',
     headerText: 'text-white',
-    headerLabel: 'AGRICULTURA · Zafra 24/25',
+    headerLabel: 'GRANOS · Zafra 24/25',
     cols: [
       { key: 'cat', label: 'Cultivo', align: 'left' },
       { key: 'has', label: 'Hás', align: 'right' },
@@ -1937,13 +1950,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-[400px_1fr] gap-10 lg:gap-12 items-center">
             <div>
-              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Ventas · Bovino · Ovino</span>
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tus ventas de hacienda, claras como un Excel</h3>
-              <p className="text-lg text-gray-500 mb-6">
-                Enviá la factura de venta por WhatsApp y la tabla se llena sola. KG, US$/KG, US$ bruto por categoría, total general y gráfico de torta.
-              </p>
+              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">{VENTAS_SECTION.badge}</span>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{VENTAS_SECTION.title}</h3>
+              <p className="text-lg text-gray-500 mb-6">{VENTAS_SECTION.description}</p>
               <ul className="space-y-2 text-sm text-gray-600">
-                {['Desglose por categoría (Novillo, Vaca, Vaquillona…)', 'Cambia entre US$, KG y Animales con un toque', 'Promedios y totales calculados', 'Exportá todo a Excel con un click'].map((it, i) => (
+                {VENTAS_SECTION.bullets.map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
                     <span>{it}</span>
@@ -2045,13 +2056,11 @@ export default function Home() {
             className="grid lg:grid-cols-[400px_1fr] gap-10 lg:gap-12 items-center mt-14 md:mt-16 pt-14 md:pt-16 border-t border-[#2D5C64]/10"
           >
             <div>
-              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Ventas · Bovino · Ovino</span>
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tus ventas de hacienda, claras como un Excel</h3>
-              <p className="text-lg text-gray-500 mb-6">
-                Enviá la factura de venta por WhatsApp y la tabla se llena sola. KG, US$/KG, US$ bruto por categoría, total general y gráfico de torta.
-              </p>
+              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">{VENTAS_SECTION.badge}</span>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{VENTAS_SECTION.title}</h3>
+              <p className="text-lg text-gray-500 mb-6">{VENTAS_SECTION.description}</p>
               <ul className="space-y-2 text-sm text-gray-600">
-                {['Desglose por categoría (Novillo, Vaca, Vaquillona…)', 'Cambia entre US$, KG y Animales con un toque', 'Promedios y totales calculados', 'Exportá todo a Excel con un click'].map((it, i) => (
+                {VENTAS_SECTION.bullets.map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
                     <span>{it}</span>
