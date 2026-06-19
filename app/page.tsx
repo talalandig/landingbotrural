@@ -114,7 +114,7 @@ const MODULE_BANNERS: Record<ModuleId, { title: string; subtitle: string }> = {
   },
   finanzas: {
     title: 'Finanzas',
-    subtitle: 'Gastos, ingresos, facturas con foto y costos desglosados por sector.',
+    subtitle: 'Gastos, ingresos, ventas de hacienda, facturas con foto y costos desglosados por sector.',
   },
   agenda: {
     title: 'Agenda de actividades',
@@ -230,6 +230,14 @@ const PLATFORM_FEATURES: {
     description: 'Costos directos vinculados a diferentes rubros y cultivos, costos generales de la empresa claros. Costo por hectarea y por UG.',
     color: 'from-[#1e454c] to-[#2D5C64]',
     tag: 'Economia',
+    module: 'finanzas',
+  },
+  {
+    icon: <TrendingUp className="w-7 h-7" />,
+    title: 'Ventas de hacienda',
+    description: 'Cargá cada venta con un mensaje. KG, US$/KG, US$ bruto por categoría, totales y gráfico — listo para el contador.',
+    color: 'from-[#02C951] to-[#2D5C64]',
+    tag: 'Ventas',
     module: 'finanzas',
   },
   {
@@ -1873,7 +1881,7 @@ export default function Home() {
             </motion.div>
           ))}
 
-          {activeModule === 'ganaderia' && (
+          {(activeModule === 'ganaderia' || activeModule === 'finanzas') && (
       <div className="py-4 md:py-8">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-[400px_1fr] gap-10 lg:gap-12 items-center">
