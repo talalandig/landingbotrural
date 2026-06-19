@@ -91,7 +91,7 @@ function IconMapa({ className }: { className?: string }) {
   );
 }
 
-type ModuleId = 'ganaderia' | 'agricultura' | 'insumos' | 'finanzas' | 'calendario' | 'mapa';
+type ModuleId = 'ganaderia' | 'agricultura' | 'insumos' | 'finanzas' | 'agenda' | 'mapa';
 
 const NAV_LINKS = [
   { href: '#funcionalidades', label: 'Funcionalidades' },
@@ -116,9 +116,9 @@ const MODULE_BANNERS: Record<ModuleId, { title: string; subtitle: string }> = {
     title: 'Finanzas',
     subtitle: 'Gastos, ingresos, facturas con foto y costos desglosados por sector.',
   },
-  calendario: {
-    title: 'Agenda',
-    subtitle: 'Recordatorios con IA, tareas programadas y calendario mensual del campo.',
+  agenda: {
+    title: 'Agenda de actividades',
+    subtitle: 'Recordatorios con IA, tareas programadas y vista mensual de actividades del campo.',
   },
   mapa: {
     title: 'Mapa interactivo',
@@ -131,7 +131,7 @@ const HERO_CATEGORIES: { id: ModuleId; icon: ReactNode; label: string }[] = [
   { id: 'agricultura', icon: <Wheat className="w-5 h-5" />, label: 'Agricultura' },
   { id: 'insumos', icon: <Sprout className="w-5 h-5" />, label: 'Insumos' },
   { id: 'finanzas', icon: <DollarSign className="w-5 h-5" />, label: 'Finanzas' },
-  { id: 'calendario', icon: <Calendar className="w-5 h-5" />, label: 'Agenda' },
+  { id: 'agenda', icon: <Calendar className="w-5 h-5" />, label: 'Agenda' },
   { id: 'mapa', icon: <IconMapa className="w-5 h-5" />, label: 'Mapa' },
 ];
 
@@ -162,7 +162,7 @@ const WHATSAPP_FEATURES = [
   },
   {
     icon: <Calendar className="w-6 h-6" />,
-    title: 'Agenda con IA',
+    title: 'Agenda de actividades',
     description: '"En 14 dias hacer tacto" — el bot programa el recordatorio y te avisa.',
     demo: 'calendario',
   },
@@ -234,11 +234,11 @@ const PLATFORM_FEATURES: {
   },
   {
     icon: <Calendar className="w-7 h-7" />,
-    title: 'Agenda con IA',
+    title: 'Agenda de actividades',
     description: 'Programa tareas con un mensaje. El bot arma la agenda y te recuerda por WhatsApp.',
     color: 'from-[#02C951] to-[#2D5C64]',
     tag: 'Agenda',
-    module: 'calendario',
+    module: 'agenda',
   },
   {
     icon: <IconMapa className="w-7 h-7" />,
@@ -2025,18 +2025,18 @@ export default function Home() {
       </div>
           )}
 
-          {activeModule === 'calendario' && (
+          {activeModule === 'agenda' && (
       <div className="py-4 md:py-8 bg-white/70 rounded-2xl px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
-              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Agenda con IA</span>
+              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Agenda de actividades</span>
               <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">"En 14 días hacer tacto" — el bot lo agenda solo</h3>
               <p className="text-lg text-gray-500 mb-6">
-                Decile al bot lo que hay que hacer y cuándo. Él arma la agenda, te recuerda el día y lo deja listo para que lo veas en el calendario.
+                Decile al bot lo que hay que hacer y cuándo. Él arma la agenda, te recuerda el día y lo deja listo en tu lista de actividades.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
-                {['Recordatorios automáticos por WhatsApp', 'Calendario mensual con todas las tareas', 'Tareas recurrentes: vacunas, esquila, sanidad', 'Cargá tareas con un audio o un texto natural'].map((it, i) => (
+                {['Recordatorios automáticos por WhatsApp', 'Vista mensual con todas las actividades', 'Tareas recurrentes: vacunas, esquila, sanidad', 'Cargá tareas con un audio o un texto natural'].map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
                     <span>{it}</span>
