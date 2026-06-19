@@ -163,7 +163,7 @@ const WHATSAPP_FEATURES = [
   {
     icon: <Calendar className="w-6 h-6" />,
     title: 'Agenda de actividades',
-    description: '"En 14 dias hacer tacto" — el bot programa el recordatorio y te avisa.',
+    description: '"En 14 dias quitar tablillas a terneros" — el bot programa el recordatorio y te avisa.',
     demo: 'calendario',
   },
 ];
@@ -316,7 +316,7 @@ const WHATSAPP_EXAMPLES = [
   { user: '[Foto] + murio un ternero en el norte', bot: 'Mortandad con foto guardada' },
   { user: 'movi 30 novillos del norte al sur', bot: 'Movimiento: 30 novillos de Norte a Sur' },
   { user: 'reporte de carga', bot: 'Generando PDF de carga actual...' },
-  { user: 'en 14 dias hacer tacto', bot: 'Recordatorio programado' },
+  { user: 'en 14 dias quitar tablillas a terneros', bot: 'Recordatorio programado' },
   { user: '[Foto de factura]', bot: 'Factura: Veterinaria Sur - $15.000' },
 ];
 
@@ -1142,7 +1142,7 @@ function FinanzasVisual() {
 // ============================================================
 
 const AGENDA_TAREAS = [
-  { dia: 5, color: 'bg-[#02C951]', label: 'Tacto · Sur' },
+  { dia: 5, color: 'bg-[#02C951]', label: 'Tablillas · Terneros' },
   { dia: 12, color: 'bg-amber-500', label: 'Vacuna brucelosis' },
   { dia: 18, color: 'bg-blue-500', label: 'Esquila · Norte' },
   { dia: 22, color: 'bg-rose-500', label: 'Carga · 30 novillos' },
@@ -1252,10 +1252,10 @@ export default function Home() {
           text: { title: '23 registros', icon: '📊', summary: 'Generando PDF... + 3 fotos adjuntas',
             data: [{ label: 'Lluvias', value: '4 registros' }, { label: 'Tratamientos', value: '8 registros' }, { label: 'Mortandades', value: '2 registros 📷' }, { label: 'Tactos', value: '3 registros' }] } } },
       calendario: {
-        userMsg: { type: 'text', sender: 'user', message: 'en 14 dias hacer tacto en el sur', timestamp: '10:00' },
+        userMsg: { type: 'text', sender: 'user', message: 'en 14 dias quitar tablillas a terneros', timestamp: '10:00' },
         botResponse: { type: 'text', sender: 'bot', timestamp: '10:01',
           text: { title: 'Actividad programada', icon: '📅',
-            data: [{ label: 'Tarea', value: 'Hacer tacto en el sur' }, { label: 'Fecha', value: '13/02/2026' }],
+            data: [{ label: 'Tarea', value: 'Quitar tablillas a terneros' }, { label: 'Fecha', value: '13/02/2026' }],
             buttons: ['Confirmar', 'Cancelar'] } } },
     };
     return demos[demoType] || demos.audio;
@@ -2059,7 +2059,7 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
               <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Agenda de actividades</span>
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">"En 14 días hacer tacto" — el bot lo agenda solo</h3>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">"En 14 días quitar tablillas a terneros" — el bot lo agenda solo</h3>
               <p className="text-lg text-gray-500 mb-6">
                 Decile al bot lo que hay que hacer y cuándo. Él arma la agenda, te recuerda el día y lo deja listo en tu lista de actividades.
               </p>
