@@ -187,7 +187,7 @@ const WHATSAPP_FEATURES = [
   {
     icon: <Mic className="w-6 h-6" />,
     title: 'Audio inteligente',
-    description: 'Graba un audio describiendo lo que paso y el bot lo interpreta y registra solo.',
+    description: 'Enviá un mensaje de audio con el dato que querés cargar, el bot lo interpreta y registra.',
     demo: 'audio',
   },
   {
