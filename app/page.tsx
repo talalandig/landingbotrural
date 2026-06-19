@@ -141,7 +141,7 @@ type ModuleId = 'ganaderia' | 'agricultura' | 'insumos' | 'finanzas' | 'agenda' 
 
 const NAV_LINKS = [
   { href: '/', label: 'Inicio' },
-  { href: '#funcionalidades', label: 'Funcionalidades' },
+  { href: '#funcionalidades', label: 'Funciones' },
   { href: '#whatsapp', label: 'WhatsApp' },
   { href: 'https://www.youtube.com/watch?v=6E3wScs0ru0', label: 'Cómo empezar', external: true },
   { href: 'https://pricing.botrural.app', label: 'Precios' },
@@ -1978,58 +1978,6 @@ export default function Home() {
       </div>
           )}
 
-          {activeModule === 'ganaderia' && (
-      <div className="py-4 md:py-8 bg-white/60 rounded-2xl px-4 md:px-6">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Eventos del campo</span>
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Todo lo que pasa en el campo, en un solo timeline</h3>
-              <p className="text-lg text-gray-500 mb-6">
-                Lluvias, sanidades, pariciones, mortandades, movimientos. Cada cosa que mandás por WhatsApp queda registrada y filtrable.
-              </p>
-              <ul className="space-y-2 text-sm text-gray-600">
-                {['Lluvias y clima', 'Sanidad: vacunas, tratamientos, dosificaciones', 'Pariciones, destetes, mortandades', 'Movimientos entre potreros', 'Fotos adjuntas a cualquier evento'].map((it, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
-                    <span>{it}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="bg-[#F0E8D8]/30 rounded-2xl p-5 md:p-6 border border-[#2D5C64]/10 shadow-sm">
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#2D5C64]/10">
-                <div className="flex items-center gap-2">
-                  <CalendarDays className="w-4 h-4 text-[#2D5C64]" />
-                  <span className="text-sm font-bold text-[#2D5C64]">Últimos eventos</span>
-                </div>
-                <span className="text-xs text-gray-400">Hoy · 5 nuevos</span>
-              </div>
-              <div className="space-y-3">
-                {EVENTOS.map((e, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                    className="flex items-start gap-3 bg-white rounded-xl p-3 shadow-sm">
-                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${e.bg} ${e.color}`}>
-                      <IconoEvento tipo={e.tipo} className="w-5 h-5" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-bold text-gray-800">{e.label}</span>
-                        <span className="text-[10px] text-gray-400">· {e.hora}</span>
-                      </div>
-                      <p className="text-sm text-gray-600">{e.desc}</p>
-                      <p className="text-[10px] text-gray-400 mt-0.5">{e.via}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-          )}
-
           {activeModule === 'finanzas' && (
       <div className="py-4 md:py-8 bg-gradient-to-b from-white/80 to-[#F0E8D8]/40 rounded-2xl px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
@@ -2235,6 +2183,57 @@ export default function Home() {
               </div>
             </motion.div>
           </AnimatePresence>
+        </div>
+      </section>
+
+      {/* ============================================================ EVENTOS — siempre visible */}
+      <section className="py-16 md:py-24 px-4 md:px-6 bg-white/60">
+        <div className="max-w-7xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Eventos del campo</span>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Todo lo que pasa en el campo, en un solo timeline</h3>
+              <p className="text-lg text-gray-500 mb-6">
+                Lluvias, sanidades, pariciones, mortandades, movimientos. Cada cosa que mandás por WhatsApp queda registrada y filtrable.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                {['Lluvias y clima', 'Sanidad: vacunas, tratamientos, dosificaciones', 'Pariciones, destetes, mortandades', 'Movimientos entre potreros', 'Fotos adjuntas a cualquier evento'].map((it, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-[#F0E8D8]/30 rounded-2xl p-5 md:p-6 border border-[#2D5C64]/10 shadow-sm">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#2D5C64]/10">
+                <div className="flex items-center gap-2">
+                  <CalendarDays className="w-4 h-4 text-[#2D5C64]" />
+                  <span className="text-sm font-bold text-[#2D5C64]">Últimos eventos</span>
+                </div>
+                <span className="text-xs text-gray-400">Hoy · 5 nuevos</span>
+              </div>
+              <div className="space-y-3">
+                {EVENTOS.map((e, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                    className="flex items-start gap-3 bg-white rounded-xl p-3 shadow-sm">
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${e.bg} ${e.color}`}>
+                      <IconoEvento tipo={e.tipo} className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-bold text-gray-800">{e.label}</span>
+                        <span className="text-[10px] text-gray-400">· {e.hora}</span>
+                      </div>
+                      <p className="text-sm text-gray-600">{e.desc}</p>
+                      <p className="text-[10px] text-gray-400 mt-0.5">{e.via}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

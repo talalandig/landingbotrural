@@ -7,7 +7,7 @@ const HOME_URL = 'https://botrural.app';
 
 const NAV_LINKS = [
   { href: HOME_URL, label: 'Inicio' },
-  { href: `${HOME_URL}/#funcionalidades`, label: 'Funcionalidades' },
+  { href: `${HOME_URL}/#funcionalidades`, label: 'Funciones' },
   { href: `${HOME_URL}/#whatsapp`, label: 'WhatsApp' },
   { href: 'https://www.youtube.com/watch?v=6E3wScs0ru0', label: 'Cómo empezar', newTab: true },
   { href: 'https://pricing.botrural.app', label: 'Precios' },
