@@ -2165,34 +2165,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============================================================ PRICING TEASER */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-[#F0E8D8]">
-        <div className="max-w-4xl mx-auto text-center">
-          <span className="inline-block bg-white text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-4 shadow-sm">Precios</span>
-          <h3 className="text-3xl md:text-5xl font-bold text-[#2D5C64] mb-4">Un precio simple, según tus hectáreas</h3>
-          <p className="text-lg text-gray-600 mb-8">Sin permanencias. Sin sorpresas. Cancelás cuando quieras.</p>
-
-          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-[#2D5C64]/20 max-w-md mx-auto">
-            <div className="text-sm text-gray-500 mb-2">Plan Inicial · hasta 500 ha</div>
-            <div className="flex items-baseline justify-center gap-1 mb-1">
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">USD 29.99</span>
-            </div>
-            <div className="text-sm text-gray-500 mb-6">/mes · todo incluido</div>
-            <ul className="text-left space-y-2 mb-6 text-sm text-gray-600">
-              {['Bot de WhatsApp con IA', 'Campos / establecimientos ilimitados', 'Equipo con roles y permisos', 'Reportes y exportación a Excel'].map((it, i) => (
-                <li key={i} className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
-                  <span>{it}</span>
-                </li>
-              ))}
-            </ul>
-            <a href="https://pricing.botrural.app" className="block w-full bg-[#02C951] hover:bg-[#02C951]/90 text-white py-3 rounded-xl font-semibold transition shadow-md">
-              Ver todos los planes
-            </a>
-          </div>
-        </div>
-      </section>
-
       {/* ============================================================ FINAL CTA */}
       <section className="py-24 px-6 bg-[#F0E8D8]/30">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
