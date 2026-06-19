@@ -1,3 +1,6 @@
+const WHATSAPP_URL =
+  'https://wa.me/59899465242?text=Hola%20quiero%20mas%20informacion%20de%20botrural';
+
 export default function Footer() {
   return (
     <footer className="bg-[#2D5C64] text-white py-16 px-6">
@@ -10,8 +13,13 @@ export default function Footer() {
             <p className="text-white/70 text-sm mb-4 leading-relaxed">
               Gestión agropecuaria por WhatsApp. Registrá, consultá y reportá todo desde el celular, con IA.
             </p>
-            <a href="mailto:botruraluy@gmail.com" className="text-[#02C951] text-sm font-medium hover:text-[#02C951]/80 transition-colors">
-              botruraluy@gmail.com
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#02C951] text-sm font-medium hover:text-[#02C951]/80 transition-colors"
+            >
+              WhatsApp
             </a>
           </div>
           <div>
@@ -26,7 +34,16 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4 text-[#F0E8D8]">Contacto</h4>
             <ul className="space-y-2 text-sm text-white/70">
-              <li><a href="mailto:botruraluy@gmail.com" className="hover:text-[#02C951] transition-colors">botruraluy@gmail.com</a></li>
+              <li>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#02C951] transition-colors"
+                >
+                  WhatsApp
+                </a>
+              </li>
               <li><a href="https://app.botrural.app/login" className="hover:text-[#02C951] transition-colors">Ingresar</a></li>
             </ul>
           </div>
