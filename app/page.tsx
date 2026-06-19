@@ -1316,7 +1316,7 @@ export default function Home() {
             }`}>
               <a
                 href="https://app.botrural.app/login"
-                className={`font-semibold text-white bg-[#2D5C64] hover:bg-[#1e454c] rounded-lg transition-all duration-300 ${
+                className={`font-semibold text-white bg-[#02C951] hover:bg-[#02b84a] rounded-lg transition-all duration-300 ${
                   scrollY > 24 || mobileMenuOpen
                     ? 'text-[12px] md:text-[13px] px-4 py-2'
                     : 'text-sm md:text-[15px] px-6 py-2.5'
@@ -1360,7 +1360,7 @@ export default function Home() {
                   <a
                     href="https://app.botrural.app/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="bg-[#2D5C64] hover:bg-[#1e454c] text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2 transition-colors"
+                    className="bg-[#02C951] hover:bg-[#02b84a] text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2 transition-colors"
                   >
                     Ingresar
                   </a>
@@ -1412,7 +1412,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-3 mb-10 md:mb-0">
                 <a
                   href="https://app.botrural.app/register"
-                  className="group inline-flex items-center justify-center gap-2 bg-[#2D5C64] hover:bg-[#1e454c] text-white px-7 py-3.5 md:py-4 rounded-xl text-sm md:text-base font-semibold transition-colors"
+                  className="group inline-flex items-center justify-center gap-2 bg-[#02C951] hover:bg-[#02b84a] text-white px-7 py-3.5 md:py-4 rounded-xl text-sm md:text-base font-semibold transition-colors"
                 >
                   Probar gratis
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -1436,13 +1436,11 @@ export default function Home() {
                     onClick={() => selectModule(cat.id)}
                     className={`flex items-center gap-2.5 backdrop-blur-md border rounded-xl px-3 py-2.5 text-left transition-colors cursor-pointer ${
                       activeModule === cat.id
-                        ? 'bg-[#2D5C64] border-[#2D5C64]'
+                        ? 'bg-[#02C951]/20 border-[#02C951]/50'
                         : 'bg-white/[0.06] border-white/10 hover:bg-white/10'
                     }`}
                   >
-                    <span className={`flex items-center justify-center w-8 h-8 rounded-lg shrink-0 [&>svg]:w-4 [&>svg]:h-4 ${
-                      activeModule === cat.id ? 'bg-white/15 text-white' : 'bg-[#2D5C64]/20 text-[#02C951]'
-                    }`}>
+                    <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#02C951]/15 text-[#02C951] shrink-0 [&>svg]:w-4 [&>svg]:h-4">
                       {cat.icon}
                     </span>
                     <span className="text-xs font-medium text-white/90">{cat.label}</span>
@@ -1472,15 +1470,11 @@ export default function Home() {
                       onClick={() => selectModule(cat.id)}
                       className={`group flex items-center gap-3 rounded-xl border px-4 py-3.5 transition-colors text-left cursor-pointer ${
                         activeModule === cat.id
-                          ? 'bg-[#2D5C64] border-[#2D5C64]'
+                          ? 'bg-[#02C951]/20 border-[#02C951]/45'
                           : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/[0.08] hover:border-white/15'
                       }`}
                     >
-                      <span className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-colors [&>svg]:w-5 [&>svg]:h-5 ${
-                        activeModule === cat.id
-                          ? 'bg-white/15 text-white'
-                          : 'bg-[#2D5C64]/15 text-[#02C951] group-hover:bg-[#2D5C64]/25'
-                      }`}>
+                      <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#02C951]/12 text-[#02C951] shrink-0 group-hover:bg-[#02C951]/20 transition-colors [&>svg]:w-5 [&>svg]:h-5">
                         {cat.icon}
                       </span>
                       <span className="text-sm font-medium text-white/90">{cat.label}</span>
