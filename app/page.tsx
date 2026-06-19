@@ -1210,6 +1210,27 @@ const AGENDA_TAREAS = [
 ];
 
 // ============================================================
+// ANIMACIONES — módulos (entrada suave, sin pop-in escalonado)
+// ============================================================
+
+const EASE_SMOOTH = [0.22, 1, 0.36, 1] as const;
+
+const heroModulesReveal = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: EASE_SMOOTH, delay: 0.2 },
+  },
+};
+
+const moduleSwitchReveal = {
+  initial: { opacity: 0, y: 6 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.28, ease: EASE_SMOOTH } },
+  exit: { opacity: 0, transition: { duration: 0.16, ease: EASE_SMOOTH } },
+};
+
+// ============================================================
 // COMPONENTE PRINCIPAL
 // ============================================================
 
@@ -1485,14 +1506,16 @@ export default function Home() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-8 lg:hidden">
-                {HERO_CATEGORIES.map((cat, i) => (
-                  <motion.button
+              <motion.div
+                variants={heroModulesReveal}
+                initial="hidden"
+                animate="visible"
+                className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-8 lg:hidden"
+              >
+                {HERO_CATEGORIES.map((cat) => (
+                  <button
                     key={cat.id}
                     type="button"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 + i * 0.06 }}
                     onClick={() => selectModule(cat.id)}
                     className={`flex items-center gap-2.5 backdrop-blur-md border rounded-xl px-3 py-2.5 text-left transition-colors cursor-pointer ${
                       activeModule === cat.id
@@ -1506,15 +1529,15 @@ export default function Home() {
                       {cat.icon}
                     </span>
                     <span className="text-xs font-medium text-white/90">{cat.label}</span>
-                  </motion.button>
+                  </button>
                 ))}
-              </div>
+              </motion.div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15 }}
+              variants={heroModulesReveal}
+              initial="hidden"
+              animate="visible"
               className="hidden lg:block"
             >
               <div className="bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl p-6 xl:p-7">
@@ -1522,13 +1545,10 @@ export default function Home() {
                   Módulos de la plataforma
                 </p>
                 <div className="grid grid-cols-2 gap-3">
-                  {HERO_CATEGORIES.map((cat, i) => (
-                    <motion.button
+                  {HERO_CATEGORIES.map((cat) => (
+                    <button
                       key={cat.id}
                       type="button"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.35 + i * 0.07 }}
                       onClick={() => selectModule(cat.id)}
                       className={`group flex items-center gap-3 rounded-xl border px-4 py-3.5 transition-colors text-left cursor-pointer ${
                         activeModule === cat.id
@@ -1544,7 +1564,7 @@ export default function Home() {
                         {cat.icon}
                       </span>
                       <span className="text-sm font-medium text-white/90">{cat.label}</span>
-                    </motion.button>
+                    </button>
                   ))}
                 </div>
                 <p className="mt-5 pt-5 border-t border-white/10 text-xs text-white/45 leading-relaxed">
@@ -1768,50 +1788,40 @@ export default function Home() {
             </div>
           </div>
 
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={activeModule}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25 }}
-              className="rounded-2xl md:rounded-3xl bg-[#2D5C64] text-white p-6 md:p-10 mb-10 md:mb-14 relative overflow-hidden"
+              {...moduleSwitchReveal}
+              className="space-y-14 md:space-y-20"
             >
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#02C951]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-              <div className="relative">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#02C951] mb-3 block">Módulo activo</span>
-                <h2 className="text-2xl md:text-4xl font-bold mb-3">{MODULE_BANNERS[activeModule].title}</h2>
-                <p className="text-sm md:text-lg text-white/75 max-w-3xl">{MODULE_BANNERS[activeModule].subtitle}</p>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-14 md:mb-20">
-            {PLATFORM_FEATURES.filter((f) => f.module === activeModule).map((feature, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -8 }}
-                className="group bg-white border border-[#2D5C64]/10 p-4 md:p-7 rounded-xl md:rounded-2xl hover:shadow-xl hover:border-[#02C951]/40 transition-all">
-                <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-4">
-                  <div className={`bg-gradient-to-br ${feature.color} w-9 h-9 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform [&>svg]:w-5 [&>svg]:h-5 md:[&>svg]:w-7 md:[&>svg]:h-7`}>
-                    {feature.icon}
-                  </div>
-                  <span className="text-[10px] md:text-xs font-semibold text-[#2D5C64]/60 uppercase tracking-wider">{feature.tag}</span>
+              <div className="rounded-2xl md:rounded-3xl bg-[#2D5C64] text-white p-6 md:p-10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#02C951]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+                <div className="relative">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#02C951] mb-3 block">Módulo activo</span>
+                  <h2 className="text-2xl md:text-4xl font-bold mb-3">{MODULE_BANNERS[activeModule].title}</h2>
+                  <p className="text-sm md:text-lg text-white/75 max-w-3xl">{MODULE_BANNERS[activeModule].subtitle}</p>
                 </div>
-                <h3 className="text-sm md:text-xl font-bold mb-1 md:mb-2 text-gray-900">{feature.title}</h3>
-                <p className="text-gray-500 leading-relaxed text-xs md:text-sm hidden md:block">{feature.description}</p>
-              </motion.div>
-            ))}
-          </div>
+              </div>
 
-          <AnimatePresence mode="wait">
-          <motion.div
-            key={activeModule}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="space-y-20 md:space-y-28"
-          >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+                {PLATFORM_FEATURES.filter((f) => f.module === activeModule).map((feature) => (
+                  <div
+                    key={feature.title}
+                    className="group bg-white border border-[#2D5C64]/10 p-4 md:p-7 rounded-xl md:rounded-2xl hover:shadow-xl hover:border-[#02C951]/40 hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-4">
+                      <div className={`bg-gradient-to-br ${feature.color} w-9 h-9 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform [&>svg]:w-5 [&>svg]:h-5 md:[&>svg]:w-7 md:[&>svg]:h-7`}>
+                        {feature.icon}
+                      </div>
+                      <span className="text-[10px] md:text-xs font-semibold text-[#2D5C64]/60 uppercase tracking-wider">{feature.tag}</span>
+                    </div>
+                    <h3 className="text-sm md:text-xl font-bold mb-1 md:mb-2 text-gray-900">{feature.title}</h3>
+                    <p className="text-gray-500 leading-relaxed text-xs md:text-sm hidden md:block">{feature.description}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-20 md:space-y-28">
           {DETAILED_SECTIONS.filter((s) => s.module === activeModule).map((section, index) => (
             <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }}
               className={section.visual === 'agricultura' ? '' : `grid lg:grid-cols-2 gap-16 items-center`}>
@@ -2222,7 +2232,8 @@ export default function Home() {
       </div>
           )}
 
-          </motion.div>
+              </div>
+            </motion.div>
           </AnimatePresence>
         </div>
       </section>
