@@ -2202,7 +2202,7 @@ export default function Home() {
           <div className="relative z-10">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Empezá a gestionar tu campo hoy</h2>
             <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-              En 2 minutos tenés tu campo configurado. Sin tarjeta, sin compromiso. Tu equipo registra datos por WhatsApp desde el primer día.
+              En minutos tenés tu campo configurado. Sin tarjeta, sin compromiso. Tu equipo registra datos por WhatsApp desde el primer día.
             </p>
             <motion.a href="https://app.botrural.app/register" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
               className="group bg-white hover:bg-[#F0E8D8] text-[#2D5C64] px-10 py-5 rounded-xl text-xl font-bold shadow-lg transition-all inline-flex items-center gap-3">
