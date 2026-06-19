@@ -1215,12 +1215,12 @@ const AGENDA_TAREAS = [
 
 const EASE_SMOOTH = [0.22, 1, 0.36, 1] as const;
 
+// Solo desplazamiento — sin opacity (evita flash transparente en el glass)
 const heroModulesReveal = {
-  hidden: { opacity: 0, y: 10 },
+  hidden: { y: 8 },
   visible: {
-    opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: EASE_SMOOTH, delay: 0.2 },
+    transition: { duration: 0.4, ease: EASE_SMOOTH, delay: 0.15 },
   },
 };
 
@@ -1519,8 +1519,8 @@ export default function Home() {
                     onClick={() => selectModule(cat.id)}
                     className={`flex items-center gap-2.5 backdrop-blur-md border rounded-xl px-3 py-2.5 text-left transition-colors cursor-pointer ${
                       activeModule === cat.id
-                        ? 'bg-white/12 border-white/30 shadow-sm'
-                        : 'bg-white/[0.06] border-white/10 hover:bg-white/10'
+                        ? 'bg-white/14 border-white/30 shadow-sm'
+                        : 'bg-black/35 border-white/12 hover:bg-black/45'
                     }`}
                   >
                     <span className={`flex items-center justify-center w-8 h-8 rounded-lg shrink-0 text-white [&>svg]:w-4 [&>svg]:h-4 ${
@@ -1540,8 +1540,8 @@ export default function Home() {
               animate="visible"
               className="hidden lg:block"
             >
-              <div className="bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl p-6 xl:p-7">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45 mb-5">
+              <div className="bg-black/45 backdrop-blur-xl border border-white/15 rounded-2xl p-6 xl:p-7 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50 mb-5">
                   Módulos de la plataforma
                 </p>
                 <div className="grid grid-cols-2 gap-3">
@@ -1552,8 +1552,8 @@ export default function Home() {
                       onClick={() => selectModule(cat.id)}
                       className={`group flex items-center gap-3 rounded-xl border px-4 py-3.5 transition-colors text-left cursor-pointer ${
                         activeModule === cat.id
-                          ? 'bg-white/12 border-white/30 shadow-sm'
-                          : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/[0.08] hover:border-white/15'
+                          ? 'bg-white/14 border-white/30 shadow-sm'
+                          : 'bg-white/[0.07] hover:bg-white/12 border-white/12 hover:border-white/20'
                       }`}
                     >
                       <span className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 text-white transition-colors [&>svg]:w-5 [&>svg]:h-5 ${
