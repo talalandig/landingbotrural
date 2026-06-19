@@ -1272,8 +1272,8 @@ export default function Home() {
         transition={{ duration: 0.35 }}
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           scrollY > 24 || mobileMenuOpen
-            ? 'bg-[#2D5C64]/95 backdrop-blur-xl border-b border-white/10'
-            : 'bg-gradient-to-b from-[#2D5C64]/85 via-[#2D5C64]/45 to-transparent'
+            ? 'bg-black/90 backdrop-blur-xl border-b border-white/[0.08]'
+            : 'bg-gradient-to-b from-black/50 via-black/20 to-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -1316,7 +1316,7 @@ export default function Home() {
             }`}>
               <a
                 href="https://app.botrural.app/login"
-                className={`font-semibold text-white bg-[#02C951] hover:bg-[#02b84a] rounded-lg transition-all duration-300 ${
+                className={`font-semibold text-white bg-[#2D5C64] hover:bg-[#1e454c] rounded-lg transition-all duration-300 ${
                   scrollY > 24 || mobileMenuOpen
                     ? 'text-[12px] md:text-[13px] px-4 py-2'
                     : 'text-sm md:text-[15px] px-6 py-2.5'
@@ -1360,7 +1360,7 @@ export default function Home() {
                   <a
                     href="https://app.botrural.app/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="bg-[#02C951] hover:bg-[#02b84a] text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2 transition-colors"
+                    className="bg-[#2D5C64] hover:bg-[#1e454c] text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2 transition-colors"
                   >
                     Ingresar
                   </a>
@@ -1380,9 +1380,9 @@ export default function Home() {
             role="img"
             aria-label="Vacunos en el campo"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#2D5C64]/92 via-[#2D5C64]/72 to-[#2D5C64]/30 md:to-[#2D5C64]/15" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_35%,_#02C95120_0%,_transparent_50%)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#2D5C64]/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/25 md:to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_40%,_#02C95114_0%,_transparent_55%)]" />
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/40 to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 w-full py-24 md:py-28 lg:py-32">
@@ -1393,8 +1393,8 @@ export default function Home() {
               transition={{ duration: 0.7 }}
             >
               <div className="inline-flex items-center gap-3 mb-6 md:mb-8">
-                <span className="h-px w-10 bg-[#F0E8D8]/60" />
-                <span className="text-[11px] md:text-xs font-semibold uppercase tracking-[0.2em] text-[#F0E8D8]">
+                <span className="h-px w-10 bg-[#02C951]/70" />
+                <span className="text-[11px] md:text-xs font-semibold uppercase tracking-[0.2em] text-[#02C951]">
                   Gestión rural con IA
                 </span>
               </div>
@@ -1412,14 +1412,14 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-3 mb-10 md:mb-0">
                 <a
                   href="https://app.botrural.app/register"
-                  className="group inline-flex items-center justify-center gap-2 bg-[#02C951] hover:bg-[#02b84a] text-white px-7 py-3.5 md:py-4 rounded-xl text-sm md:text-base font-semibold transition-colors"
+                  className="group inline-flex items-center justify-center gap-2 bg-[#2D5C64] hover:bg-[#1e454c] text-white px-7 py-3.5 md:py-4 rounded-xl text-sm md:text-base font-semibold transition-colors"
                 >
                   Probar gratis
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </a>
                 <button
                   onClick={() => document.getElementById('whatsapp')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="inline-flex items-center justify-center gap-2 bg-[#2D5C64]/50 hover:bg-[#2D5C64]/65 backdrop-blur-sm border border-[#F0E8D8]/25 text-white px-7 py-3.5 md:py-4 rounded-xl text-sm md:text-base font-medium transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/20 text-white px-7 py-3.5 md:py-4 rounded-xl text-sm md:text-base font-medium transition-colors cursor-pointer"
                 >
                   Ver cómo funciona
                 </button>
@@ -1436,11 +1436,13 @@ export default function Home() {
                     onClick={() => selectModule(cat.id)}
                     className={`flex items-center gap-2.5 backdrop-blur-md border rounded-xl px-3 py-2.5 text-left transition-colors cursor-pointer ${
                       activeModule === cat.id
-                        ? 'bg-[#02C951]/25 border-[#02C951]/50'
-                        : 'bg-[#2D5C64]/35 border-[#F0E8D8]/15 hover:bg-[#2D5C64]/50'
+                        ? 'bg-[#2D5C64] border-[#2D5C64]'
+                        : 'bg-white/[0.06] border-white/10 hover:bg-white/10'
                     }`}
                   >
-                    <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#02C951]/15 text-[#02C951] shrink-0 [&>svg]:w-4 [&>svg]:h-4">
+                    <span className={`flex items-center justify-center w-8 h-8 rounded-lg shrink-0 [&>svg]:w-4 [&>svg]:h-4 ${
+                      activeModule === cat.id ? 'bg-white/15 text-white' : 'bg-[#2D5C64]/20 text-[#02C951]'
+                    }`}>
                       {cat.icon}
                     </span>
                     <span className="text-xs font-medium text-white/90">{cat.label}</span>
@@ -1455,8 +1457,8 @@ export default function Home() {
               transition={{ duration: 0.7, delay: 0.15 }}
               className="hidden lg:block"
             >
-              <div className="bg-[#2D5C64]/45 backdrop-blur-xl border border-[#F0E8D8]/15 rounded-2xl p-6 xl:p-7 shadow-xl shadow-[#2D5C64]/20">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#F0E8D8]/70 mb-5">
+              <div className="bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl p-6 xl:p-7">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45 mb-5">
                   Módulos de la plataforma
                 </p>
                 <div className="grid grid-cols-2 gap-3">
@@ -1470,18 +1472,22 @@ export default function Home() {
                       onClick={() => selectModule(cat.id)}
                       className={`group flex items-center gap-3 rounded-xl border px-4 py-3.5 transition-colors text-left cursor-pointer ${
                         activeModule === cat.id
-                          ? 'bg-[#02C951]/25 border-[#02C951]/45'
-                          : 'bg-[#2D5C64]/30 hover:bg-[#2D5C64]/45 border-[#F0E8D8]/12 hover:border-[#F0E8D8]/25'
+                          ? 'bg-[#2D5C64] border-[#2D5C64]'
+                          : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/[0.08] hover:border-white/15'
                       }`}
                     >
-                      <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#02C951]/12 text-[#02C951] shrink-0 group-hover:bg-[#02C951]/20 transition-colors [&>svg]:w-5 [&>svg]:h-5">
+                      <span className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-colors [&>svg]:w-5 [&>svg]:h-5 ${
+                        activeModule === cat.id
+                          ? 'bg-white/15 text-white'
+                          : 'bg-[#2D5C64]/15 text-[#02C951] group-hover:bg-[#2D5C64]/25'
+                      }`}>
                         {cat.icon}
                       </span>
                       <span className="text-sm font-medium text-white/90">{cat.label}</span>
                     </motion.button>
                   ))}
                 </div>
-                <p className="mt-5 pt-5 border-t border-[#F0E8D8]/15 text-xs text-[#F0E8D8]/65 leading-relaxed">
+                <p className="mt-5 pt-5 border-t border-white/10 text-xs text-white/45 leading-relaxed">
                   Todo integrado en una sola plataforma.
                 </p>
               </div>
