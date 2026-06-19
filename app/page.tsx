@@ -1240,66 +1240,123 @@ export default function Home() {
       </motion.nav>
 
       {/* ============================================================ HERO */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <motion.img animate={{ opacity: showMaiz ? 0 : 1 }} transition={{ duration: 1.5 }}
-            src="campo.jpg" className="absolute inset-0 w-full h-full object-cover" alt="Campo" />
+            src="campo.jpg" className="absolute inset-0 w-full h-full object-cover scale-105" alt="Campo" />
           <motion.img animate={{ opacity: showMaiz ? 1 : 0 }} transition={{ duration: 1.5 }}
-            src="maiz.jpg" className="absolute inset-0 w-full h-full object-cover" alt="Maiz" />
-          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-black/80 via-black/60 to-black/30" />
+            src="maiz.jpg" className="absolute inset-0 w-full h-full object-cover scale-105" alt="Maiz" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/25 md:to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_40%,_#02C95114_0%,_transparent_55%)]" />
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/40 to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-8 md:pt-20 w-full">
-          <div className="max-w-2xl">
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-              <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
-                className="inline-block bg-[#02C951]/20 text-[#02C951] border border-[#02C951]/40 px-3 py-1 md:px-4 md:py-1.5 rounded-full text-xs md:text-sm font-medium mb-4 md:mb-6">
-                Plataforma de gestión rural con IA
-              </motion.span>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 w-full py-24 md:py-28 lg:py-32">
+          <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <div className="inline-flex items-center gap-3 mb-6 md:mb-8">
+                <span className="h-px w-10 bg-[#02C951]/70" />
+                <span className="text-[11px] md:text-xs font-semibold uppercase tracking-[0.2em] text-[#02C951]">
+                  Gestión rural con IA
+                </span>
+              </div>
 
-              <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 text-white leading-[1.1]">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-[4.25rem] font-bold text-white leading-[1.06] tracking-tight mb-5 md:mb-6">
                 Gestioná tu campo<br />
-                con <span className="text-[#02C951]">WhatsApp</span>
+                desde <span className="text-[#02C951]">WhatsApp</span>
               </h1>
 
-              <p className="text-sm md:text-lg lg:text-xl text-white/80 mb-5 md:mb-8 leading-relaxed max-w-lg">
+              <p className="text-base md:text-lg text-white/75 leading-relaxed max-w-xl mb-8 md:mb-10">
                 Registrá eventos, facturas y datos con un audio o una foto.
                 Consultá indicadores, generá reportes y controlá finanzas — todo desde el celular.
               </p>
 
-              <div className="flex flex-wrap gap-2 md:gap-3 mb-5 md:mb-8">
+              <div className="flex flex-col sm:flex-row gap-3 mb-10 md:mb-0">
+                <a
+                  href="https://app.botrural.app/register"
+                  className="group inline-flex items-center justify-center gap-2 bg-[#02C951] hover:bg-[#02b84a] text-white px-7 py-3.5 md:py-4 rounded-xl text-sm md:text-base font-semibold transition-colors"
+                >
+                  Probar gratis
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+                <button
+                  onClick={() => document.getElementById('whatsapp')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/20 text-white px-7 py-3.5 md:py-4 rounded-xl text-sm md:text-base font-medium transition-colors cursor-pointer"
+                >
+                  Ver cómo funciona
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-8 lg:hidden">
                 {HERO_CATEGORIES.map((cat, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 + i * 0.1 }}
-                    className="flex items-center gap-1.5 md:gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-2.5 py-1.5 md:px-4 md:py-2.5 rounded-full text-xs md:text-sm">
-                    <span className="text-[#02C951] [&>svg]:w-3.5 [&>svg]:h-3.5 md:[&>svg]:w-5 md:[&>svg]:h-5">{cat.icon}</span>
-                    <span className="text-white font-medium">{cat.label}</span>
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 + i * 0.06 }}
+                    className="flex items-center gap-2.5 bg-white/[0.06] backdrop-blur-md border border-white/10 rounded-xl px-3 py-2.5"
+                  >
+                    <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#02C951]/15 text-[#02C951] shrink-0 [&>svg]:w-4 [&>svg]:h-4">
+                      {cat.icon}
+                    </span>
+                    <span className="text-xs font-medium text-white/90">{cat.label}</span>
                   </motion.div>
                 ))}
               </div>
+            </motion.div>
 
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}
-                className="flex flex-row gap-3 md:gap-4 mb-4 md:mb-6">
-                <motion.a href="https://app.botrural.app/register" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                  className="group bg-[#02C951] hover:bg-[#02C951]/90 text-white px-5 py-3 md:px-8 md:py-4 rounded-xl text-sm md:text-lg font-semibold shadow-lg transition-all flex items-center justify-center gap-2">
-                  Probar gratis
-                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
-                </motion.a>
-              </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="hidden lg:block"
+            >
+              <div className="bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl p-6 xl:p-7">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45 mb-5">
+                  Módulos de la plataforma
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  {HERO_CATEGORIES.map((cat, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.35 + i * 0.07 }}
+                      className="group flex items-center gap-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.08] hover:border-white/15 px-4 py-3.5 transition-colors"
+                    >
+                      <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#02C951]/12 text-[#02C951] shrink-0 group-hover:bg-[#02C951]/20 transition-colors [&>svg]:w-5 [&>svg]:h-5">
+                        {cat.icon}
+                      </span>
+                      <span className="text-sm font-medium text-white/90">{cat.label}</span>
+                    </motion.div>
+                  ))}
+                </div>
+                <p className="mt-5 pt-5 border-t border-white/10 text-xs text-white/45 leading-relaxed">
+                  Ganadería, agricultura, finanzas y mapa — integrados en una sola plataforma.
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
-          className="absolute bottom-4 md:bottom-8 left-0 right-0 flex justify-center">
-          <motion.button onClick={() => document.getElementById('whatsapp')?.scrollIntoView({ behavior: 'smooth' })}
-            animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-            className="flex flex-col items-center gap-1 md:gap-2 text-white/70 hover:text-white transition-colors cursor-pointer">
-            <span className="text-xs md:text-sm font-medium">Ver más</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-6 md:h-6">
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          onClick={() => document.getElementById('whatsapp')?.scrollIntoView({ behavior: 'smooth' })}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/40 hover:text-white/70 transition-colors cursor-pointer z-10"
+        >
+          <span className="text-[10px] font-medium uppercase tracking-widest">Explorar</span>
+          <motion.span animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M7 13l5 5 5-5" /><path d="M7 6l5 5 5-5" />
             </svg>
-          </motion.button>
-        </motion.div>
+          </motion.span>
+        </motion.button>
       </section>
 
       {/* ============================================================ WHATSAPP DEMO */}
