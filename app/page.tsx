@@ -48,6 +48,37 @@ import {
 // DATOS DE LA LANDING
 // ============================================================
 
+function IconMapa({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5" />
+      <path d="M9 4v13" />
+      <path d="M15 7v5.5" />
+      <path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879" />
+      <path d="M19 18v.01" />
+    </svg>
+  );
+}
+
+const NAV_LINKS = [
+  { href: '#funcionalidades', label: 'Funcionalidades' },
+  { href: '#whatsapp', label: 'WhatsApp' },
+  { href: '#plataforma', label: 'Plataforma' },
+  { href: '#mapa', label: 'Mapa' },
+  { href: 'https://pricing.botrural.app', label: 'Precios' },
+];
+
 const HERO_CATEGORIES = [
   { icon: <Users className="w-5 h-5" />, label: 'Ganaderia' },
   { icon: <Wheat className="w-5 h-5" />, label: 'Agricultura' },
@@ -117,6 +148,13 @@ const PLATFORM_FEATURES = [
     description: 'Controla el stock por potrero y categoria. Nacimientos, mortandad, ventas y compras actualizan automaticamente.',
     color: 'from-[#019a42] to-[#02C951]',
     tag: 'Ganaderia',
+  },
+  {
+    icon: <IconMapa className="w-7 h-7" />,
+    title: 'Mapa interactivo',
+    description: 'Dibuja los potreros una vez y conecta animales, cultivos, lluvias y pastoreo. Capas satelite, NDVI, curvas y CONEAT.',
+    color: 'from-[#2D5C64] to-[#02C951]',
+    tag: 'Mapa',
   },
   {
     icon: <BarChart3 className="w-7 h-7" />,
@@ -1129,44 +1167,77 @@ export default function Home() {
 
       {/* ============================================================ NAV */}
       <motion.nav
-        initial={{ y: -100 }} animate={{ y: 0 }}
-        className="fixed top-0 w-full z-50 transition-all duration-300"
-        style={{
-          backgroundColor: scrollY > 50 || mobileMenuOpen ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
-          backdropFilter: scrollY > 50 || mobileMenuOpen ? 'blur(10px)' : 'none'
-        }}
+        initial={{ y: -16, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.35 }}
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          scrollY > 24 || mobileMenuOpen
+            ? 'bg-black/90 backdrop-blur-xl border-b border-white/[0.08]'
+            : 'bg-gradient-to-b from-black/50 via-black/20 to-transparent'
+        }`}
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
-          <div className="flex justify-between items-center">
-            <motion.div className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
-              <img src="/BotRural.svg" alt="BotRural" className="h-9 md:h-12" />
-            </motion.div>
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className="flex items-center justify-between h-16 md:h-[68px]">
+            <a href="#" className="flex items-center shrink-0" aria-label="BotRural inicio">
+              <img src="/BotRural.svg" alt="BotRural" className="h-8 md:h-9 w-auto" />
+            </a>
 
-            <div className="hidden md:flex gap-8 items-center">
-              <a href="#funcionalidades" className="text-white/80 hover:text-white transition-colors text-sm">Funcionalidades</a>
-              <a href="#whatsapp" className="text-white/80 hover:text-white transition-colors text-sm">WhatsApp</a>
-              <a href="#plataforma" className="text-white/80 hover:text-white transition-colors text-sm">Plataforma</a>
-              <a href="https://pricing.botrural.app" className="text-white/80 hover:text-white transition-colors text-sm">Precios</a>
-              <motion.a href="https://app.botrural.app/login" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                className="bg-[#02C951] text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-[#02C951]/90 transition-all">
-                Ingresar
-              </motion.a>
+            <div className="hidden lg:flex items-center gap-0.5">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="px-3.5 py-2 text-[13px] font-medium text-white/70 hover:text-white transition-colors tracking-wide"
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
 
-            <button className="md:hidden text-white p-1" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <div className="hidden md:flex items-center shrink-0 pl-4 ml-2 border-l border-white/10">
+              <a
+                href="https://app.botrural.app/login"
+                className="text-[13px] font-semibold text-white bg-[#02C951] hover:bg-[#02b84a] px-5 py-2.5 rounded-lg transition-colors"
+              >
+                Ingresar
+              </a>
+            </div>
+
+            <button
+              className="md:hidden text-white p-2 -mr-2 rounded-lg hover:bg-white/10 transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? 'Cerrar menu' : 'Abrir menu'}
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
 
           <AnimatePresence>
             {mobileMenuOpen && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden overflow-hidden">
-                <div className="py-4 flex flex-col gap-1 border-t border-white/10 mt-3">
-                  <a href="#funcionalidades" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Funcionalidades</a>
-                  <a href="#whatsapp" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">WhatsApp</a>
-                  <a href="#plataforma" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Plataforma</a>
-                  <a href="https://pricing.botrural.app" onClick={() => setMobileMenuOpen(false)} className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors">Precios</a>
-                  <a href="https://app.botrural.app/login" onClick={() => setMobileMenuOpen(false)} className="bg-[#02C951] text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2">Ingresar</a>
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="md:hidden overflow-hidden border-t border-white/10"
+              >
+                <div className="py-3 flex flex-col gap-0.5">
+                  {NAV_LINKS.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                  <a
+                    href="https://app.botrural.app/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="bg-[#02C951] hover:bg-[#02b84a] text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2 transition-colors"
+                  >
+                    Ingresar
+                  </a>
                 </div>
               </motion.div>
             )}
@@ -1602,7 +1673,7 @@ export default function Home() {
       </section>
 
       {/* ============================================================ MAPA */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/30">
+      <section id="mapa" className="py-20 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/30">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
             <MapaVisual />
