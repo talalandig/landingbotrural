@@ -27,7 +27,7 @@ import {
   Globe,
   ArrowUpRight,
   Play,
-  Package,
+
   CalendarDays,
   CloudRain,
   Heart,
@@ -91,6 +91,29 @@ function IconMapa({ className }: { className?: string }) {
   );
 }
 
+function IconInsumos({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+      <path d="M12 12l8 -4.5" />
+      <path d="M12 12l0 9" />
+      <path d="M12 12l-8 -4.5" />
+      <path d="M16 5.25l-8 4.5" />
+    </svg>
+  );
+}
+
 type ModuleId = 'ganaderia' | 'agricultura' | 'insumos' | 'finanzas' | 'agenda' | 'mapa';
 
 const NAV_LINKS = [
@@ -130,7 +153,7 @@ const MODULE_BANNERS: Record<ModuleId, { title: string; subtitle: string }> = {
 const HERO_CATEGORIES: { id: ModuleId; icon: ReactNode; label: string }[] = [
   { id: 'ganaderia', icon: <IconGanaderia className="w-5 h-5" />, label: 'Ganaderia' },
   { id: 'agricultura', icon: <Wheat className="w-5 h-5" />, label: 'Agricultura' },
-  { id: 'insumos', icon: <Sprout className="w-5 h-5" />, label: 'Insumos' },
+  { id: 'insumos', icon: <IconInsumos className="w-5 h-5" />, label: 'Insumos' },
   { id: 'finanzas', icon: <DollarSign className="w-5 h-5" />, label: 'Finanzas' },
   { id: 'agenda', icon: <Calendar className="w-5 h-5" />, label: 'Agenda' },
   { id: 'mapa', icon: <IconMapa className="w-5 h-5" />, label: 'Mapa' },
@@ -210,7 +233,7 @@ const PLATFORM_FEATURES: {
     module: 'agricultura',
   },
   {
-    icon: <Package className="w-7 h-7" />,
+    icon: <IconInsumos className="w-7 h-7" />,
     title: 'Stock de insumos',
     description: 'Ingresos, usos y saldo actual de cada insumo. Actualizado desde WhatsApp o la web.',
     color: 'from-[#1e454c] to-[#2D5C64]',
@@ -2025,7 +2048,7 @@ export default function Home() {
             <div className="bg-white rounded-2xl p-5 md:p-6 border border-[#2D5C64]/10 shadow-sm order-2 lg:order-1">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#2D5C64]/10">
                 <div className="flex items-center gap-2">
-                  <Package className="w-4 h-4 text-[#2D5C64]" />
+                  <IconInsumos className="w-4 h-4 text-[#2D5C64]" />
                   <span className="text-sm font-bold text-[#2D5C64]">Stock de insumos</span>
                 </div>
                 <span className="text-xs text-gray-400">Ingresos · usos · stock</span>
