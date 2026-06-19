@@ -1940,7 +1940,7 @@ export default function Home() {
               <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Ventas · Bovino · Ovino</span>
               <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tus ventas de hacienda, claras como un Excel</h3>
               <p className="text-lg text-gray-500 mb-6">
-                Enviá la factura de venta por WhatsApp y la tabla se llena sola. KG, US$/KG, US$ bruto por categoría, total general y gráfico de torta — listo para el contador.
+                Enviá la factura de venta por WhatsApp y la tabla se llena sola. KG, US$/KG, US$ bruto por categoría, total general y gráfico de torta.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 {['Desglose por categoría (Novillo, Vaca, Vaquillona…)', 'Cambia entre US$, KG y Animales con un toque', 'Promedios y totales calculados', 'Exportá todo a Excel con un click'].map((it, i) => (
@@ -2048,7 +2048,7 @@ export default function Home() {
               <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Ventas · Bovino · Ovino</span>
               <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tus ventas de hacienda, claras como un Excel</h3>
               <p className="text-lg text-gray-500 mb-6">
-                Enviá la factura de venta por WhatsApp y la tabla se llena sola. KG, US$/KG, US$ bruto por categoría, total general y gráfico de torta — listo para el contador.
+                Enviá la factura de venta por WhatsApp y la tabla se llena sola. KG, US$/KG, US$ bruto por categoría, total general y gráfico de torta.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 {['Desglose por categoría (Novillo, Vaca, Vaquillona…)', 'Cambia entre US$, KG y Animales con un toque', 'Promedios y totales calculados', 'Exportá todo a Excel con un click'].map((it, i) => (
