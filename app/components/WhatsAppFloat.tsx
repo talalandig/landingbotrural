@@ -1,5 +1,5 @@
 const WHATSAPP_URL =
-  'https://wa.me/59899465242?text=Hola%2C%20quiero%20contactarme%20con%20BotRural';
+  'https://wa.me/59899465242?text=Hola%20quiero%20mas%20informacion%20de%20botrural';
 
 function WhatsAppIcon() {
   return (
