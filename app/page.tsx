@@ -193,7 +193,7 @@ const WHATSAPP_FEATURES = [
   {
     icon: <Camera className="w-6 h-6" />,
     title: 'Facturas con foto',
-    description: 'Saca una foto a la factura. El bot lee proveedor, monto y categoria automaticamente.',
+    description: 'Enviá una imagen o PDF de la factura de gastos o ingresos, y el bot se encarga de procesar y ordenar la información.',
     demo: 'factura',
   },
   {
