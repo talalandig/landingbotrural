@@ -1274,9 +1274,19 @@ export default function Home() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-16 md:h-[68px]">
+          <div
+            className={`flex items-center justify-between transition-all duration-300 ${
+              scrollY > 24 || mobileMenuOpen ? 'h-14 md:h-16' : 'h-20 md:h-[88px]'
+            }`}
+          >
             <a href="#" className="flex items-center shrink-0" aria-label="BotRural inicio">
-              <img src="/BotRural.svg" alt="BotRural" className="h-8 md:h-9 w-auto" />
+              <img
+                src="/BotRural.svg"
+                alt="BotRural"
+                className={`w-auto transition-all duration-300 ${
+                  scrollY > 24 || mobileMenuOpen ? 'h-7 md:h-8' : 'h-11 md:h-14'
+                }`}
+              />
             </a>
 
             <div className="hidden lg:flex items-center gap-0.5">
@@ -1284,17 +1294,27 @@ export default function Home() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="px-3.5 py-2 text-[13px] font-medium text-white/70 hover:text-white transition-colors tracking-wide"
+                  className={`font-medium text-white/70 hover:text-white transition-all duration-300 tracking-wide ${
+                    scrollY > 24 || mobileMenuOpen
+                      ? 'px-3 py-1.5 text-[12px] md:text-[13px]'
+                      : 'px-4 py-2.5 text-sm md:text-[15px]'
+                  }`}
                 >
                   {link.label}
                 </a>
               ))}
             </div>
 
-            <div className="hidden md:flex items-center shrink-0 pl-4 ml-2 border-l border-white/10">
+            <div className={`hidden md:flex items-center shrink-0 border-l border-white/10 transition-all duration-300 ${
+              scrollY > 24 || mobileMenuOpen ? 'pl-3 ml-1' : 'pl-5 ml-3'
+            }`}>
               <a
                 href="https://app.botrural.app/login"
-                className="text-[13px] font-semibold text-white bg-[#02C951] hover:bg-[#02b84a] px-5 py-2.5 rounded-lg transition-colors"
+                className={`font-semibold text-white bg-[#02C951] hover:bg-[#02b84a] rounded-lg transition-all duration-300 ${
+                  scrollY > 24 || mobileMenuOpen
+                    ? 'text-[12px] md:text-[13px] px-4 py-2'
+                    : 'text-sm md:text-[15px] px-6 py-2.5'
+                }`}
               >
                 Ingresar
               </a>
@@ -1654,7 +1674,7 @@ export default function Home() {
       {/* ============================================================ MÓDULOS / FUNCIONALIDADES */}
       <section id="funcionalidades" ref={funcionalidadesRef} className="py-16 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/25 scroll-mt-20">
         <div className="max-w-7xl mx-auto">
-          <div className="sticky top-16 md:top-[68px] z-30 -mx-4 px-4 md:mx-0 md:px-0 py-3 mb-8 bg-[#F0E8D8]/90 backdrop-blur-xl border-b border-[#2D5C64]/10">
+          <div className="sticky top-14 md:top-16 z-30 -mx-4 px-4 md:mx-0 md:px-0 py-3 mb-8 bg-[#F0E8D8]/90 backdrop-blur-xl border-b border-[#2D5C64]/10">
             <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
               {HERO_CATEGORIES.map((cat) => (
                 <button

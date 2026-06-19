@@ -19,7 +19,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-[68px]">
             <Link href="/" className="flex items-center shrink-0 hover:opacity-90 transition-opacity" aria-label="BotRural inicio">
-              <img src="/BotRural.svg" alt="BotRural" className="h-8 md:h-9 w-auto" />
+              <img src="/BotRural.svg" alt="BotRural" className="h-10 md:h-11 w-auto" />
             </Link>
 
             <div className="hidden lg:flex items-center gap-0.5">
