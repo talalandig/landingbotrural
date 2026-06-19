@@ -1479,7 +1479,7 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="mt-5 pt-5 border-t border-white/10 text-xs text-white/45 leading-relaxed">
-                  Ganadería, agricultura, finanzas, insumos de tu galpón y mapa — integrados en una sola plataforma.
+                  Todo integrado en una sola plataforma.
                 </p>
               </div>
             </motion.div>
