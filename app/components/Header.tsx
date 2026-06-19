@@ -4,7 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
+const HOME_URL = 'https://botrural.app';
+
 const NAV_LINKS = [
+  { href: HOME_URL, label: 'Inicio', external: true },
   { href: '/#funcionalidades', label: 'Funcionalidades' },
   { href: '/#whatsapp', label: 'WhatsApp' },
   { href: 'https://www.youtube.com/watch?v=6E3wScs0ru0', label: 'Cómo empezar', external: true },
@@ -19,7 +22,7 @@ export default function Header() {
       <nav className="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-[68px]">
-            <Link href="/" className="flex items-center shrink-0 hover:opacity-90 transition-opacity" aria-label="BotRural inicio">
+            <Link href={HOME_URL} className="flex items-center shrink-0 hover:opacity-90 transition-opacity" aria-label="BotRural inicio">
               <img src="/BotRural.svg" alt="BotRural" className="h-10 md:h-11 w-auto" />
             </Link>
 

@@ -140,6 +140,7 @@ function IconFactura({ className }: { className?: string }) {
 type ModuleId = 'ganaderia' | 'agricultura' | 'insumos' | 'finanzas' | 'agenda' | 'mapa';
 
 const NAV_LINKS = [
+  { href: '/', label: 'Inicio' },
   { href: '#funcionalidades', label: 'Funcionalidades' },
   { href: '#whatsapp', label: 'WhatsApp' },
   { href: 'https://www.youtube.com/watch?v=6E3wScs0ru0', label: 'Cómo empezar', external: true },
@@ -1328,7 +1329,7 @@ export default function Home() {
               scrollY > 24 || mobileMenuOpen ? 'h-14 md:h-16' : 'h-20 md:h-[88px]'
             }`}
           >
-            <a href="#" className="flex items-center shrink-0" aria-label="BotRural inicio">
+            <a href="/" className="flex items-center shrink-0 hover:opacity-90 transition-opacity" aria-label="BotRural inicio">
               <img
                 src="/BotRural.svg"
                 alt="BotRural"
