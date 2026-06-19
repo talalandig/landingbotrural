@@ -236,7 +236,7 @@ const PLATFORM_FEATURES: {
   {
     icon: <TrendingUp className="w-7 h-7" />,
     title: 'Ventas de hacienda',
-    description: 'Cargá cada venta con un mensaje. KG, US$/KG, US$ bruto por categoría, totales y gráfico — listo para el contador.',
+    description: 'Cargá cada venta simplemente enviando la factura en WhatsApp.',
     color: 'from-[#02C951] to-[#2D5C64]',
     tag: 'Ventas',
     module: 'finanzas',
