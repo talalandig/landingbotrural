@@ -33,7 +33,7 @@ const INCLUDED = [
   'Equipo con roles y permisos',
 ]
 
-const APP_URL = 'https://app.botrural.app'
+const WHATSAPP_NUMBER = '59899465242'
 
 export default function PricingPage() {
   const [selectedPlan, setSelectedPlan] = useState<PlanId>('PLAN_500')
@@ -51,7 +51,11 @@ export default function PricingPage() {
   const totalLabel = cycle === 'monthly' ? '/mes' : '/año'
   const monthlyEquivalent = cycle === 'annual' ? baseAnnual / 12 : null
 
-  const checkoutUrl = `${APP_URL}/checkout?plan=${selectedPlan}&cycle=${cycle}`
+  const contactUrl = useMemo(() => {
+    const billing = cycle === 'monthly' ? 'mensual' : 'anual'
+    const message = `Hola, quiero suscribirme a BotRural. Plan: ${plan.rango} (${billing})`
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+  }, [plan.rango, cycle])
 
   return (
     <div className="min-h-screen bg-[#faf9f7] text-gray-900">
@@ -248,7 +252,9 @@ export default function PricingPage() {
               </div>
 
               <a
-                href={checkoutUrl}
+                href={contactUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full block text-center bg-[#02C951] hover:bg-[#02b84a] text-white py-3.5 rounded-xl font-semibold transition shadow-sm"
               >
                 Suscribirme
