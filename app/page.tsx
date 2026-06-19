@@ -1888,7 +1888,7 @@ export default function Home() {
             </motion.div>
           ))}
 
-          {(activeModule === 'ganaderia' || activeModule === 'finanzas') && (
+          {activeModule === 'ganaderia' && (
       <div className="py-4 md:py-8">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-[400px_1fr] gap-10 lg:gap-12 items-center">
@@ -1993,6 +1993,30 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid lg:grid-cols-[400px_1fr] gap-10 lg:gap-12 items-center mt-14 md:mt-16 pt-14 md:pt-16 border-t border-[#2D5C64]/10"
+          >
+            <div>
+              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Ventas · Bovino · Ovino</span>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tus ventas de hacienda, claras como un Excel</h3>
+              <p className="text-lg text-gray-500 mb-6">
+                Cargás cada venta con un mensaje y la tabla se llena sola. KG, US$/KG, US$ bruto por categoría, total general y gráfico de torta — listo para el contador.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                {['Desglose por categoría (Novillo, Vaca, Vaquillona…)', 'Cambia entre US$, KG y Animales con un toque', 'Promedios y totales calculados', 'Exportá todo a Excel con un click'].map((it, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <VentasVisual />
+          </motion.div>
         </div>
       </div>
           )}
