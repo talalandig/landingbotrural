@@ -1975,7 +1975,7 @@ export default function Home() {
             {[
               { icon: <Receipt className="w-5 h-5" />, title: 'Categorías reales', desc: 'Sanidad, Alimentación, Insumos de Cultivos, Combustible, Asesoramiento, etc.' },
               { icon: <Banknote className="w-5 h-5" />, title: 'Sector + tipo', desc: 'Costos directos (ganadería y agricultura) o costos globales de la empresa.' },
-              { icon: <Camera className="w-5 h-5" />, title: 'Factura adjunta', desc: 'Foto por WhatsApp = gasto cargado con OCR.' },
+              { icon: <Camera className="w-5 h-5" />, title: 'Factura adjunta', desc: 'Gasto procesado con inteligencia artificial.' },
               { icon: <DollarSign className="w-5 h-5" />, title: 'Pesos + dólares', desc: 'Cotización actual incluida en cada movimiento.' },
             ].map((it, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
