@@ -117,7 +117,7 @@ const MODULE_BANNERS: Record<ModuleId, { title: string; subtitle: string }> = {
     subtitle: 'Gastos, ingresos, facturas con foto y costos desglosados por sector.',
   },
   calendario: {
-    title: 'Calendario y agenda',
+    title: 'Agenda',
     subtitle: 'Recordatorios con IA, tareas programadas y calendario mensual del campo.',
   },
   mapa: {
@@ -131,7 +131,7 @@ const HERO_CATEGORIES: { id: ModuleId; icon: ReactNode; label: string }[] = [
   { id: 'agricultura', icon: <Wheat className="w-5 h-5" />, label: 'Agricultura' },
   { id: 'insumos', icon: <Sprout className="w-5 h-5" />, label: 'Insumos' },
   { id: 'finanzas', icon: <DollarSign className="w-5 h-5" />, label: 'Finanzas' },
-  { id: 'calendario', icon: <Calendar className="w-5 h-5" />, label: 'Calendario' },
+  { id: 'calendario', icon: <Calendar className="w-5 h-5" />, label: 'Agenda' },
   { id: 'mapa', icon: <IconMapa className="w-5 h-5" />, label: 'Mapa' },
 ];
 
@@ -162,7 +162,7 @@ const WHATSAPP_FEATURES = [
   },
   {
     icon: <Calendar className="w-6 h-6" />,
-    title: 'Calendario con IA',
+    title: 'Agenda con IA',
     description: '"En 14 dias hacer tacto" — el bot programa el recordatorio y te avisa.',
     demo: 'calendario',
   },
@@ -235,9 +235,9 @@ const PLATFORM_FEATURES: {
   {
     icon: <Calendar className="w-7 h-7" />,
     title: 'Agenda con IA',
-    description: 'Programa tareas con un mensaje. El bot arma el calendario y te recuerda por WhatsApp.',
+    description: 'Programa tareas con un mensaje. El bot arma la agenda y te recuerda por WhatsApp.',
     color: 'from-[#02C951] to-[#2D5C64]',
-    tag: 'Calendario',
+    tag: 'Agenda',
     module: 'calendario',
   },
   {
