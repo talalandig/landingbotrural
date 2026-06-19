@@ -1132,7 +1132,7 @@ export default function Home() {
         initial={{ y: -100 }} animate={{ y: 0 }}
         className="fixed top-0 w-full z-50 transition-all duration-300"
         style={{
-          backgroundColor: scrollY > 50 || mobileMenuOpen ? 'rgba(45, 92, 100, 0.95)' : 'transparent',
+          backgroundColor: scrollY > 50 || mobileMenuOpen ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
           backdropFilter: scrollY > 50 || mobileMenuOpen ? 'blur(10px)' : 'none'
         }}
       >
@@ -1148,7 +1148,7 @@ export default function Home() {
               <a href="#plataforma" className="text-white/80 hover:text-white transition-colors text-sm">Plataforma</a>
               <a href="https://pricing.botrural.app" className="text-white/80 hover:text-white transition-colors text-sm">Precios</a>
               <motion.a href="https://app.botrural.app/login" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                className="bg-[#02C951] text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:bg-[#02C951]/90 transition-all">
+                className="bg-[#02C951] text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-[#02C951]/90 transition-all">
                 Ingresar
               </motion.a>
             </div>
@@ -1181,7 +1181,7 @@ export default function Home() {
             src="campo.jpg" className="absolute inset-0 w-full h-full object-cover" alt="Campo" />
           <motion.img animate={{ opacity: showMaiz ? 1 : 0 }} transition={{ duration: 1.5 }}
             src="maiz.jpg" className="absolute inset-0 w-full h-full object-cover" alt="Maiz" />
-          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-[#2D5C64]/85 via-black/55 to-black/25" />
+          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-black/80 via-black/60 to-black/30" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-8 md:pt-20 w-full">

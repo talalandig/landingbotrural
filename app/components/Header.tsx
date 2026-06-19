@@ -9,7 +9,7 @@ export default function Header() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-[#2D5C64]/95 backdrop-blur-md">
+      <nav className="fixed top-0 w-full z-50 bg-black/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
@@ -21,7 +21,7 @@ export default function Header() {
               <Link href="/#whatsapp" className="text-white/80 hover:text-white transition-colors text-sm">WhatsApp</Link>
               <Link href="/#plataforma" className="text-white/80 hover:text-white transition-colors text-sm">Plataforma</Link>
               <a href="https://pricing.botrural.app" className="text-white/80 hover:text-white transition-colors text-sm">Precios</a>
-              <a href="https://app.botrural.app/login" className="bg-[#02C951] text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:bg-[#02C951]/90 transition-all">
+              <a href="https://app.botrural.app/login" className="bg-[#02C951] text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-[#02C951]/90 transition-all">
                 Ingresar
               </a>
             </div>
