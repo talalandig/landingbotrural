@@ -2119,7 +2119,7 @@ export default function Home() {
       <section className="py-16 md:py-20 px-4 md:px-6 bg-[#2D5C64] text-white">
         <div className="max-w-6xl mx-auto text-center">
           <h3 className="text-2xl md:text-4xl font-bold mb-3">Donde sea, como te quede cómodo</h3>
-          <p className="text-gray-400 mb-10 md:mb-14 max-w-2xl mx-auto">Cada uno del equipo carga datos por su canal. Todos ven la misma información en tiempo real.</p>
+          <p className="text-gray-400 mb-10 md:mb-14 max-w-2xl mx-auto">Cada uno del equipo carga datos por su canal.</p>
           <div className="grid grid-cols-3 gap-4 md:gap-8">
             {[
               { icon: <MessageSquare className="w-8 h-8" />, title: 'WhatsApp', desc: 'Para el capataz, el equipo, vos.' },
