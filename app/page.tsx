@@ -1436,11 +1436,13 @@ export default function Home() {
                     onClick={() => selectModule(cat.id)}
                     className={`flex items-center gap-2.5 backdrop-blur-md border rounded-xl px-3 py-2.5 text-left transition-colors cursor-pointer ${
                       activeModule === cat.id
-                        ? 'bg-[#02C951]/20 border-[#02C951]/50'
+                        ? 'bg-[#2D5C64] border-[#2D5C64]'
                         : 'bg-white/[0.06] border-white/10 hover:bg-white/10'
                     }`}
                   >
-                    <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#02C951]/15 text-[#02C951] shrink-0 [&>svg]:w-4 [&>svg]:h-4">
+                    <span className={`flex items-center justify-center w-8 h-8 rounded-lg shrink-0 [&>svg]:w-4 [&>svg]:h-4 ${
+                      activeModule === cat.id ? 'bg-white/15 text-white' : 'bg-[#2D5C64]/20 text-white/80'
+                    }`}>
                       {cat.icon}
                     </span>
                     <span className="text-xs font-medium text-white/90">{cat.label}</span>
@@ -1470,11 +1472,15 @@ export default function Home() {
                       onClick={() => selectModule(cat.id)}
                       className={`group flex items-center gap-3 rounded-xl border px-4 py-3.5 transition-colors text-left cursor-pointer ${
                         activeModule === cat.id
-                          ? 'bg-[#02C951]/20 border-[#02C951]/45'
+                          ? 'bg-[#2D5C64] border-[#2D5C64]'
                           : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/[0.08] hover:border-white/15'
                       }`}
                     >
-                      <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#02C951]/12 text-[#02C951] shrink-0 group-hover:bg-[#02C951]/20 transition-colors [&>svg]:w-5 [&>svg]:h-5">
+                      <span className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-colors [&>svg]:w-5 [&>svg]:h-5 ${
+                        activeModule === cat.id
+                          ? 'bg-white/15 text-white'
+                          : 'bg-[#2D5C64]/15 text-white/80 group-hover:bg-[#2D5C64]/25'
+                      }`}>
                         {cat.icon}
                       </span>
                       <span className="text-sm font-medium text-white/90">{cat.label}</span>
