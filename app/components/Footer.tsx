@@ -10,17 +10,9 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-4">
               <img src="/BotRural.svg" alt="BotRural" className="h-10" />
             </div>
-            <p className="text-white/70 text-sm mb-4 leading-relaxed">
+            <p className="text-white/70 text-sm leading-relaxed">
               Gestión agropecuaria por WhatsApp. Registrá, consultá y reportá todo desde el celular, con IA.
             </p>
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#02C951] text-sm font-medium hover:text-[#02C951]/80 transition-colors"
-            >
-              WhatsApp
-            </a>
           </div>
           <div>
             <h4 className="font-semibold mb-4 text-[#F0E8D8]">Producto</h4>
