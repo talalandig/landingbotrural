@@ -85,6 +85,7 @@ const HERO_CATEGORIES = [
   { icon: <Sprout className="w-5 h-5" />, label: 'Insumos' },
   { icon: <DollarSign className="w-5 h-5" />, label: 'Finanzas' },
   { icon: <Calendar className="w-5 h-5" />, label: 'Calendario' },
+  { icon: <IconMapa className="w-5 h-5" />, label: 'Mapa' },
 ];
 
 const WHATSAPP_FEATURES = [
@@ -148,13 +149,6 @@ const PLATFORM_FEATURES = [
     description: 'Controla el stock por potrero y categoria. Nacimientos, mortandad, ventas y compras actualizan automaticamente.',
     color: 'from-[#019a42] to-[#02C951]',
     tag: 'Ganaderia',
-  },
-  {
-    icon: <IconMapa className="w-7 h-7" />,
-    title: 'Mapa interactivo',
-    description: 'Dibuja los potreros una vez y conecta animales, cultivos, lluvias y pastoreo. Capas satelite, NDVI, curvas y CONEAT.',
-    color: 'from-[#2D5C64] to-[#02C951]',
-    tag: 'Mapa',
   },
   {
     icon: <BarChart3 className="w-7 h-7" />,
