@@ -1309,15 +1309,20 @@ export default function Home() {
       </section>
 
       {/* ============================================================ WHATSAPP DEMO */}
-      <section id="whatsapp" ref={whatsappRef} className="py-16 md:py-24 px-4 md:px-6 bg-gradient-to-b from-[#2D5C64] to-[#1a3d44] text-white">
-        <div className="max-w-7xl mx-auto">
+      <section id="whatsapp" ref={whatsappRef} className="relative py-16 md:py-24 px-4 md:px-6 overflow-hidden text-white">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#2D5C64] via-[#264f56] to-[#1e454c]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_#02C95118_0%,_transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_#F0E8D810_0%,_transparent_50%)]" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+
+        <div className="relative max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10 md:mb-16">
-            <span className="bg-[#02C951]/20 text-[#02C951] px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4 inline-block">
+            <span className="bg-[#02C951]/15 text-[#02C951] border border-[#02C951]/25 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4 inline-block">
               WhatsApp + IA
             </span>
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-6">Tan simple como mandar un audio</h2>
-            <p className="text-sm md:text-xl text-gray-400 max-w-3xl mx-auto">
-              Tu capataz no necesita aprender ninguna app. Manda un audio, un texto o una foto por WhatsApp y el bot registra todo con inteligencia artificial.
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-6">Tan simple como enviar un audio</h2>
+            <p className="text-sm md:text-xl text-white/70 max-w-3xl mx-auto">
+              Tu capataz no necesita aprender ninguna app. Enviá un audio, un texto o una foto por WhatsApp y el bot registra todo con inteligencia artificial.
             </p>
           </motion.div>
 
