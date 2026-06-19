@@ -115,7 +115,7 @@ const MODULE_BANNERS: Record<ModuleId, { title: string; subtitle: string }> = {
   },
   finanzas: {
     title: 'Finanzas',
-    subtitle: 'Gastos, ingresos, ventas de hacienda, facturas con foto y costos desglosados por sector.',
+    subtitle: 'Gastos, ingresos, ventas de hacienda, facturas con foto y costos desglosados por categoría y sector.',
   },
   agenda: {
     title: 'Agenda de actividades',
