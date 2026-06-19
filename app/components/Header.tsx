@@ -1,18 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
 const HOME_URL = 'https://botrural.app';
 
 const NAV_LINKS = [
-  { href: HOME_URL, label: 'Inicio', external: true },
-  { href: '/#funcionalidades', label: 'Funcionalidades' },
-  { href: '/#whatsapp', label: 'WhatsApp' },
-  { href: 'https://www.youtube.com/watch?v=6E3wScs0ru0', label: 'Cómo empezar', external: true },
+  { href: HOME_URL, label: 'Inicio' },
+  { href: `${HOME_URL}/#funcionalidades`, label: 'Funcionalidades' },
+  { href: `${HOME_URL}/#whatsapp`, label: 'WhatsApp' },
+  { href: 'https://www.youtube.com/watch?v=6E3wScs0ru0', label: 'Cómo empezar', newTab: true },
   { href: 'https://pricing.botrural.app', label: 'Precios' },
 ] as const;
+
+const linkClass =
+  'px-3.5 py-2 text-[13px] font-medium text-white/70 hover:text-white transition-colors tracking-wide';
+
+const mobileLinkClass =
+  'text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -22,32 +27,27 @@ export default function Header() {
       <nav className="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-[68px]">
-            <Link href={HOME_URL} className="flex items-center shrink-0 hover:opacity-90 transition-opacity" aria-label="BotRural inicio">
+            <a
+              href={HOME_URL}
+              className="flex items-center shrink-0 hover:opacity-90 transition-opacity"
+              aria-label="BotRural inicio"
+            >
               <img src="/BotRural.svg" alt="BotRural" className="h-10 md:h-11 w-auto" />
-            </Link>
+            </a>
 
             <div className="hidden lg:flex items-center gap-0.5">
-              {NAV_LINKS.map((link) =>
-                'external' in link && link.external ? (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-3.5 py-2 text-[13px] font-medium text-white/70 hover:text-white transition-colors tracking-wide"
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="px-3.5 py-2 text-[13px] font-medium text-white/70 hover:text-white transition-colors tracking-wide"
-                  >
-                    {link.label}
-                  </Link>
-                )
-              )}
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  {...('newTab' in link && link.newTab
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                  className={linkClass}
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
 
             <div className="hidden md:flex items-center shrink-0 pl-4 ml-2 border-l border-white/10">
@@ -70,29 +70,19 @@ export default function Header() {
 
           {mobileMenuOpen && (
             <div className="md:hidden border-t border-white/10 py-3 flex flex-col gap-0.5">
-              {NAV_LINKS.map((link) =>
-                'external' in link && link.external ? (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-white/90 text-sm py-2.5 px-3 rounded-lg hover:bg-white/10 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                )
-              )}
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  {...('newTab' in link && link.newTab
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                  className={mobileLinkClass}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
               <a
                 href="https://app.botrural.app/login"
                 className="bg-[#02C951] hover:bg-[#02b84a] text-white text-sm py-2.5 px-3 rounded-lg font-semibold text-center mt-2 transition-colors"
