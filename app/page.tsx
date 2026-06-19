@@ -1836,7 +1836,7 @@ export default function Home() {
                       </div>
                       <div className="bg-amber-50 rounded-xl p-2.5 border border-amber-100 flex items-center gap-2">
                         <DollarSign className="w-4 h-4 text-amber-600" />
-                        <span className="text-[10px] text-amber-700 font-medium">Cotización dólar del día anterior incluida en cada registro</span>
+                        <span className="text-[10px] text-amber-700 font-medium">Cotización actual incluida en cada registro</span>
                       </div>
                     </div>
                   )}
@@ -1976,7 +1976,7 @@ export default function Home() {
               { icon: <Receipt className="w-5 h-5" />, title: 'Categorías reales', desc: 'Sanidad, Alimentación, Insumos de Cultivos, Combustible, Asesoramiento, etc.' },
               { icon: <Banknote className="w-5 h-5" />, title: 'Sector + tipo', desc: 'Variable o fijo, ganadería o agricultura, asignable o puro.' },
               { icon: <Camera className="w-5 h-5" />, title: 'Factura adjunta', desc: 'Foto por WhatsApp = gasto cargado con OCR.' },
-              { icon: <DollarSign className="w-5 h-5" />, title: 'Pesos + dólares', desc: 'Cotización del día anterior incluida en cada movimiento.' },
+              { icon: <DollarSign className="w-5 h-5" />, title: 'Pesos + dólares', desc: 'Cotización actual incluida en cada movimiento.' },
             ].map((it, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
