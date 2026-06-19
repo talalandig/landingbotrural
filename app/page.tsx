@@ -114,6 +114,29 @@ function IconInsumos({ className }: { className?: string }) {
   );
 }
 
+function IconFactura({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+      <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
+      <path d="M9 7l1 0" />
+      <path d="M9 13l6 0" />
+      <path d="M13 17l2 0" />
+    </svg>
+  );
+}
+
 type ModuleId = 'ganaderia' | 'agricultura' | 'insumos' | 'finanzas' | 'agenda' | 'mapa';
 
 const NAV_LINKS = [
@@ -1072,7 +1095,7 @@ function FinanzasVisual() {
                       {g.factura && (
                         <button onClick={() => setShowFactura(showFactura === i ? null : i)}
                           className="text-[#02C951] hover:text-[#2D5C64] transition-colors" title="Ver factura">
-                          <Camera className="w-4 h-4" />
+                          <IconFactura className="w-4 h-4" />
                         </button>
                       )}
                     </td>
@@ -1094,7 +1117,7 @@ function FinanzasVisual() {
               className="border-t border-gray-200 p-4 bg-gray-50">
               <div className="flex items-start gap-3">
                 <div className="w-20 h-24 bg-white rounded border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 shrink-0">
-                  <Camera className="w-5 h-5 mb-1" />
+                  <IconFactura className="w-5 h-5 mb-1" />
                   <span className="text-[8px]">Factura.jpg</span>
                 </div>
                 <div className="flex-1 text-xs">
