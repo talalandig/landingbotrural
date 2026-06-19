@@ -42,20 +42,20 @@ export default function PricingPage() {
   const checkoutUrl = `${APP_URL}/checkout?plan=${selectedPlan}&cycle=${cycle}`
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white text-gray-900">
+    <div className="min-h-screen bg-gradient-to-b from-[#F0E8D8]/30 to-white text-gray-900">
       {/* Nav simple */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+      <nav className="bg-[#2D5C64]/95 backdrop-blur-md border-b border-[#2D5C64] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <a href="https://botrural.app" className="flex items-center gap-2 hover:opacity-80">
             <img src="/BotRural.svg" alt="BotRural" className="h-10" />
           </a>
           <div className="flex items-center gap-4">
-            <a href="https://botrural.app" className="text-gray-600 hover:text-gray-900 text-sm hidden sm:block">
+            <a href="https://botrural.app" className="text-white/80 hover:text-white text-sm hidden sm:block">
               Inicio
             </a>
             <a
               href={`${APP_URL}/login`}
-              className="bg-green-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition"
+              className="bg-[#02C951] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#02C951]/90 transition"
             >
               Ingresar
             </a>
@@ -70,7 +70,7 @@ export default function PricingPage() {
           alt="BotRural"
           className="mx-auto mb-6 h-20 md:h-24 w-auto"
         />
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-[#2D5C64]">
           Precios simples y transparentes
         </h1>
         <p className="text-lg text-gray-600">
@@ -102,7 +102,7 @@ export default function PricingPage() {
                 }`}
               >
                 Anual
-                <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-semibold">
+                <span className="text-[10px] bg-[#F0E8D8] text-[#2D5C64] px-1.5 py-0.5 rounded-full font-semibold">
                   -2 meses
                 </span>
               </button>
@@ -120,20 +120,20 @@ export default function PricingPage() {
                   onClick={() => setSelectedPlan(p.id)}
                   className={`text-left p-4 rounded-xl border-2 transition-all ${
                     selected
-                      ? 'border-green-500 bg-green-50 ring-2 ring-green-200'
+                      ? 'border-[#02C951] bg-[#F0E8D8]/50 ring-2 ring-[#02C951]/20'
                       : 'border-gray-200 hover:border-gray-300 bg-white'
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     <span
                       className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center mt-0.5 ${
-                        selected ? 'border-green-600 bg-green-600' : 'border-gray-300'
+                        selected ? 'border-[#02C951] bg-[#02C951]' : 'border-gray-300'
                       }`}
                     >
                       {selected && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
                     </span>
                     <div className="flex-1">
-                      <div className="text-green-700 font-bold text-lg leading-tight">
+                      <div className="text-[#2D5C64] font-bold text-lg leading-tight">
                         USD {price.toFixed(2)}
                         <span className="text-xs font-normal text-gray-500 ml-1">{suffix}</span>
                       </div>
@@ -146,14 +146,14 @@ export default function PricingPage() {
           </div>
 
           <div className="mt-6 flex items-start gap-2 text-sm text-gray-600 bg-gray-50 rounded-lg p-3">
-            <Info className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+            <Info className="w-4 h-4 text-[#02C951] flex-shrink-0 mt-0.5" />
             <p>
               ¿Necesitás más de 10.000 ha?{' '}
               <a
                 href="https://wa.me/59899465242?text=Hola%2C%20necesito%20un%20plan%20enterprise%20de%20BotRural"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-green-700 font-medium hover:underline"
+                className="text-[#2D5C64] font-medium hover:underline"
               >
                 Contactanos
               </a>{' '}
@@ -161,8 +161,8 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div className="mt-3 flex items-start gap-2 text-sm text-gray-600 bg-green-50 border border-green-200 rounded-lg p-3">
-            <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+          <div className="mt-3 flex items-start gap-2 text-sm text-gray-600 bg-[#F0E8D8]/40 border border-[#2D5C64]/15 rounded-lg p-3">
+            <Check className="w-4 h-4 text-[#02C951] flex-shrink-0 mt-0.5" />
             <p>
               Podés crear <strong>todos los campos / establecimientos que quieras</strong> sin costo extra.
               El límite de hectáreas es global del plan.
@@ -185,7 +185,7 @@ export default function PricingPage() {
                 'Equipo con roles y permisos',
               ].map((b) => (
                 <li key={b} className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#02C951] flex-shrink-0 mt-0.5" />
                   <span>{b}</span>
                 </li>
               ))}
@@ -219,7 +219,7 @@ export default function PricingPage() {
             <div className="mb-5">
               <div className="flex justify-between items-baseline">
                 <span className="text-gray-700 font-semibold">Total</span>
-                <span className="text-2xl font-bold text-green-700">
+                <span className="text-2xl font-bold text-[#2D5C64]">
                   USD {totalPrice.toFixed(2)}
                   <span className="text-sm font-normal text-gray-500 ml-1">{totalLabel}</span>
                 </span>
@@ -234,7 +234,7 @@ export default function PricingPage() {
 
             <a
               href={checkoutUrl}
-              className="w-full block text-center bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition shadow-md"
+              className="w-full block text-center bg-[#02C951] hover:bg-[#02C951]/90 text-white py-3 rounded-xl font-semibold transition shadow-md"
             >
               Suscribirme
             </a>

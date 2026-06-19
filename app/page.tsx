@@ -48,13 +48,6 @@ import {
 // DATOS DE LA LANDING
 // ============================================================
 
-const STATS = [
-  { value: '100+', label: 'Productores' },
-  { value: '250K+', label: 'Eventos registrados' },
-  { value: '98%', label: 'Retención' },
-  { value: '24/7', label: 'Disponibilidad' },
-];
-
 const HERO_CATEGORIES = [
   { icon: <Users className="w-5 h-5" />, label: 'Ganaderia' },
   { icon: <Wheat className="w-5 h-5" />, label: 'Agricultura' },
@@ -101,42 +94,42 @@ const PLATFORM_FEATURES = [
     icon: <PieChart className="w-7 h-7" />,
     title: 'Indicadores en tiempo real',
     description: 'Eficiencia tecnica, indicadores ganaderos y economicos. Carga animal por hectarea, costo por UG, rentabilidad — todo calculado automaticamente.',
-    color: 'from-emerald-500 to-green-700',
+    color: 'from-[#2D5C64] to-[#1e454c]',
     tag: 'Dashboard',
   },
   {
     icon: <DollarSign className="w-7 h-7" />,
     title: 'Finanzas completas',
     description: 'Gastos pendientes y pagados, ingresos por cobrar y cobrados. Filtra por categoria, proveedor, fecha. Vincula facturas con fotos.',
-    color: 'from-green-500 to-emerald-600',
+    color: 'from-[#02C951] to-[#019a42]',
     tag: 'Finanzas',
   },
   {
     icon: <RefreshCw className="w-7 h-7" />,
     title: 'Pastoreo Rotativo',
     description: 'Genera el historial de movimientos por modulo: dias de pastoreo, dias de descanso, hectareas. Exporta como PDF desde WhatsApp o la web.',
-    color: 'from-amber-500 to-orange-600',
+    color: 'from-[#2D5C64] to-[#02C951]',
     tag: 'Reportes',
   },
   {
     icon: <ClipboardList className="w-7 h-7" />,
     title: 'Stock y categorias',
     description: 'Controla el stock por potrero y categoria. Nacimientos, mortandad, ventas y compras actualizan automaticamente.',
-    color: 'from-lime-500 to-green-600',
+    color: 'from-[#019a42] to-[#02C951]',
     tag: 'Ganaderia',
   },
   {
     icon: <BarChart3 className="w-7 h-7" />,
     title: 'Costos desglosados',
     description: 'Costos directos vinculados a diferentes rubros y cultivos, costos generales de la empresa claros. Costo por hectarea y por UG. Sabes exactamente cuanto te sale cada animal.',
-    color: 'from-rose-500 to-pink-600',
+    color: 'from-[#1e454c] to-[#2D5C64]',
     tag: 'Economia',
   },
   {
     icon: <Users className="w-7 h-7" />,
     title: 'Equipo y roles',
     description: 'Suma a tu capataz, veterinario o contador. Cada uno con su rol y permisos. Todos cargan datos por WhatsApp, vos controlas desde la web.',
-    color: 'from-cyan-500 to-teal-600',
+    color: 'from-[#02C951] to-[#2D5C64]',
     tag: 'Equipo',
   },
 ];
@@ -488,7 +481,7 @@ const SECTORS: Sector[] = [
   {
     id: 'agri',
     label: 'Agricultura',
-    headerBg: 'bg-green-600',
+    headerBg: 'bg-[#2D5C64]',
     headerText: 'text-white',
     headerLabel: 'AGRICULTURA · Zafra 24/25',
     cols: [
@@ -715,9 +708,9 @@ function MapaVisual() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="bg-gradient-to-br from-emerald-50 to-green-100 px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+      <div className="bg-gradient-to-br from-[#F0E8D8] to-[#F0E8D8]/60 px-4 py-3 border-b border-[#2D5C64]/10 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-green-700" />
+          <MapPin className="w-4 h-4 text-[#2D5C64]" />
           <span className="text-sm font-bold text-gray-800">Campo Rodazo</span>
         </div>
         <span className="text-xs text-gray-500">{capa.desc}</span>
@@ -731,8 +724,8 @@ function MapaVisual() {
             onClick={() => { setActive(i); setPaused(true); }}
             className={`shrink-0 text-xs md:text-sm px-3.5 py-1.5 rounded-full font-semibold transition border ${
               i === active
-                ? 'bg-green-600 text-white border-green-600 shadow-sm'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                ? 'bg-[#02C951] text-white border-[#02C951] shadow-sm'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-[#2D5C64]/30'
             }`}
           >
             {c.label}
@@ -833,29 +826,29 @@ function FinanzasVisual() {
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-700 to-emerald-700 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-[#2D5C64] to-[#1e454c] px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-white">
           <Receipt className="w-4 h-4" />
           <span className="font-bold text-sm">Finanzas · Enero 2026</span>
         </div>
-        <span className="text-xs text-green-100 hidden sm:inline">Cotización USD: $39.46</span>
+        <span className="text-xs text-[#F0E8D8] hidden sm:inline">Cotización USD: $39.46</span>
       </div>
 
       {/* Tabs */}
       <div className="flex border-b border-gray-200 bg-gray-50">
         <button onClick={() => setTab('gastos')}
           className={`flex-1 px-4 py-3 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
-            tab === 'gastos' ? 'text-green-700 border-b-2 border-green-700 bg-white' : 'text-gray-500 hover:text-gray-700'
+            tab === 'gastos' ? 'text-[#2D5C64] border-b-2 border-[#02C951] bg-white' : 'text-gray-500 hover:text-[#2D5C64]'
           }`}>
           <Banknote className="w-4 h-4" /> Gastos
           <span className="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded-full font-bold">{FIN_GASTOS.length}</span>
         </button>
         <button onClick={() => setTab('ingresos')}
           className={`flex-1 px-4 py-3 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
-            tab === 'ingresos' ? 'text-green-700 border-b-2 border-green-700 bg-white' : 'text-gray-500 hover:text-gray-700'
+            tab === 'ingresos' ? 'text-[#2D5C64] border-b-2 border-[#02C951] bg-white' : 'text-gray-500 hover:text-[#2D5C64]'
           }`}>
           <DollarSign className="w-4 h-4" /> Ingresos
-          <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-bold">{FIN_INGRESOS.length}</span>
+          <span className="text-[10px] bg-[#F0E8D8] text-[#2D5C64] px-1.5 py-0.5 rounded-full font-bold">{FIN_INGRESOS.length}</span>
         </button>
       </div>
 
@@ -894,7 +887,7 @@ function FinanzasVisual() {
                       <div className="text-gray-500 text-[10px]">
                         {g.concepto}
                         {g.cultivo && (
-                          <span className="ml-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-medium">
+                          <span className="ml-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#F0E8D8] text-[#2D5C64] font-medium">
                             <Sprout className="w-2.5 h-2.5" />{g.cultivo}
                           </span>
                         )}
@@ -914,13 +907,13 @@ function FinanzasVisual() {
                     </td>
                     <td className="px-3 py-2.5 text-center">
                       <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                        g.pagado ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                        g.pagado ? 'bg-[#F0E8D8] text-[#2D5C64]' : 'bg-amber-100 text-amber-700'
                       }`}>{g.pagado ? 'Pagado' : 'Pendiente'}</span>
                     </td>
                     <td className="px-2 py-2.5 text-center">
                       {g.factura && (
                         <button onClick={() => setShowFactura(showFactura === i ? null : i)}
-                          className="text-green-700 hover:text-green-800 transition-colors" title="Ver factura">
+                          className="text-[#02C951] hover:text-[#2D5C64] transition-colors" title="Ver factura">
                           <Camera className="w-4 h-4" />
                         </button>
                       )}
@@ -991,7 +984,7 @@ function FinanzasVisual() {
                   </td>
                   <td className="px-3 py-2.5 text-center">
                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                      g.cobrado ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                      g.cobrado ? 'bg-[#F0E8D8] text-[#2D5C64]' : 'bg-amber-100 text-amber-700'
                     }`}>{g.cobrado ? 'Cobrado' : 'Por cobrar'}</span>
                   </td>
                 </tr>
@@ -1015,7 +1008,7 @@ function FinanzasVisual() {
 // ============================================================
 
 const AGENDA_TAREAS = [
-  { dia: 5, color: 'bg-emerald-500', label: 'Tacto · Sur' },
+  { dia: 5, color: 'bg-[#02C951]', label: 'Tacto · Sur' },
   { dia: 12, color: 'bg-amber-500', label: 'Vacuna brucelosis' },
   { dia: 18, color: 'bg-blue-500', label: 'Esquila · Norte' },
   { dia: 22, color: 'bg-rose-500', label: 'Carga · 30 novillos' },
@@ -1139,7 +1132,7 @@ export default function Home() {
         initial={{ y: -100 }} animate={{ y: 0 }}
         className="fixed top-0 w-full z-50 transition-all duration-300"
         style={{
-          backgroundColor: scrollY > 50 || mobileMenuOpen ? 'rgba(0, 0, 0, 0.95)' : 'transparent',
+          backgroundColor: scrollY > 50 || mobileMenuOpen ? 'rgba(45, 92, 100, 0.95)' : 'transparent',
           backdropFilter: scrollY > 50 || mobileMenuOpen ? 'blur(10px)' : 'none'
         }}
       >
@@ -1188,7 +1181,7 @@ export default function Home() {
             src="campo.jpg" className="absolute inset-0 w-full h-full object-cover" alt="Campo" />
           <motion.img animate={{ opacity: showMaiz ? 1 : 0 }} transition={{ duration: 1.5 }}
             src="maiz.jpg" className="absolute inset-0 w-full h-full object-cover" alt="Maiz" />
-          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-black/80 via-black/60 to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-[#2D5C64]/85 via-black/55 to-black/25" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-8 md:pt-20 w-full">
@@ -1201,7 +1194,7 @@ export default function Home() {
 
               <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 text-white leading-[1.1]">
                 Gestioná tu campo<br />
-                con <span className="text-[#00934a]">WhatsApp</span>
+                con <span className="text-[#02C951]">WhatsApp</span>
               </h1>
 
               <p className="text-sm md:text-lg lg:text-xl text-white/80 mb-5 md:mb-8 leading-relaxed max-w-lg">
@@ -1245,10 +1238,10 @@ export default function Home() {
       </section>
 
       {/* ============================================================ WHATSAPP DEMO */}
-      <section id="whatsapp" ref={whatsappRef} className="py-16 md:py-24 px-4 md:px-6 bg-gray-950 text-white">
+      <section id="whatsapp" ref={whatsappRef} className="py-16 md:py-24 px-4 md:px-6 bg-gradient-to-b from-[#2D5C64] to-[#1a3d44] text-white">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10 md:mb-16">
-            <span className="bg-[#00934a]/20 text-[#00934a] px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4 inline-block">
+            <span className="bg-[#02C951]/20 text-[#02C951] px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4 inline-block">
               WhatsApp + IA
             </span>
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-6">Tan simple como mandar un audio</h2>
@@ -1264,10 +1257,10 @@ export default function Home() {
                 <motion.button key={index} initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.02, x: 5 }} onClick={() => startChatDemo(feature.demo)}
                   className={`w-full text-left p-3 md:p-5 rounded-xl md:rounded-2xl transition-all ${
-                    selectedDemo === feature.demo ? 'bg-[#00934a]/20 border-2 border-[#00934a]' : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
+                    selectedDemo === feature.demo ? 'bg-[#02C951]/20 border-2 border-[#02C951]' : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
                   }`}>
                   <div className="flex items-center md:items-start gap-3 md:gap-4">
-                    <div className={`p-2 md:p-3 rounded-lg md:rounded-xl shrink-0 ${selectedDemo === feature.demo ? 'bg-[#00934a]' : 'bg-white/10'}`}>{feature.icon}</div>
+                    <div className={`p-2 md:p-3 rounded-lg md:rounded-xl shrink-0 ${selectedDemo === feature.demo ? 'bg-[#02C951]' : 'bg-white/10'}`}>{feature.icon}</div>
                     <div className="min-w-0">
                       <h4 className="font-bold text-sm md:text-lg mb-0 md:mb-1">{feature.title}</h4>
                       <p className="text-gray-400 text-xs md:text-sm hidden md:block">{feature.description}</p>
@@ -1281,7 +1274,7 @@ export default function Home() {
                 <div className="space-y-2">
                   {WHATSAPP_EXAMPLES.slice(0, 5).map((ex, i) => (
                     <motion.div key={i} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex items-center gap-3 text-sm">
-                      <span className="text-[#00934a] shrink-0">{">"}</span>
+                      <span className="text-[#02C951] shrink-0">{">"}</span>
                       <span className="text-gray-300">"{ex.user}"</span>
                     </motion.div>
                   ))}
@@ -1408,8 +1401,8 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="absolute -top-4 -right-4 md:-top-6 md:-right-6 w-20 md:w-28 h-20 md:h-28 bg-[#00934a]/20 rounded-full blur-3xl" />
-                <div className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 w-24 md:w-36 h-24 md:h-36 bg-[#00934a]/15 rounded-full blur-3xl" />
+                <div className="absolute -top-4 -right-4 md:-top-6 md:-right-6 w-20 md:w-28 h-20 md:h-28 bg-[#02C951]/20 rounded-full blur-3xl" />
+                <div className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 w-24 md:w-36 h-24 md:h-36 bg-[#02C951]/15 rounded-full blur-3xl" />
               </div>
             </motion.div>
           </div>
@@ -1417,10 +1410,11 @@ export default function Home() {
       </section>
 
       {/* ============================================================ PLATFORM FEATURES GRID */}
-      <section id="funcionalidades" className="py-16 md:py-24 px-4 md:px-6 bg-white">
+      <section id="funcionalidades" className="py-16 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/25">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10 md:mb-16">
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-6 text-gray-900">Todo lo que necesitás en un solo lugar</h2>
+            <span className="inline-block bg-white text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-4 shadow-sm">Plataforma</span>
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-6 text-[#2D5C64]">Todo lo que necesitás en un solo lugar</h2>
             <p className="text-sm md:text-xl text-gray-500 max-w-2xl mx-auto">
               Gestión completa de tu establecimiento: ganadería, finanzas, costos, equipo y más.
             </p>
@@ -1430,12 +1424,12 @@ export default function Home() {
             {PLATFORM_FEATURES.map((feature, index) => (
               <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8 }}
-                className="group bg-white border border-gray-200 p-4 md:p-7 rounded-xl md:rounded-2xl hover:shadow-xl hover:border-gray-300 transition-all">
+                className="group bg-white border border-[#2D5C64]/10 p-4 md:p-7 rounded-xl md:rounded-2xl hover:shadow-xl hover:border-[#02C951]/40 transition-all">
                 <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-4">
                   <div className={`bg-gradient-to-br ${feature.color} w-9 h-9 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform [&>svg]:w-5 [&>svg]:h-5 md:[&>svg]:w-7 md:[&>svg]:h-7`}>
                     {feature.icon}
                   </div>
-                  <span className="text-[10px] md:text-xs font-semibold text-gray-400 uppercase tracking-wider">{feature.tag}</span>
+                  <span className="text-[10px] md:text-xs font-semibold text-[#2D5C64]/60 uppercase tracking-wider">{feature.tag}</span>
                 </div>
                 <h3 className="text-sm md:text-xl font-bold mb-1 md:mb-2 text-gray-900">{feature.title}</h3>
                 <p className="text-gray-500 leading-relaxed text-xs md:text-sm hidden md:block">{feature.description}</p>
@@ -1446,7 +1440,7 @@ export default function Home() {
       </section>
 
       {/* ============================================================ DETAILED SECTIONS */}
-      <section id="plataforma" className="py-24 px-6 bg-gray-50">
+      <section id="plataforma" className="py-24 px-6 bg-white">
         <div className="max-w-7xl mx-auto space-y-32">
           {DETAILED_SECTIONS.map((section, index) => (
             <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }}
@@ -1458,8 +1452,8 @@ export default function Home() {
                 <ul className={`space-y-3 ${section.visual === 'agricultura' ? 'grid sm:grid-cols-2 gap-x-8 gap-y-3 space-y-0 mb-10' : ''}`}>
                   {section.items.map((item, i) => (
                     <motion.li key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="flex items-start gap-3">
-                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                        <Check className="w-3 h-3 text-green-600" />
+                      <div className="w-5 h-5 bg-[#F0E8D8] rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                        <Check className="w-3 h-3 text-[#02C951]" />
                       </div>
                       <span className="text-gray-600">{item}</span>
                     </motion.li>
@@ -1469,7 +1463,7 @@ export default function Home() {
 
               <div className={index % 2 === 1 && section.visual !== 'agricultura' ? 'lg:order-1' : ''}>
                 <motion.div whileHover={{ scale: 1.02 }}
-                  className={`bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-8 flex items-center justify-center border border-gray-200 shadow-lg ${
+                  className={`bg-gradient-to-br from-[#F0E8D8]/50 to-white rounded-2xl p-8 flex items-center justify-center border border-[#2D5C64]/10 shadow-lg ${
                     section.visual === 'agricultura' ? 'min-h-[500px]' : 'aspect-[4/3]'
                   }`}>
                   {section.visual === 'indicadores' && (
@@ -1483,7 +1477,7 @@ export default function Home() {
                           <div key={i} className="bg-white rounded-xl p-3 text-center shadow-sm">
                             <div className="text-xs text-gray-400 mb-1">{kpi.label}</div>
                             <div className="text-xl font-bold text-gray-800">{kpi.value}</div>
-                            <div className="text-xs text-green-600 font-medium">{kpi.trend}</div>
+                            <div className="text-xs text-[#02C951] font-medium">{kpi.trend}</div>
                           </div>
                         ))}
                       </div>
@@ -1491,7 +1485,7 @@ export default function Home() {
                         <div className="text-xs text-gray-400 mb-3">Evolución UG (12 meses)</div>
                         <div className="flex items-end gap-1 h-20">
                           {[40, 45, 42, 48, 52, 55, 50, 58, 62, 60, 65, 68].map((h, i) => (
-                            <div key={i} className="flex-1 bg-green-500 rounded-t" style={{ height: `${h}%` }} />
+                            <div key={i} className="flex-1 bg-[#02C951] rounded-t" style={{ height: `${h}%` }} />
                           ))}
                         </div>
                       </div>
@@ -1504,21 +1498,21 @@ export default function Home() {
                           <div className="text-xs text-red-400">Gastos pendientes</div>
                           <div className="text-lg font-bold text-red-600">$245.000</div>
                         </div>
-                        <div className="bg-green-50 rounded-xl p-3 border border-green-100">
-                          <div className="text-xs text-green-500">Ingresos cobrados</div>
-                          <div className="text-lg font-bold text-green-600">$890.000</div>
+                        <div className="bg-[#F0E8D8]/60 rounded-xl p-3 border border-[#02C951]/20">
+                          <div className="text-xs text-[#2D5C64]">Ingresos cobrados</div>
+                          <div className="text-lg font-bold text-[#02C951]">$890.000</div>
                         </div>
                       </div>
                       <div className="bg-white rounded-xl p-3 shadow-sm">
                         <div className="flex items-center gap-2 mb-2">
-                          <div className="w-6 h-6 bg-green-600 rounded flex items-center justify-center">
+                          <div className="w-6 h-6 bg-[#2D5C64] rounded flex items-center justify-center">
                             <FileText className="w-3 h-3 text-white" />
                           </div>
                           <span className="text-xs font-bold text-gray-700">exportar_campo.xlsx</span>
                         </div>
                         <div className="flex gap-1 mb-2">
-                          <span className="text-[9px] px-2 py-0.5 bg-green-100 text-green-700 rounded font-medium">Ventas</span>
-                          <span className="text-[9px] px-2 py-0.5 bg-green-100 text-green-700 rounded font-medium">Gastos</span>
+                          <span className="text-[9px] px-2 py-0.5 bg-[#F0E8D8] text-[#2D5C64] rounded font-medium">Ventas</span>
+                          <span className="text-[9px] px-2 py-0.5 bg-[#F0E8D8] text-[#2D5C64] rounded font-medium">Gastos</span>
                           <span className="text-[9px] px-2 py-0.5 bg-gray-100 text-gray-500 rounded">Eventos</span>
                           <span className="text-[9px] px-2 py-0.5 bg-gray-100 text-gray-500 rounded">Stock</span>
                         </div>
@@ -1554,7 +1548,7 @@ export default function Home() {
                               <span className="font-semibold text-gray-700">{row.modulo}</span>
                               <span className="text-gray-500">{row.entrada}</span>
                               <span className="text-gray-500">{row.salida}</span>
-                              <span className="text-green-600 font-medium">{row.dias}d</span>
+                              <span className="text-[#02C951] font-medium">{row.dias}d</span>
                               <span className="text-amber-600">{row.descanso}{typeof row.descanso === 'number' ? 'd' : ''}</span>
                             </div>
                           ))}
@@ -1564,8 +1558,8 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="bg-white rounded-xl p-3 shadow-sm flex items-center gap-3">
-                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                          <FileText className="w-4 h-4 text-green-600" />
+                        <div className="w-8 h-8 bg-[#F0E8D8] rounded-lg flex items-center justify-center">
+                          <FileText className="w-4 h-4 text-[#2D5C64]" />
                         </div>
                         <div className="flex-1">
                           <div className="text-sm font-medium text-gray-700">pastoreo_rotativo.pdf</div>
@@ -1588,7 +1582,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-[400px_1fr] gap-10 lg:gap-12 items-center">
             <div>
-              <span className="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold mb-3">Ventas · Bovino · Ovino</span>
+              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Ventas · Bovino · Ovino</span>
               <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tus ventas de hacienda, claras como un Excel</h3>
               <p className="text-lg text-gray-500 mb-6">
                 Cargás cada venta con un mensaje y la tabla se llena sola. KG, US$/KG, US$ bruto por categoría, total general y gráfico de torta — listo para el contador.
@@ -1596,7 +1590,7 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-gray-600">
                 {['Desglose por categoría (Novillo, Vaca, Vaquillona…)', 'Cambia entre US$, KG y Animales con un toque', 'Promedios y totales calculados', 'Exportá todo a Excel con un click'].map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
                     <span>{it}</span>
                   </li>
                 ))}
@@ -1608,12 +1602,12 @@ export default function Home() {
       </section>
 
       {/* ============================================================ MAPA */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-gray-50">
+      <section className="py-20 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/30">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
             <MapaVisual />
             <div>
-              <span className="inline-block bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-semibold mb-3">Mapa interactivo</span>
+              <span className="inline-block bg-white text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3 shadow-sm">Mapa interactivo</span>
               <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Tu campo dibujado, no en una libreta</h3>
               <p className="text-lg text-gray-500 mb-6">
                 Dibujá los potreros una vez y todo se conecta: animales, cultivos, lluvias, pastoreo. Un click y ves qué hay en cada potrero hoy.
@@ -1621,7 +1615,7 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-gray-600">
                 {['Polígonos de cada potrero con superficie real', 'Filtrá por cultivo, categoría animal o evento', 'Visualización del pastoreo rotativo en el mapa', 'Compartilo con tu equipo en segundos'].map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
                     <span>{it}</span>
                   </li>
                 ))}
@@ -1636,7 +1630,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
-              <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold mb-3">Eventos del campo</span>
+              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Eventos del campo</span>
               <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Todo lo que pasa en el campo, en un solo timeline</h3>
               <p className="text-lg text-gray-500 mb-6">
                 Lluvias, sanidades, pariciones, mortandades, movimientos. Cada cosa que mandás por WhatsApp queda registrada y filtrable.
@@ -1644,18 +1638,18 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-gray-600">
                 {['Lluvias y clima', 'Sanidad: vacunas, tratamientos, dosificaciones', 'Pariciones, destetes, mortandades', 'Movimientos entre potreros', 'Fotos adjuntas a cualquier evento'].map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
                     <span>{it}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-5 md:p-6 border border-gray-200 shadow-sm">
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+            <div className="bg-[#F0E8D8]/30 rounded-2xl p-5 md:p-6 border border-[#2D5C64]/10 shadow-sm">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#2D5C64]/10">
                 <div className="flex items-center gap-2">
-                  <CalendarDays className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-bold text-gray-700">Últimos eventos</span>
+                  <CalendarDays className="w-4 h-4 text-[#2D5C64]" />
+                  <span className="text-sm font-bold text-[#2D5C64]">Últimos eventos</span>
                 </div>
                 <span className="text-xs text-gray-400">Hoy · 5 nuevos</span>
               </div>
@@ -1683,7 +1677,7 @@ export default function Home() {
       </section>
 
       {/* ============================================================ FINANZAS DETALLADA */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-gradient-to-b from-white to-green-50/40">
+      <section className="py-20 md:py-24 px-4 md:px-6 bg-gradient-to-b from-white to-[#F0E8D8]/50">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10 md:mb-12">
             <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Finanzas</span>
@@ -1714,14 +1708,14 @@ export default function Home() {
       </section>
 
       {/* ============================================================ INSUMOS */}
-      <section className="py-20 md:py-24 px-4 md:px-6 bg-gray-50">
+      <section className="py-20 md:py-24 px-4 md:px-6 bg-[#F0E8D8]/25">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
-            <div className="bg-white rounded-2xl p-5 md:p-6 border border-gray-200 shadow-sm order-2 lg:order-1">
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+            <div className="bg-white rounded-2xl p-5 md:p-6 border border-[#2D5C64]/10 shadow-sm order-2 lg:order-1">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#2D5C64]/10">
                 <div className="flex items-center gap-2">
-                  <Package className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-bold text-gray-700">Stock de insumos</span>
+                  <Package className="w-4 h-4 text-[#2D5C64]" />
+                  <span className="text-sm font-bold text-[#2D5C64]">Stock de insumos</span>
                 </div>
                 <span className="text-xs text-gray-400">Ingresos · usos · stock</span>
               </div>
@@ -1739,7 +1733,7 @@ export default function Home() {
                     {INSUMOS_STOCK.map((it, i) => (
                       <motion.tr key={i} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
                         <td className="px-2 py-2.5 font-semibold text-gray-800">{it.nombre}</td>
-                        <td className="px-2 py-2.5 text-right text-green-600 font-medium">+{fmt(it.ingresos)}</td>
+                        <td className="px-2 py-2.5 text-right text-[#02C951] font-medium">+{fmt(it.ingresos)}</td>
                         <td className="px-2 py-2.5 text-right text-rose-600">−{fmt(it.usos)}</td>
                         <td className="px-2 py-2.5 text-right">
                           <span className="font-bold text-gray-900">{fmt(it.stock)}</span>
@@ -1751,13 +1745,13 @@ export default function Home() {
                 </table>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-2 text-[11px] text-gray-500">
-                <MessageSquare className="w-3.5 h-3.5 text-green-600" />
+                <MessageSquare className="w-3.5 h-3.5 text-[#02C951]" />
                 <span>"<span className="text-gray-700 italic">usé 50kg de sal en el norte</span>" → stock actualizado</span>
               </div>
             </div>
 
             <div className="order-1 lg:order-2">
-              <span className="inline-block bg-lime-100 text-lime-700 px-3 py-1 rounded-full text-xs font-semibold mb-3">Insumos</span>
+              <span className="inline-block bg-white text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3 shadow-sm">Insumos</span>
               <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Stock de insumos al día, sin planillas</h3>
               <p className="text-lg text-gray-500 mb-6">
                 Cargá los <strong>ingresos</strong>, registrá los <strong>usos</strong> y el sistema calcula el <strong>stock actual</strong>. Lo hacés por WhatsApp o desde la web.
@@ -1765,7 +1759,7 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-gray-600">
                 {['Registrá ingresos de insumos al campo', 'Cargá los usos cuando se aplican', 'Stock actual calculado automáticamente', 'Mismo dato accesible desde WhatsApp y web'].map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
                     <span>{it}</span>
                   </li>
                 ))}
@@ -1780,7 +1774,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
-              <span className="inline-block bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-xs font-semibold mb-3">Agenda con IA</span>
+              <span className="inline-block bg-[#F0E8D8] text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-3">Agenda con IA</span>
               <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">"En 14 días hacer tacto" — el bot lo agenda solo</h3>
               <p className="text-lg text-gray-500 mb-6">
                 Decile al bot lo que hay que hacer y cuándo. Él arma la agenda, te recuerda el día y lo deja listo para que lo veas en el calendario.
@@ -1788,17 +1782,17 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-gray-600">
                 {['Recordatorios automáticos por WhatsApp', 'Calendario mensual con todas las tareas', 'Tareas recurrentes: vacunas, esquila, sanidad', 'Cargá tareas con un audio o un texto natural'].map((it, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                    <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
                     <span>{it}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="bg-gradient-to-br from-emerald-50 to-green-100 rounded-2xl p-5 md:p-6 border border-green-200 shadow-sm">
+            <div className="bg-gradient-to-br from-[#F0E8D8] to-white rounded-2xl p-5 md:p-6 border border-[#2D5C64]/15 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <CalendarDays className="w-4 h-4 text-green-700" />
+                  <CalendarDays className="w-4 h-4 text-[#2D5C64]" />
                   <span className="text-sm font-bold text-gray-800">Febrero 2026</span>
                 </div>
                 <span className="text-xs text-gray-500">4 tareas</span>
@@ -1835,7 +1829,7 @@ export default function Home() {
       </section>
 
       {/* ============================================================ MULTI-CANAL */}
-      <section className="py-16 md:py-20 px-4 md:px-6 bg-gradient-to-br from-gray-900 to-black text-white">
+      <section className="py-16 md:py-20 px-4 md:px-6 bg-[#2D5C64] text-white">
         <div className="max-w-6xl mx-auto text-center">
           <h3 className="text-2xl md:text-4xl font-bold mb-3">Donde sea, como te quede cómodo</h3>
           <p className="text-gray-400 mb-10 md:mb-14 max-w-2xl mx-auto">Cada uno del equipo carga datos por su canal. Todos ven la misma información en tiempo real.</p>
@@ -1860,7 +1854,7 @@ export default function Home() {
       <section className="py-20 md:py-24 px-4 md:px-6 bg-[#F0E8D8]">
         <div className="max-w-4xl mx-auto text-center">
           <span className="inline-block bg-white text-[#2D5C64] px-3 py-1 rounded-full text-xs font-semibold mb-4 shadow-sm">Precios</span>
-          <h3 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">Un precio simple, según tus hectáreas</h3>
+          <h3 className="text-3xl md:text-5xl font-bold text-[#2D5C64] mb-4">Un precio simple, según tus hectáreas</h3>
           <p className="text-lg text-gray-600 mb-8">Sin permanencias. Sin sorpresas. Cancelás cuando quieras.</p>
 
           <div className="bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-[#2D5C64]/20 max-w-md mx-auto">
@@ -1872,7 +1866,7 @@ export default function Home() {
             <ul className="text-left space-y-2 mb-6 text-sm text-gray-600">
               {['Bot de WhatsApp con IA', 'Campos / establecimientos ilimitados', 'Equipo con roles y permisos', 'Reportes y exportación a Excel'].map((it, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                  <Check className="w-4 h-4 text-[#02C951] mt-0.5 shrink-0" />
                   <span>{it}</span>
                 </li>
               ))}
@@ -1885,11 +1879,11 @@ export default function Home() {
       </section>
 
       {/* ============================================================ FINAL CTA */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-24 px-6 bg-[#F0E8D8]/30">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
           className="max-w-4xl mx-auto text-center bg-[#2D5C64] rounded-3xl p-12 md:p-16 shadow-2xl relative overflow-hidden">
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#02C951]/20 rounded-full blur-3xl" />
+          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#F0E8D8]/20 rounded-full blur-3xl" />
           <div className="relative z-10">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Empezá a gestionar tu campo hoy</h2>
             <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
