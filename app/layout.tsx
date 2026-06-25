@@ -118,7 +118,7 @@ export const metadata: Metadata = {
       "Gestión agropecuaria por WhatsApp. Todos los datos de tu campo en un solo lugar.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-v2.jpg",
         width: 1280,
         height: 720,
         alt: "BotRural - Gestión agropecuaria por WhatsApp",
@@ -133,7 +133,7 @@ export const metadata: Metadata = {
     title: "BotRural - Gestiona tu campo con WhatsApp e IA",
     description:
       "Gestión agropecuaria por WhatsApp. Todos los datos de tu campo en un solo lugar.",
-    images: ["/og-image.jpg"],
+    images: ["/og-v2.jpg"],
     creator: "@botrural",
     site: "@botrural",
   },
