@@ -115,14 +115,14 @@ export const metadata: Metadata = {
     siteName: "BotRural",
     title: "BotRural - Gestiona tu campo con WhatsApp e Inteligencia Artificial",
     description:
-      "Registra ganaderia, agricultura, finanzas y clima desde WhatsApp. Tu capataz manda un audio y la IA lo convierte en datos. Sin apps, sin complicaciones.",
+      "Gestión agropecuaria por WhatsApp. Todos los datos de tu campo en un solo lugar.",
     images: [
       {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "BotRural - Gestion rural con WhatsApp e IA",
-        type: "image/png",
+        url: "/og-image.jpg",
+        width: 1856,
+        height: 560,
+        alt: "BotRural - Gestión agropecuaria por WhatsApp",
+        type: "image/jpeg",
       },
     ],
   },
@@ -132,8 +132,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "BotRural - Gestiona tu campo con WhatsApp e IA",
     description:
-      "Registra ganaderia, agricultura, finanzas y clima desde WhatsApp. Tu capataz manda un audio y la IA lo convierte en datos.",
-    images: ["/og-image.png"],
+      "Gestión agropecuaria por WhatsApp. Todos los datos de tu campo en un solo lugar.",
+    images: ["/og-image.jpg"],
     creator: "@botrural",
     site: "@botrural",
   },
