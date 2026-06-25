@@ -119,8 +119,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og-image.jpg",
-        width: 1408,
-        height: 736,
+        width: 1280,
+        height: 720,
         alt: "BotRural - Gestión agropecuaria por WhatsApp",
         type: "image/jpeg",
       },
