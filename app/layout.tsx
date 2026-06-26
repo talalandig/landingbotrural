@@ -115,7 +115,7 @@ export const metadata: Metadata = {
     siteName: "BotRural",
     title: "BotRural - Gestiona tu campo con WhatsApp e Inteligencia Artificial",
     description:
-      "Gestión agropecuaria por WhatsApp. Todos los datos de tu campo en un solo lugar.",
+      "Tu asistente personal, diseño a medida para campos en Uruguay.",
     images: [
       {
         url: "/og-v2.jpg",
@@ -132,7 +132,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "BotRural - Gestiona tu campo con WhatsApp e IA",
     description:
-      "Gestión agropecuaria por WhatsApp. Todos los datos de tu campo en un solo lugar.",
+      "Tu asistente personal, diseño a medida para campos en Uruguay.",
     images: ["/og-v2.jpg"],
     creator: "@botrural",
     site: "@botrural",
