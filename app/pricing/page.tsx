@@ -13,12 +13,12 @@ interface PlanRow {
 }
 
 const PLANS: PlanRow[] = [
-  { id: 'PLAN_500', rango: '0 - 500 ha', monthly: 29.99 },
-  { id: 'PLAN_1000', rango: '500 - 1.000 ha', monthly: 54.99 },
-  { id: 'PLAN_2000', rango: '1.000 - 2.000 ha', monthly: 74.99 },
-  { id: 'PLAN_5000', rango: '2.000 - 5.000 ha', monthly: 94.99 },
-  { id: 'PLAN_7500', rango: '5.000 - 7.500 ha', monthly: 109.99 },
-  { id: 'PLAN_10000', rango: '7.500 - 10.000 ha', monthly: 124.99 },
+  { id: 'PLAN_500', rango: '0 - 500 animales', monthly: 29.99 },
+  { id: 'PLAN_1000', rango: '500 - 1.000 animales', monthly: 54.99 },
+  { id: 'PLAN_2000', rango: '1.000 - 2.000 animales', monthly: 74.99 },
+  { id: 'PLAN_5000', rango: '2.000 - 5.000 animales', monthly: 94.99 },
+  { id: 'PLAN_7500', rango: '5.000 - 7.500 animales', monthly: 109.99 },
+  { id: 'PLAN_10000', rango: '7.500 - 10.000 animales', monthly: 124.99 },
 ]
 
 const INCLUDED = [
@@ -73,11 +73,8 @@ export default function PricingPage() {
             Planes BotRural
           </span>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white mb-4 max-w-3xl mx-auto leading-tight">
-            El plan según las hectáreas de tu operación
+            Precios simples y transparentes
           </h1>
-          <p className="text-base md:text-lg text-white/75 max-w-2xl mx-auto leading-relaxed">
-            Un solo precio por rango de hectáreas. Campos ilimitados, todo incluido. Sin permanencia.
-          </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm">
             {[
@@ -104,7 +101,7 @@ export default function PricingPage() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-7">
             <div>
               <h2 className="text-xl font-bold text-gray-900">Seleccioná tu plan</h2>
-              <p className="text-sm text-gray-500 mt-1">El límite de hectáreas es global del plan</p>
+              <p className="text-sm text-gray-500 mt-1">El límite de animales es global del plan</p>
             </div>
 
             <div className="inline-flex items-center self-start sm:self-auto bg-gray-100 rounded-full p-1 text-sm font-medium">
@@ -174,7 +171,7 @@ export default function PricingPage() {
           <div className="mt-6 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
             <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
             <p>
-              ¿Necesitás más de 10.000 ha?{' '}
+              ¿Necesitás más de 10.000 animales?{' '}
               <a
                 href="https://wa.me/59899465242?text=Hola%2C%20necesito%20un%20plan%20enterprise%20de%20BotRural"
                 target="_blank"
@@ -220,7 +217,7 @@ export default function PricingPage() {
 
               <div className="space-y-3 text-sm border-b border-gray-100 pb-5 mb-5">
                 <div className="flex justify-between gap-4">
-                  <span className="text-gray-500">Hectáreas</span>
+                  <span className="text-gray-500">Animales</span>
                   <span className="font-semibold text-gray-900 text-right">{plan.rango}</span>
                 </div>
                 <div className="flex justify-between gap-4">

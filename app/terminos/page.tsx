@@ -70,10 +70,8 @@ export default function TerminosPage() {
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
               <li>Las contraseñas se almacenan de forma segura utilizando tecnicas de hashing. Nadie en la empresa puede ver las contraseñas.</li>
-              <li>Los datos se almacenan en servidores con altos estandares de seguridad.</li>
-              <li>Los mensajes de WhatsApp (textos, audios, fotos) son procesados por inteligencia artificial unicamente para extraer la informacion relevante a su operacion rural.</li>
-              <li>No almacenamos audios ni fotos mas alla del tiempo necesario para su procesamiento, salvo que usted lo solicite.</li>
-              <li>Nadie fuera de BotRural tiene acceso a los datos almacenados, salvo que sea necesario para proporcionar el servicio o cumplir con la ley.</li>
+              <li>Todos los datos se almacenan en servidores proporcionados por Amazon Web Services, que cuentan con altos estándares de seguridad.</li>
+              <li>Nadie fuera de BotRural tiene acceso a los datos almacenados.</li>
             </ul>
           </section>
 
@@ -163,56 +161,49 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">13. Enlaces a Terceros</h2>
-            <p>
-              El sitio web de BotRural puede contener enlaces a otros sitios web operados por terceros. Estos enlaces se proporcionan unicamente para su conveniencia, y no somos responsables del contenido ni de las politicas de estos sitios de terceros.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">14. Respaldo de Datos</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">13. Respaldo de Datos</h2>
             <p>
               Aunque tomamos medidas para proteger y respaldar sus datos, le recomendamos encarecidamente que exporte sus datos periodicamente y mantenga copias de seguridad. No seremos responsables por la perdida de datos debido a fallas del sistema u otros eventos imprevistos.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">15. Modificaciones a los Terminos</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">14. Modificaciones a los Terminos</h2>
             <p>
               BotRural se reserva el derecho de modificar estos Terminos y Condiciones en cualquier momento. Le notificaremos cambios significativos a traves de WhatsApp o la plataforma web. Su uso continuado del servicio despues de la publicacion de cambios significara que acepta y esta de acuerdo con los cambios.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">16. Fuerza Mayor</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">15. Fuerza Mayor</h2>
             <p>
               No seremos responsables por el incumplimiento de nuestras obligaciones bajo estos terminos si dicho incumplimiento es causado por circunstancias fuera de nuestro control razonable, incluyendo, pero no limitado a, desastres naturales, conflictos laborales, fallas de energia, interrupciones de internet o cambios en las politicas de WhatsApp/Meta.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">17. Ley Aplicable</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">16. Ley Aplicable</h2>
             <p>
               Estos Terminos y Condiciones se regiran e interpretaran de acuerdo con las leyes de la Republica Oriental del Uruguay, sin dar efecto a sus principios de conflicto de leyes.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">18. Divisibilidad</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">17. Divisibilidad</h2>
             <p>
               Si alguna disposicion de estos Terminos y Condiciones se considera invalida o inaplicable, dicha disposicion se eliminara y las disposiciones restantes se haran cumplir.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">19. Acuerdo Completo</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">18. Acuerdo Completo</h2>
             <p>
               Estos Terminos y Condiciones constituyen el acuerdo completo entre usted y BotRural con respecto al uso de nuestro sitio web y servicios.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">20. Contacto</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">19. Contacto</h2>
             <p>
               Si tiene alguna pregunta sobre estos Terminos y Condiciones, puede contactarnos a traves de <a href="mailto:info@botrural.com" className="text-[#00934a] hover:underline">info@botrural.com</a> o por WhatsApp.
             </p>
