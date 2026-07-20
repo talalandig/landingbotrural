@@ -81,7 +81,7 @@ export default function TerminosPage() {
               BotRural utiliza modelos de inteligencia artificial para procesar y registrar la informacion que usted envia. Es importante entender que:
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
-              <li>La IA puede cometer errores en la interpretacion de audios, textos o imagenes. Recomendamos verificar los registros periodicamente.</li>
+              <li>La IA puede cometer errores en la interpretacion de audios, textos o imagenes. Recomendamos verificar los registros.</li>
               <li>BotRural no se hace responsable por decisiones tomadas en base a datos procesados incorrectamente por la IA.</li>
               <li>Los modelos de IA se mejoran continuamente, lo que puede generar cambios en el comportamiento del bot.</li>
             </ul>
@@ -128,7 +128,7 @@ export default function TerminosPage() {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">10. Soporte Tecnico</h2>
             <p>
-              Ofrecemos soporte tecnico para ayudarle a utilizar nuestro servicio. Sin embargo, no somos responsables de problemas causados por su dispositivo, conexion a internet, configuracion de WhatsApp o cualquier otro factor fuera de nuestro control directo.
+              Ofrecemos soporte tecnico para ayudarle a utilizar nuestro servicio. Sin embargo, no somos responsables de problemas causados por su dispositivo, conexion a internet, o cualquier otro factor fuera de nuestro control directo.
             </p>
           </section>
 
@@ -147,35 +147,28 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">13. Fuerza Mayor</h2>
-            <p>
-              No seremos responsables por el incumplimiento de nuestras obligaciones bajo estos terminos si dicho incumplimiento es causado por circunstancias fuera de nuestro control razonable, incluyendo, pero no limitado a, desastres naturales, conflictos laborales, fallas de energia, interrupciones de internet o cambios en las politicas de WhatsApp/Meta.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">14. Ley Aplicable</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">13. Ley Aplicable</h2>
             <p>
               Estos Terminos y Condiciones se regiran e interpretaran de acuerdo con las leyes de la Republica Oriental del Uruguay, sin dar efecto a sus principios de conflicto de leyes.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">15. Divisibilidad</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">14. Divisibilidad</h2>
             <p>
               Si alguna disposicion de estos Terminos y Condiciones se considera invalida o inaplicable, dicha disposicion se eliminara y las disposiciones restantes se haran cumplir.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">16. Acuerdo Completo</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">15. Acuerdo Completo</h2>
             <p>
               Estos Terminos y Condiciones constituyen el acuerdo completo entre usted y BotRural con respecto al uso de nuestro sitio web y servicios.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">17. Contacto</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">16. Contacto</h2>
             <p>
               Si tiene alguna pregunta sobre estos Terminos y Condiciones, puede contactarnos a traves de <a href="mailto:info@botrural.com" className="text-[#00934a] hover:underline">info@botrural.com</a> o por WhatsApp.
             </p>
