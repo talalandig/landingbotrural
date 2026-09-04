@@ -12,6 +12,7 @@ type CampoDraft = {
   id: string
   nombre: string
   tipo: TipoCampo
+  modalidad: Modalidad
   hectareas: string
   vacunos: string
   ovinos: string
@@ -57,6 +58,7 @@ function newCampo(index: number): CampoDraft {
     id: `c-${Date.now()}-${index}`,
     nombre: `Campo ${index}`,
     tipo: 'ganaderia',
+    modalidad: 'con',
     hectareas: '',
     vacunos: '',
     ovinos: '',
@@ -111,64 +113,103 @@ function montoPool(p: PrecioPool, cycle: Cycle): number | null {
   return cycle === 'monthly' ? p.monthly : p.monthly * 10
 }
 
+type PoolLinea = { titulo: string; quote: PrecioPool }
+
+function armarPools(campos: CampoDraft[]): PoolLinea[] {
+  const buckets: Record<
+    string,
+    { n: number; unidades: number; titulo: string; modalidad: Modalidad; unidad: 'ha' | 'animales eq.' }
+  > = {
+    'ani-con': {
+      n: 0,
+      unidades: 0,
+      titulo: 'Ganadería / Mixto · Con Finanzas',
+      modalidad: 'con',
+      unidad: 'animales eq.',
+    },
+    'ani-sin': {
+      n: 0,
+      unidades: 0,
+      titulo: 'Ganadería / Mixto · Sin Finanzas',
+      modalidad: 'sin',
+      unidad: 'animales eq.',
+    },
+    'ha-con': {
+      n: 0,
+      unidades: 0,
+      titulo: 'Agricultura · Con Finanzas',
+      modalidad: 'con',
+      unidad: 'ha',
+    },
+    'ha-sin': {
+      n: 0,
+      unidades: 0,
+      titulo: 'Agricultura · Sin Finanzas',
+      modalidad: 'sin',
+      unidad: 'ha',
+    },
+  }
+  for (const c of campos) {
+    const esAgri = c.tipo === 'agricultura'
+    const key = `${esAgri ? 'ha' : 'ani'}-${c.modalidad}`
+    buckets[key].n += 1
+    buckets[key].unidades += esAgri ? parseNum(c.hectareas) : equivalentes(c)
+  }
+  return Object.values(buckets)
+    .filter((b) => b.n > 0)
+    .map((b) => ({
+      titulo: b.titulo,
+      quote: cotizarPool(b.unidades, b.modalidad, b.unidad),
+    }))
+}
+
 export default function PricingPage() {
   const [campos, setCampos] = useState<CampoDraft[]>(() => [newCampo(1)])
-  const [modalidad, setModalidad] = useState<Modalidad>('con')
   const [cycle, setCycle] = useState<Cycle>('monthly')
 
-  const hayGanaderia = campos.some((c) => c.tipo !== 'agricultura')
-  const hayAgri = campos.some((c) => c.tipo === 'agricultura')
-  const poolAnimales = campos
-    .filter((c) => c.tipo !== 'agricultura')
-    .reduce((s, c) => s + equivalentes(c), 0)
-  const poolHa = campos
-    .filter((c) => c.tipo === 'agricultura')
-    .reduce((s, c) => s + parseNum(c.hectareas), 0)
-
-  const quoteAni = hayGanaderia ? cotizarPool(poolAnimales, modalidad, 'animales eq.') : null
-  const quoteHa = hayAgri ? cotizarPool(poolHa, modalidad, 'ha') : null
-
-  const needsContact = quoteAni?.kind === 'contact' || quoteHa?.kind === 'contact'
-  const monthlyTotal =
-    (quoteAni?.kind === 'usd' ? quoteAni.monthly : 0) +
-    (quoteHa?.kind === 'usd' ? quoteHa.monthly : 0)
+  const pools = armarPools(campos)
+  const hayCon = campos.some((c) => c.modalidad === 'con')
+  const haySin = campos.some((c) => c.modalidad === 'sin')
+  const needsContact = pools.some((p) => p.quote.kind === 'contact')
+  const monthlyTotal = pools.reduce(
+    (s, p) => s + (p.quote.kind === 'usd' ? p.quote.monthly : 0),
+    0
+  )
   const displayTotal = cycle === 'monthly' ? monthlyTotal : monthlyTotal * 10
   const totalLabel = cycle === 'monthly' ? '/mes' : '/año'
 
-  const included = modalidad === 'con' ? [...INCLUDED_BASE, INCLUDED_FINANZAS] : INCLUDED_BASE
+  const included = hayCon ? [...INCLUDED_BASE, INCLUDED_FINANZAS] : INCLUDED_BASE
 
   const contactUrl = useMemo(() => {
     const billing = cycle === 'monthly' ? 'mensual' : 'anual'
-    const fin = modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'
     const lineasCampos = campos.map((campo, i) => {
       const nom = campo.nombre.trim() || `Campo ${i + 1}`
       const mag =
         campo.tipo === 'agricultura'
           ? `${fmtNum(parseNum(campo.hectareas))} ha`
           : `${fmtNum(equivalentes(campo))} animales eq.`
-      return `• ${nom} (${TIPO_LABEL[campo.tipo]}): ${mag}`
+      const mod = campo.modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'
+      return `• ${nom} (${TIPO_LABEL[campo.tipo]}, ${mod}): ${mag}`
     })
-    const lineaPool = (q: PrecioPool | null, titulo: string) => {
-      if (!q) return null
-      if (q.kind === 'contact') return `Pool ${titulo}: ${fmtNum(q.unidades)} ${q.unidad} — Contáctanos`
-      const precio = cycle === 'monthly' ? q.monthly : q.monthly * 10
-      return `Pool ${titulo}: ${fmtNum(q.unidades)} ${q.unidad} (${q.bandLabel}) — USD ${fmtUsd(precio)}${totalLabel}`
-    }
+    const lineasPool = pools.map(({ titulo, quote }) => {
+      if (quote.kind === 'contact') {
+        return `Pool ${titulo}: ${fmtNum(quote.unidades)} ${quote.unidad} — Contáctanos`
+      }
+      const precio = cycle === 'monthly' ? quote.monthly : quote.monthly * 10
+      return `Pool ${titulo}: ${fmtNum(quote.unidades)} ${quote.unidad} (${quote.bandLabel}) — USD ${fmtUsd(precio)}${totalLabel}`
+    })
     const totalTxt = needsContact
       ? 'Total: Contáctanos (+10.000 en el pool)'
       : `Total: USD ${fmtUsd(displayTotal)} ${totalLabel}`
     const message = [
       'Hola, quiero BotRural.',
-      `Modalidad: ${fin} · Facturación ${billing}`,
+      `Facturación ${billing}`,
       ...lineasCampos,
-      lineaPool(quoteAni, 'Ganadería / Mixto'),
-      lineaPool(quoteHa, 'Agricultura'),
+      ...lineasPool,
       totalTxt,
-    ]
-      .filter(Boolean)
-      .join('\n')
+    ].join('\n')
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-  }, [campos, quoteAni, quoteHa, cycle, modalidad, needsContact, displayTotal, totalLabel])
+  }, [campos, pools, cycle, needsContact, displayTotal, totalLabel])
 
   const updateCampo = (id: string, patch: Partial<CampoDraft>) => {
     setCampos((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c)))
@@ -220,42 +261,12 @@ export default function PricingPage() {
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 xl:pr-20 py-10 md:py-14 grid grid-cols-1 xl:grid-cols-[minmax(0,1.15fr)_minmax(280px,340px)_340px] gap-6 lg:gap-7">
         <div className="space-y-5 min-w-0">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-5 md:p-7">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">Tus campos</h2>
-                <p className="text-sm text-gray-500 mt-1">
-                  Podés contratar uno solo y sumar establecimientos después.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="inline-flex items-center bg-gray-100 rounded-full p-1 text-sm font-medium">
-                  <button
-                    type="button"
-                    onClick={() => setModalidad('con')}
-                    className={`px-3.5 py-1.5 rounded-full transition ${
-                      modalidad === 'con' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    Con Finanzas
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setModalidad('sin')}
-                    className={`px-3.5 py-1.5 rounded-full transition ${
-                      modalidad === 'sin' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    Sin Finanzas
-                  </button>
-                </div>
-              </div>
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-gray-900">Tus campos</h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Podés contratar uno solo y sumar establecimientos después. Con o Sin Finanzas se elige en cada campo.
+              </p>
             </div>
-            <p className="text-xs text-gray-500 -mt-3 mb-6">
-              {modalidad === 'sin'
-                ? 'Las ventas y compras de animales se cargan igual, pero sin montos. No incluye facturas de gastos/ventas ni los informes de dinero del ejercicio. Podés pasar a Con Finanzas cuando quieras.'
-                : 'Con Finanzas suma facturas de gastos y ventas, y los informes de dinero del ejercicio.'}
-            </p>
 
             <div className="space-y-4">
               {campos.map((c, i) => {
@@ -290,7 +301,7 @@ export default function PricingPage() {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-1.5 mb-4">
+                    <div className="grid grid-cols-3 gap-1.5 mb-3">
                       {(['ganaderia', 'mixto', 'agricultura'] as TipoCampo[]).map((t) => {
                         const on = c.tipo === t
                         return (
@@ -309,6 +320,32 @@ export default function PricingPage() {
                         )
                       })}
                     </div>
+
+                    <div className="inline-flex w-full sm:w-auto items-center bg-white rounded-full p-1 text-xs font-medium border border-gray-200 mb-4">
+                      <button
+                        type="button"
+                        onClick={() => updateCampo(c.id, { modalidad: 'con' })}
+                        className={`flex-1 sm:flex-none px-3 py-1.5 rounded-full transition ${
+                          c.modalidad === 'con' ? 'bg-[#F0E8D8] text-[#2D5C64] shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                        }`}
+                      >
+                        Con Finanzas
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateCampo(c.id, { modalidad: 'sin' })}
+                        className={`flex-1 sm:flex-none px-3 py-1.5 rounded-full transition ${
+                          c.modalidad === 'sin' ? 'bg-[#F0E8D8] text-[#2D5C64] shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                        }`}
+                      >
+                        Sin Finanzas
+                      </button>
+                    </div>
+                    {c.modalidad === 'sin' && (
+                      <p className="text-[11px] text-gray-500 -mt-2 mb-3">
+                        Ventas y compras de animales sin montos. No incluye facturas ni informes de dinero del ejercicio.
+                      </p>
+                    )}
 
                     {esAgri ? (
                       <label className="block">
@@ -360,8 +397,8 @@ export default function PricingPage() {
 
                     <p className="mt-3 pt-3 border-t border-gray-200/80 text-xs text-gray-500">
                       {esAgri
-                        ? `Suma al pool Agricultura: ${fmtNum(parseNum(c.hectareas))} ha`
-                        : `Suma al pool Ganadería / Mixto: ${fmtNum(eq)} an. eq.`}
+                        ? `Suma al pool Agricultura · ${c.modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'}: ${fmtNum(parseNum(c.hectareas))} ha`
+                        : `Suma al pool Ganadería / Mixto · ${c.modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'}: ${fmtNum(eq)} an. eq.`}
                     </p>
                   </div>
                 )
@@ -380,8 +417,8 @@ export default function PricingPage() {
             <div className="mt-5 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
               <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
               <p>
-                El precio sale del pool: se suman los animales eq. de Ganadería/Mixto y las ha de
-                Agricultura, y a cada pool se le aplica un rango. Si un pool supera 10.000,{' '}
+                El precio sale del pool: se suman animales eq. o ha de campos con la misma
+                actividad y la misma modalidad (Con o Sin Finanzas). Si un pool supera 10.000,{' '}
                 <a
                   href={contactUrl}
                   target="_blank"
@@ -405,11 +442,11 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-            {modalidad === 'sin' && (
+            {haySin && (
               <p className="text-xs text-gray-500 mt-4">
-                Sin Finanzas no saca las ventas ni compras de animales: solo van sin dato de
-                dinero. No incluye facturas de gastos/ventas ni los informes del ejercicio por
-                movimientos de plata. Podés pasar a Con Finanzas cuando quieras.
+                En los campos Sin Finanzas las ventas y compras de animales van sin montos. No
+                incluye facturas de gastos/ventas ni los informes de dinero del ejercicio. Podés
+                pasar ese campo a Con Finanzas cuando quieras.
               </p>
             )}
           </div>
@@ -434,14 +471,14 @@ export default function PricingPage() {
                     </th>
                     <th
                       className={`font-medium pb-2 pr-2 text-right ${
-                        modalidad === 'con' ? 'text-[#2D5C64]' : ''
+                        hayCon ? 'text-[#2D5C64]' : ''
                       }`}
                     >
                       Con finanzas
                     </th>
                     <th
                       className={`font-medium pb-2 text-right ${
-                        modalidad === 'sin' ? 'text-[#2D5C64]' : ''
+                        haySin ? 'text-[#2D5C64]' : ''
                       }`}
                     >
                       Sin finanzas
@@ -457,14 +494,14 @@ export default function PricingPage() {
                       </td>
                       <td
                         className={`py-2 pr-2 text-right tabular-nums ${
-                          modalidad === 'con' ? 'font-semibold text-gray-900' : 'text-gray-500'
+                          hayCon ? 'font-semibold text-gray-900' : 'text-gray-500'
                         }`}
                       >
                         USD {fmtUsd(b.con)}
                       </td>
                       <td
                         className={`py-2 text-right tabular-nums ${
-                          modalidad === 'sin' ? 'font-semibold text-gray-900' : 'text-gray-500'
+                          haySin ? 'font-semibold text-gray-900' : 'text-gray-500'
                         }`}
                       >
                         USD {fmtUsd(b.sin)}
@@ -540,46 +577,34 @@ export default function PricingPage() {
                       <span className="text-gray-500 min-w-0">
                         <span className="font-medium text-gray-800 block truncate">{nom}</span>
                         <span className="text-xs">
-                          {TIPO_LABEL[campo.tipo]} · {mag}
+                          {TIPO_LABEL[campo.tipo]} · {campo.modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'} · {mag}
                         </span>
                       </span>
                     </div>
                   )
                 })}
-                {quoteAni && (
-                  <div className="flex justify-between gap-3 pt-2 border-t border-gray-100">
+                {pools.map(({ titulo, quote }, idx) => (
+                  <div
+                    key={titulo}
+                    className={`flex justify-between gap-3 ${idx === 0 ? 'pt-2 border-t border-gray-100' : ''}`}
+                  >
                     <span className="text-gray-500 min-w-0">
-                      <span className="font-medium text-gray-800 block">Pool Ganadería / Mixto</span>
+                      <span className="font-medium text-gray-800 block">Pool {titulo}</span>
                       <span className="text-xs">
-                        {fmtNum(quoteAni.unidades)} an. eq. · {quoteAni.bandLabel}
+                        {fmtNum(quote.unidades)} {quote.unidad} · {quote.bandLabel}
                       </span>
                     </span>
                     <span className="font-semibold text-gray-900 text-right shrink-0 tabular-nums">
-                      {quoteAni.kind === 'contact'
+                      {quote.kind === 'contact'
                         ? 'Contáctanos'
-                        : `USD ${fmtUsd(montoPool(quoteAni, cycle)!)}`}
+                        : `USD ${fmtUsd(montoPool(quote, cycle)!)}`}
                     </span>
                   </div>
-                )}
-                {quoteHa && (
-                  <div className="flex justify-between gap-3">
-                    <span className="text-gray-500 min-w-0">
-                      <span className="font-medium text-gray-800 block">Pool Agricultura</span>
-                      <span className="text-xs">
-                        {fmtNum(quoteHa.unidades)} ha · {quoteHa.bandLabel}
-                      </span>
-                    </span>
-                    <span className="font-semibold text-gray-900 text-right shrink-0 tabular-nums">
-                      {quoteHa.kind === 'contact'
-                        ? 'Contáctanos'
-                        : `USD ${fmtUsd(montoPool(quoteHa, cycle)!)}`}
-                    </span>
-                  </div>
-                )}
+                ))}
                 <div className="flex justify-between gap-4 pt-1">
                   <span className="text-gray-500">Modalidad</span>
-                  <span className="font-semibold text-gray-900">
-                    {modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'}
+                  <span className="font-semibold text-gray-900 text-right">
+                    {hayCon && haySin ? 'Mixto por campo' : hayCon ? 'Con Finanzas' : 'Sin Finanzas'}
                   </span>
                 </div>
                 <div className="flex justify-between gap-4">
