@@ -92,11 +92,12 @@ function equivalentes(c: CampoDraft): number {
 }
 
 function detalleMix(con: number, sin: number, u: string): string {
+  const total = con + sin
   if (con > 0 && sin > 0) {
-    return `${fmtNum(con)} ${u} Con Finanzas · ${fmtNum(sin)} ${u} Sin Finanzas`
+    return `${fmtNum(total)} ${u} en total · tarifa Con Finanzas`
   }
-  if (con > 0) return `${fmtNum(con)} ${u} · Con Finanzas`
-  if (sin > 0) return `${fmtNum(sin)} ${u} · Sin Finanzas`
+  if (con > 0) return `${fmtNum(con)} ${u} · tarifa Con Finanzas`
+  if (sin > 0) return `${fmtNum(sin)} ${u} · tarifa Sin Finanzas`
   return `0 ${u}`
 }
 
@@ -415,9 +416,10 @@ export default function PricingPage() {
             <div className="mt-5 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
               <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
               <p>
-                El precio sale del pool: se suman todos los animales eq. de Ganadería/Mixto y
-                todas las ha de Agricultura (un rango). Si algún campo de ese pool es Con
-                Finanzas, se cobra la tarifa Con Finanzas. Si un pool supera 10.000,{' '}
+                Agricultura: se suman todas las ha en un pool. Ganadería/Mixto: todos los
+                animales eq. en otro. Un campo Sin Finanzas suma a ese total; no resta. Si hay
+                algún Con Finanzas en el pool, la tarifa es Con (no un promedio). Si un pool
+                supera 10.000,{' '}
                 <a
                   href={contactUrl}
                   target="_blank"
