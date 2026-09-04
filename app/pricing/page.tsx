@@ -19,8 +19,15 @@ type CampoDraft = {
 }
 
 type PrecioPool =
-  | { kind: 'usd'; monthly: number; bandLabel: string; unidades: number; unidad: string }
-  | { kind: 'contact'; bandLabel: string; unidades: number; unidad: string }
+  | {
+      kind: 'usd'
+      monthly: number
+      bandLabel: string
+      unidades: number
+      unidad: string
+      detalle: string
+    }
+  | { kind: 'contact'; bandLabel: string; unidades: number; unidad: string; detalle: string }
 
 const OVINO_EQ = 0.16
 const WHATSAPP_NUMBER = '59899465242'
@@ -84,27 +91,44 @@ function equivalentes(c: CampoDraft): number {
   return parseNum(c.vacunos) + parseNum(c.ovinos) * OVINO_EQ
 }
 
+function detalleMix(con: number, sin: number, u: string): string {
+  if (con > 0 && sin > 0) {
+    return `${fmtNum(con)} ${u} Con Finanzas · ${fmtNum(sin)} ${u} Sin Finanzas`
+  }
+  if (con > 0) return `${fmtNum(con)} ${u} · Con Finanzas`
+  if (sin > 0) return `${fmtNum(sin)} ${u} · Sin Finanzas`
+  return `0 ${u}`
+}
+
 function cotizarPool(
-  unidades: number,
-  modalidad: Modalidad,
+  unidadesCon: number,
+  unidadesSin: number,
   unidad: 'ha' | 'animales eq.'
-): PrecioPool {
+): PrecioPool | null {
+  const unidades = unidadesCon + unidadesSin
+  if (unidades <= 0) return null
   const esHa = unidad === 'ha'
+  const detalle = detalleMix(unidadesCon, unidadesSin, esHa ? 'ha' : 'an. eq.')
   if (unidades > 10000) {
     return {
       kind: 'contact',
       bandLabel: esHa ? '+10.000 ha' : '+10.000 animales eq.',
       unidades,
       unidad,
+      detalle,
     }
   }
   const band = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
+  const monthly = Math.round(
+    ((unidadesCon / unidades) * band.con + (unidadesSin / unidades) * band.sin) * 100
+  ) / 100
   return {
     kind: 'usd',
-    monthly: modalidad === 'con' ? band.con : band.sin,
+    monthly,
     bandLabel: esHa ? band.labelHa : band.labelAn,
     unidades,
     unidad,
+    detalle,
   }
 }
 
@@ -116,51 +140,27 @@ function montoPool(p: PrecioPool, cycle: Cycle): number | null {
 type PoolLinea = { titulo: string; quote: PrecioPool }
 
 function armarPools(campos: CampoDraft[]): PoolLinea[] {
-  const buckets: Record<
-    string,
-    { n: number; unidades: number; titulo: string; modalidad: Modalidad; unidad: 'ha' | 'animales eq.' }
-  > = {
-    'ani-con': {
-      n: 0,
-      unidades: 0,
-      titulo: 'Ganadería / Mixto · Con Finanzas',
-      modalidad: 'con',
-      unidad: 'animales eq.',
-    },
-    'ani-sin': {
-      n: 0,
-      unidades: 0,
-      titulo: 'Ganadería / Mixto · Sin Finanzas',
-      modalidad: 'sin',
-      unidad: 'animales eq.',
-    },
-    'ha-con': {
-      n: 0,
-      unidades: 0,
-      titulo: 'Agricultura · Con Finanzas',
-      modalidad: 'con',
-      unidad: 'ha',
-    },
-    'ha-sin': {
-      n: 0,
-      unidades: 0,
-      titulo: 'Agricultura · Sin Finanzas',
-      modalidad: 'sin',
-      unidad: 'ha',
-    },
-  }
+  let aniCon = 0
+  let aniSin = 0
+  let haCon = 0
+  let haSin = 0
   for (const c of campos) {
-    const esAgri = c.tipo === 'agricultura'
-    const key = `${esAgri ? 'ha' : 'ani'}-${c.modalidad}`
-    buckets[key].n += 1
-    buckets[key].unidades += esAgri ? parseNum(c.hectareas) : equivalentes(c)
+    if (c.tipo === 'agricultura') {
+      const u = parseNum(c.hectareas)
+      if (c.modalidad === 'con') haCon += u
+      else haSin += u
+    } else {
+      const u = equivalentes(c)
+      if (c.modalidad === 'con') aniCon += u
+      else aniSin += u
+    }
   }
-  return Object.values(buckets)
-    .filter((b) => b.n > 0)
-    .map((b) => ({
-      titulo: b.titulo,
-      quote: cotizarPool(b.unidades, b.modalidad, b.unidad),
-    }))
+  const out: PoolLinea[] = []
+  const ani = cotizarPool(aniCon, aniSin, 'animales eq.')
+  if (ani) out.push({ titulo: 'Ganadería / Mixto', quote: ani })
+  const ha = cotizarPool(haCon, haSin, 'ha')
+  if (ha) out.push({ titulo: 'Agricultura', quote: ha })
+  return out
 }
 
 export default function PricingPage() {
@@ -196,7 +196,7 @@ export default function PricingPage() {
         return `Pool ${titulo}: ${fmtNum(quote.unidades)} ${quote.unidad} — Contáctanos`
       }
       const precio = cycle === 'monthly' ? quote.monthly : quote.monthly * 10
-      return `Pool ${titulo}: ${fmtNum(quote.unidades)} ${quote.unidad} (${quote.bandLabel}) — USD ${fmtUsd(precio)}${totalLabel}`
+      return `Pool ${titulo}: ${quote.detalle} (${quote.bandLabel}) — USD ${fmtUsd(precio)}${totalLabel}`
     })
     const totalTxt = needsContact
       ? 'Total: Contáctanos (+10.000 en el pool)'
@@ -397,8 +397,8 @@ export default function PricingPage() {
 
                     <p className="mt-3 pt-3 border-t border-gray-200/80 text-xs text-gray-500">
                       {esAgri
-                        ? `Suma al pool Agricultura · ${c.modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'}: ${fmtNum(parseNum(c.hectareas))} ha`
-                        : `Suma al pool Ganadería / Mixto · ${c.modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'}: ${fmtNum(eq)} an. eq.`}
+                        ? `Suma al pool Agricultura: ${fmtNum(parseNum(c.hectareas))} ha`
+                        : `Suma al pool Ganadería / Mixto: ${fmtNum(eq)} an. eq.`}
                     </p>
                   </div>
                 )
@@ -417,8 +417,9 @@ export default function PricingPage() {
             <div className="mt-5 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
               <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
               <p>
-                El precio sale del pool: se suman animales eq. o ha de campos con la misma
-                actividad y la misma modalidad (Con o Sin Finanzas). Si un pool supera 10.000,{' '}
+                El precio sale del pool: se suman todos los animales eq. de Ganadería/Mixto y
+                todas las ha de Agricultura. Con o Sin Finanzas no parte el pool: el rango es uno
+                solo. Si un pool supera 10.000,{' '}
                 <a
                   href={contactUrl}
                   target="_blank"
@@ -591,7 +592,7 @@ export default function PricingPage() {
                     <span className="text-gray-500 min-w-0">
                       <span className="font-medium text-gray-800 block">Pool {titulo}</span>
                       <span className="text-xs">
-                        {fmtNum(quote.unidades)} {quote.unidad} · {quote.bandLabel}
+                        {quote.detalle} · {quote.bandLabel}
                       </span>
                     </span>
                     <span className="font-semibold text-gray-900 text-right shrink-0 tabular-nums">
