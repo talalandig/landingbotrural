@@ -406,8 +406,9 @@ export default function PricingPage() {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-5">
             <h3 className="font-bold text-gray-900">Rangos</h3>
             <p className="text-xs text-gray-500 mt-1 mb-4">
-              En <strong className="font-semibold text-gray-700">animales eq.</strong> (Ganadería / Mixto).
-              Agricultura usa los mismos tramos en hectáreas.
+              Ganadería / Mixto en <strong className="font-semibold text-gray-700">animales eq.</strong>
+              {' · '}
+              Agricultura en <strong className="font-semibold text-gray-700">ha</strong>.
             </p>
 
             <div className="overflow-x-auto">
@@ -415,8 +416,8 @@ export default function PricingPage() {
                 <thead>
                   <tr className="text-left text-gray-500">
                     <th className="font-medium pb-2 pr-2">
-                      Animales eq.
-                      <span className="block font-normal text-[10px] text-gray-400">o ha</span>
+                      Rango
+                      <span className="block font-normal text-[10px] text-gray-400">an. eq. / ha</span>
                     </th>
                     <th
                       className={`font-medium pb-2 pr-2 text-right ${
@@ -437,8 +438,9 @@ export default function PricingPage() {
                 <tbody>
                   {BANDS.map((b) => (
                     <tr key={b.max} className="border-t border-gray-100">
-                      <td className="py-2 pr-2 text-gray-700 whitespace-nowrap">
-                        {b.rango} <span className="text-gray-400">an. eq.</span>
+                      <td className="py-2 pr-2 text-gray-700">
+                        <span className="whitespace-nowrap">{b.rango} an. eq.</span>
+                        <span className="block text-[10px] text-gray-400 whitespace-nowrap">{b.rango} ha</span>
                       </td>
                       <td
                         className={`py-2 pr-2 text-right tabular-nums ${
@@ -457,8 +459,9 @@ export default function PricingPage() {
                     </tr>
                   ))}
                   <tr className="border-t border-gray-100">
-                    <td className="py-2 pr-2 text-gray-700 whitespace-nowrap">
-                      +10.000 <span className="text-gray-400">an. eq.</span>
+                    <td className="py-2 pr-2 text-gray-700">
+                      <span className="whitespace-nowrap">+10.000 an. eq.</span>
+                      <span className="block text-[10px] text-gray-400 whitespace-nowrap">+10.000 ha</span>
                     </td>
                     <td colSpan={2} className="py-2 text-right font-semibold text-[#2D5C64]">
                       Contáctanos
