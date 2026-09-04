@@ -28,10 +28,10 @@ const WHATSAPP_NUMBER = '59899465242'
 const BANDS: { max: number; con: number; sin: number; rango: string; labelHa: string; labelAn: string }[] = [
   { max: 500, con: 34.99, sin: 24.49, rango: '0 – 500', labelHa: '0 – 500 ha', labelAn: '0 – 500 animales' },
   { max: 1000, con: 54.99, sin: 38.49, rango: '500 – 1.000', labelHa: '500 – 1.000 ha', labelAn: '500 – 1.000 animales' },
-  { max: 2000, con: 69.99, sin: 48.99, rango: '1.000 – 2.000', labelHa: '1.000 – 2.000 ha', labelAn: '1.000 – 2.000 animales' },
-  { max: 5000, con: 84.99, sin: 59.49, rango: '2.000 – 5.000', labelHa: '2.000 – 5.000 ha', labelAn: '2.000 – 5.000 animales' },
-  { max: 7500, con: 99.99, sin: 69.99, rango: '5.000 – 7.500', labelHa: '5.000 – 7.500 ha', labelAn: '5.000 – 7.500 animales' },
-  { max: 10000, con: 114.99, sin: 80.49, rango: '7.500 – 10.000', labelHa: '7.500 – 10.000 ha', labelAn: '7.500 – 10.000 animales' },
+  { max: 2000, con: 64.99, sin: 45.49, rango: '1.000 – 2.000', labelHa: '1.000 – 2.000 ha', labelAn: '1.000 – 2.000 animales' },
+  { max: 5000, con: 74.99, sin: 52.49, rango: '2.000 – 5.000', labelHa: '2.000 – 5.000 ha', labelAn: '2.000 – 5.000 animales' },
+  { max: 7500, con: 84.99, sin: 59.49, rango: '5.000 – 7.500', labelHa: '5.000 – 7.500 ha', labelAn: '5.000 – 7.500 animales' },
+  { max: 10000, con: 94.99, sin: 66.49, rango: '7.500 – 10.000', labelHa: '7.500 – 10.000 ha', labelAn: '7.500 – 10.000 animales' },
 ]
 
 const INCLUDED_BASE = [
