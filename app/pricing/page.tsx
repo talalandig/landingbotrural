@@ -231,29 +231,6 @@ export default function PricingPage() {
                     Sin Finanzas
                   </button>
                 </div>
-                <div className="inline-flex items-center bg-gray-100 rounded-full p-1 text-sm font-medium">
-                  <button
-                    type="button"
-                    onClick={() => setCycle('monthly')}
-                    className={`px-3.5 py-1.5 rounded-full transition ${
-                      cycle === 'monthly' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    Mensual
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCycle('annual')}
-                    className={`px-3.5 py-1.5 rounded-full transition flex items-center gap-1.5 ${
-                      cycle === 'annual' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    Anual
-                    <span className="text-[10px] bg-[#F0E8D8] text-[#2D5C64] px-1.5 py-0.5 rounded-full font-semibold">
-                      2 meses gratis
-                    </span>
-                  </button>
-                </div>
               </div>
             </div>
 
@@ -263,9 +240,7 @@ export default function PricingPage() {
                 const esAgri = c.tipo === 'agricultura'
                 const eq = equivalentes(c)
                 const precioTxt =
-                  q.kind === 'contact'
-                    ? 'Contáctanos'
-                    : `USD ${fmtUsd(cycle === 'monthly' ? q.monthly : q.monthly * 10)}`
+                  q.kind === 'contact' ? 'Contáctanos' : `USD ${fmtUsd(q.monthly)}`
                 return (
                   <div
                     key={c.id}
@@ -372,7 +347,7 @@ export default function PricingPage() {
                       >
                         {precioTxt}
                         {q.kind === 'usd' && (
-                          <span className="text-xs font-normal text-gray-500 ml-1">{totalLabel}</span>
+                          <span className="text-xs font-normal text-gray-500 ml-1">/mes</span>
                         )}
                       </span>
                     </div>
@@ -435,9 +410,36 @@ export default function PricingPage() {
                 <Shield className="w-4 h-4 text-[#2D5C64]" />
                 <h3 className="text-lg font-bold text-gray-900">Resumen</h3>
               </div>
-              <p className="text-sm text-gray-500 mb-5">
+              <p className="text-sm text-gray-500 mb-4">
                 {campos.length === 1 ? '1 campo' : `${campos.length} campos`}
               </p>
+
+              <div className="mb-5">
+                <p className="text-xs font-medium text-gray-500 mb-2">Facturación (todos los campos)</p>
+                <div className="inline-flex w-full items-center bg-gray-100 rounded-full p-1 text-sm font-medium">
+                  <button
+                    type="button"
+                    onClick={() => setCycle('monthly')}
+                    className={`flex-1 px-3 py-1.5 rounded-full transition ${
+                      cycle === 'monthly' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Mensual
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCycle('annual')}
+                    className={`flex-1 px-3 py-1.5 rounded-full transition flex items-center justify-center gap-1.5 ${
+                      cycle === 'annual' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Anual
+                    <span className="text-[10px] bg-[#F0E8D8] text-[#2D5C64] px-1.5 py-0.5 rounded-full font-semibold">
+                      2 meses gratis
+                    </span>
+                  </button>
+                </div>
+              </div>
 
               <div className="space-y-3 text-sm border-b border-gray-100 pb-5 mb-5">
                 {quotes.map(({ campo, quote }, i) => {
