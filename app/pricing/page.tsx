@@ -24,6 +24,7 @@ type PrecioPool =
       monthly: number
       parteCon: number
       parteSin: number
+      extraSin: number
       labelCon: string
       labelSin: string
       unidadesCon: number
@@ -108,7 +109,7 @@ function equivalentes(c: CampoDraft): number {
 function detalleMix(con: number, sin: number, u: string): string {
   const total = con + sin
   if (con > 0 && sin > 0) {
-    return `${fmtNum(total)} ${u} (${fmtNum(con)} Con + ${fmtNum(sin)} Sin)`
+    return `${fmtNum(total)} ${u} (${fmtNum(con)} Con + ${fmtNum(sin)} Sin) · tarifa Con Finanzas`
   }
   if (con > 0) return `${fmtNum(con)} ${u} · Con Finanzas`
   if (sin > 0) return `${fmtNum(sin)} ${u} · Sin Finanzas`
@@ -122,13 +123,6 @@ function precioTabla(unidades: number, con: boolean): number | 'contact' {
   return con ? band.con : band.sin
 }
 
-function labelRango(unidades: number, esHa: boolean): string {
-  if (unidades <= 0) return ''
-  if (unidades > 10000) return esHa ? '+10.000 ha' : '+10.000 animales eq.'
-  const band = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
-  return esHa ? band.labelHa : band.labelAn
-}
-
 function cotizarPool(
   unidadesCon: number,
   unidadesSin: number,
@@ -138,9 +132,9 @@ function cotizarPool(
   if (unidades <= 0) return null
   const esHa = unidad === 'ha'
   const detalle = detalleMix(unidadesCon, unidadesSin, esHa ? 'ha' : 'an. eq.')
-  const pCon = precioTabla(unidadesCon, true)
-  const pSin = precioTabla(unidadesSin, false)
-  if (pCon === 'contact' || pSin === 'contact') {
+  const pPoolCon = precioTabla(unidades, true)
+  const pPoolSin = precioTabla(unidades, false)
+  if (pPoolCon === 'contact' || pPoolSin === 'contact') {
     return {
       kind: 'contact',
       bandLabel: esHa ? '+10.000 ha' : '+10.000 animales eq.',
@@ -151,18 +145,20 @@ function cotizarPool(
       unidadesSin,
     }
   }
-  const monthly = Math.round((pCon + pSin) * 100) / 100
+  const monthly = unidadesCon > 0 ? pPoolCon : pPoolSin
   const bandTotal = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
+  const rango = esHa ? bandTotal.labelHa : bandTotal.labelAn
   return {
     kind: 'usd',
     monthly,
-    parteCon: pCon,
-    parteSin: pSin,
-    labelCon: labelRango(unidadesCon, esHa),
-    labelSin: labelRango(unidadesSin, esHa),
+    parteCon: monthly,
+    parteSin: 0,
+    extraSin: 0,
+    labelCon: rango,
+    labelSin: rango,
     unidadesCon,
     unidadesSin,
-    bandLabel: esHa ? bandTotal.labelHa : bandTotal.labelAn,
+    bandLabel: rango,
     unidades,
     unidad,
     detalle,
@@ -458,9 +454,10 @@ export default function PricingPage() {
             <div className="mt-5 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
               <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
               <p>
-                Agricultura y Ganadería/Mixto se cobran aparte. Dentro de cada uno: las ha (o
-                animales) Con Finanzas miran la tabla Con; las Sin Finanzas, la tabla Sin. Se
-                suman los dos importes. Si un grupo supera 10.000,{' '}
+                Agricultura y Ganadería/Mixto son dos pools. En cada uno se suman todos los
+                campos (Con y Sin). El precio es el de ese total en la tabla: Con Finanzas si
+                hay al menos un campo Con, si no la tabla Sin. Nunca dos rangos. Si un pool
+                supera 10.000,{' '}
                 <a
                   href={contactUrl}
                   target="_blank"
@@ -647,24 +644,10 @@ export default function PricingPage() {
                         </span>
                       </div>
                       {quote.kind === 'usd' && mixto && (
-                        <div className="text-[11px] text-gray-500 pl-0 space-y-0.5">
-                          <div className="flex justify-between gap-2">
-                            <span>
-                              {fmtNum(quote.unidadesCon)} {u} Con Finanzas · {quote.labelCon}
-                            </span>
-                            <span className="tabular-nums">
-                              USD {fmtUsd(escala(quote.parteCon, cycle))}
-                            </span>
-                          </div>
-                          <div className="flex justify-between gap-2">
-                            <span>
-                              {fmtNum(quote.unidadesSin)} {u} Sin Finanzas · {quote.labelSin}
-                            </span>
-                            <span className="tabular-nums">
-                              USD {fmtUsd(escala(quote.parteSin, cycle))}
-                            </span>
-                          </div>
-                        </div>
+                        <p className="text-[11px] text-gray-500">
+                          {fmtNum(quote.unidadesCon)} {u} Con + {fmtNum(quote.unidadesSin)} {u} Sin.
+                          Un solo rango, tarifa Con Finanzas.
+                        </p>
                       )}
                     </div>
                   )
