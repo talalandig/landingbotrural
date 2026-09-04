@@ -94,11 +94,18 @@ function equivalentes(c: CampoDraft): number {
 function detalleMix(con: number, sin: number, u: string): string {
   const total = con + sin
   if (con > 0 && sin > 0) {
-    return `${fmtNum(total)} ${u} en total · tarifa Con Finanzas`
+    return `${fmtNum(total)} ${u} (${fmtNum(con)} Con + ${fmtNum(sin)} Sin)`
   }
-  if (con > 0) return `${fmtNum(con)} ${u} · tarifa Con Finanzas`
-  if (sin > 0) return `${fmtNum(sin)} ${u} · tarifa Sin Finanzas`
+  if (con > 0) return `${fmtNum(con)} ${u} · Con Finanzas`
+  if (sin > 0) return `${fmtNum(sin)} ${u} · Sin Finanzas`
   return `0 ${u}`
+}
+
+function precioTabla(unidades: number, con: boolean): number | 'contact' {
+  if (unidades <= 0) return 0
+  if (unidades > 10000) return 'contact'
+  const band = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
+  return con ? band.con : band.sin
 }
 
 function cotizarPool(
@@ -110,7 +117,10 @@ function cotizarPool(
   if (unidades <= 0) return null
   const esHa = unidad === 'ha'
   const detalle = detalleMix(unidadesCon, unidadesSin, esHa ? 'ha' : 'an. eq.')
-  if (unidades > 10000) {
+  const pCon = precioTabla(unidadesCon, true)
+  const pSinTotal = precioTabla(unidades, false)
+  const pSinBase = precioTabla(unidadesCon, false)
+  if (pCon === 'contact' || pSinTotal === 'contact' || pSinBase === 'contact') {
     return {
       kind: 'contact',
       bandLabel: esHa ? '+10.000 ha' : '+10.000 animales eq.',
@@ -119,12 +129,12 @@ function cotizarPool(
       detalle,
     }
   }
-  const band = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
-  const monthly = unidadesCon > 0 ? band.con : band.sin
+  const monthly = Math.round((pCon + (pSinTotal - pSinBase)) * 100) / 100
+  const bandTotal = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
   return {
     kind: 'usd',
     monthly,
-    bandLabel: esHa ? band.labelHa : band.labelAn,
+    bandLabel: esHa ? bandTotal.labelHa : bandTotal.labelAn,
     unidades,
     unidad,
     detalle,
@@ -416,9 +426,9 @@ export default function PricingPage() {
             <div className="mt-5 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
               <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
               <p>
-                Agricultura: se suman todas las ha en un pool. Ganadería/Mixto: todos los
-                animales eq. en otro. Un campo Sin Finanzas suma a ese total; no resta. Si hay
-                algún Con Finanzas en el pool, la tarifa es Con (no un promedio). Si un pool
+                Agricultura: todas las ha en un pool. Ganadería/Mixto: todos los animales eq. en
+                otro. Lo Con Finanzas paga su rango. Lo Sin Finanzas solo suma el salto de la
+                tabla Sin al agrandar el pool (no baja el Con ni paga tarifa Con). Si un pool
                 supera 10.000,{' '}
                 <a
                   href={contactUrl}
