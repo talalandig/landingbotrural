@@ -23,7 +23,9 @@ type PrecioPool =
       kind: 'usd'
       monthly: number
       parteCon: number
-      extraSin: number
+      parteSin: number
+      labelCon: string
+      labelSin: string
       unidadesCon: number
       unidadesSin: number
       bandLabel: string
@@ -120,6 +122,13 @@ function precioTabla(unidades: number, con: boolean): number | 'contact' {
   return con ? band.con : band.sin
 }
 
+function labelRango(unidades: number, esHa: boolean): string {
+  if (unidades <= 0) return ''
+  if (unidades > 10000) return esHa ? '+10.000 ha' : '+10.000 animales eq.'
+  const band = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
+  return esHa ? band.labelHa : band.labelAn
+}
+
 function cotizarPool(
   unidadesCon: number,
   unidadesSin: number,
@@ -130,9 +139,8 @@ function cotizarPool(
   const esHa = unidad === 'ha'
   const detalle = detalleMix(unidadesCon, unidadesSin, esHa ? 'ha' : 'an. eq.')
   const pCon = precioTabla(unidadesCon, true)
-  const pSinTotal = precioTabla(unidades, false)
-  const pSinBase = precioTabla(unidadesCon, false)
-  if (pCon === 'contact' || pSinTotal === 'contact' || pSinBase === 'contact') {
+  const pSin = precioTabla(unidadesSin, false)
+  if (pCon === 'contact' || pSin === 'contact') {
     return {
       kind: 'contact',
       bandLabel: esHa ? '+10.000 ha' : '+10.000 animales eq.',
@@ -143,14 +151,15 @@ function cotizarPool(
       unidadesSin,
     }
   }
-  const extraSin = Math.round((pSinTotal - pSinBase) * 100) / 100
-  const monthly = Math.round((pCon + extraSin) * 100) / 100
+  const monthly = Math.round((pCon + pSin) * 100) / 100
   const bandTotal = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
   return {
     kind: 'usd',
     monthly,
     parteCon: pCon,
-    extraSin,
+    parteSin: pSin,
+    labelCon: labelRango(unidadesCon, esHa),
+    labelSin: labelRango(unidadesSin, esHa),
     unidadesCon,
     unidadesSin,
     bandLabel: esHa ? bandTotal.labelHa : bandTotal.labelAn,
@@ -449,10 +458,9 @@ export default function PricingPage() {
             <div className="mt-5 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
               <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
               <p>
-                Agricultura: todas las ha en un pool. Ganadería/Mixto: todos los animales eq. en
-                otro. Lo Con Finanzas paga su rango. Lo Sin Finanzas solo suma el salto de la
-                tabla Sin al agrandar el pool (no baja el Con ni paga tarifa Con). Si un pool
-                supera 10.000,{' '}
+                Agricultura y Ganadería/Mixto se cobran aparte. Dentro de cada uno: las ha (o
+                animales) Con Finanzas miran la tabla Con; las Sin Finanzas, la tabla Sin. Se
+                suman los dos importes. Si un grupo supera 10.000,{' '}
                 <a
                   href={contactUrl}
                   target="_blank"
@@ -642,7 +650,7 @@ export default function PricingPage() {
                         <div className="text-[11px] text-gray-500 pl-0 space-y-0.5">
                           <div className="flex justify-between gap-2">
                             <span>
-                              {fmtNum(quote.unidadesCon)} {u} Con Finanzas
+                              {fmtNum(quote.unidadesCon)} {u} Con Finanzas · {quote.labelCon}
                             </span>
                             <span className="tabular-nums">
                               USD {fmtUsd(escala(quote.parteCon, cycle))}
@@ -650,13 +658,10 @@ export default function PricingPage() {
                           </div>
                           <div className="flex justify-between gap-2">
                             <span>
-                              {fmtNum(quote.unidadesSin)} {u} Sin Finanzas
-                              {quote.extraSin === 0 ? ' · mismo rango' : ' · salto de rango'}
+                              {fmtNum(quote.unidadesSin)} {u} Sin Finanzas · {quote.labelSin}
                             </span>
                             <span className="tabular-nums">
-                              {quote.extraSin === 0
-                                ? 'USD 0.00'
-                                : `USD ${fmtUsd(escala(quote.extraSin, cycle))}`}
+                              USD {fmtUsd(escala(quote.parteSin, cycle))}
                             </span>
                           </div>
                         </div>
