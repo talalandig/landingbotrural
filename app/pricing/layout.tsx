@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Precios — BotRural',
   description:
-    'Planes de BotRural según hectáreas: desde USD 29.99/mes para hasta 500 ha. Pago anual con 2 meses gratis. Sin tarjeta para la prueba.',
+    'Precio por campo: Agricultura en hectáreas o Ganadería/Mixto en animales equivalentes. Con o sin finanzas. Pago mensual o anual (2 meses gratis).',
   alternates: {
     canonical: 'https://pricing.botrural.app',
   },
