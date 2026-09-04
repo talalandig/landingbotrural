@@ -109,7 +109,7 @@ function equivalentes(c: CampoDraft): number {
 function detalleMix(con: number, sin: number, u: string): string {
   const total = con + sin
   if (con > 0 && sin > 0) {
-    return `${fmtNum(total)} ${u} (${fmtNum(con)} Con + ${fmtNum(sin)} Sin) · tarifa Con Finanzas`
+    return `${fmtNum(total)} ${u} (${fmtNum(con)} Con + ${fmtNum(sin)} Sin)`
   }
   if (con > 0) return `${fmtNum(con)} ${u} · Con Finanzas`
   if (sin > 0) return `${fmtNum(sin)} ${u} · Sin Finanzas`
@@ -145,15 +145,17 @@ function cotizarPool(
       unidadesSin,
     }
   }
-  const monthly = unidadesCon > 0 ? pPoolCon : pPoolSin
+  const parteCon = Math.round((unidadesCon / unidades) * pPoolCon * 100) / 100
+  const parteSin = Math.round((unidadesSin / unidades) * pPoolSin * 100) / 100
+  const monthly = Math.round((parteCon + parteSin) * 100) / 100
   const bandTotal = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
   const rango = esHa ? bandTotal.labelHa : bandTotal.labelAn
   return {
     kind: 'usd',
     monthly,
-    parteCon: monthly,
-    parteSin: 0,
-    extraSin: 0,
+    parteCon,
+    parteSin,
+    extraSin: parteSin,
     labelCon: rango,
     labelSin: rango,
     unidadesCon,
@@ -454,10 +456,9 @@ export default function PricingPage() {
             <div className="mt-5 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
               <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
               <p>
-                Agricultura y Ganadería/Mixto son dos pools. En cada uno se suman todos los
-                campos (Con y Sin). El precio es el de ese total en la tabla: Con Finanzas si
-                hay al menos un campo Con, si no la tabla Sin. Nunca dos rangos. Si un pool
-                supera 10.000,{' '}
+                Agricultura y Ganadería/Mixto son dos pools. En cada uno se suman Con y Sin (un
+                rango). Lo Con paga su parte de la tabla Con; lo Sin, su parte de la tabla Sin.
+                Si un pool supera 10.000,{' '}
                 <a
                   href={contactUrl}
                   target="_blank"
@@ -644,10 +645,24 @@ export default function PricingPage() {
                         </span>
                       </div>
                       {quote.kind === 'usd' && mixto && (
-                        <p className="text-[11px] text-gray-500">
-                          {fmtNum(quote.unidadesCon)} {u} Con + {fmtNum(quote.unidadesSin)} {u} Sin.
-                          Un solo rango, tarifa Con Finanzas.
-                        </p>
+                        <div className="text-[11px] text-gray-500 space-y-0.5">
+                          <div className="flex justify-between gap-2">
+                            <span>
+                              {fmtNum(quote.unidadesCon)} {u} Con Finanzas
+                            </span>
+                            <span className="tabular-nums">
+                              USD {fmtUsd(escala(quote.parteCon, cycle))}
+                            </span>
+                          </div>
+                          <div className="flex justify-between gap-2">
+                            <span>
+                              {fmtNum(quote.unidadesSin)} {u} Sin Finanzas
+                            </span>
+                            <span className="tabular-nums">
+                              USD {fmtUsd(escala(quote.parteSin, cycle))}
+                            </span>
+                          </div>
+                        </div>
                       )}
                     </div>
                   )
