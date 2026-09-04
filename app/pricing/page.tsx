@@ -43,7 +43,8 @@ const INCLUDED_BASE = [
   'Equipo con roles y permisos',
 ]
 
-const INCLUDED_FINANZAS = 'Finanzas: gastos, ventas y facturas'
+const INCLUDED_FINANZAS =
+  'Finanzas: facturas de gastos y ventas, e informes de dinero del ejercicio'
 
 const TIPO_LABEL: Record<TipoCampo, string> = {
   agricultura: 'Agricultura',
@@ -233,6 +234,11 @@ export default function PricingPage() {
                 </div>
               </div>
             </div>
+            <p className="text-xs text-gray-500 -mt-3 mb-6">
+              {modalidad === 'sin'
+                ? 'Las ventas y compras de animales se cargan igual, pero sin montos. No incluye facturas de gastos/ventas ni los informes de dinero del ejercicio. Podés pasar a Con Finanzas cuando quieras.'
+                : 'Con Finanzas suma facturas de gastos y ventas, y los informes de dinero del ejercicio.'}
+            </p>
 
             <div className="space-y-4">
               {campos.map((c, i) => {
@@ -395,8 +401,9 @@ export default function PricingPage() {
             </ul>
             {modalidad === 'sin' && (
               <p className="text-xs text-gray-500 mt-4">
-                Sin Finanzas no incluye gastos, ventas ni facturas. Podés cambiar a Con Finanzas
-                cuando quieras.
+                Sin Finanzas no saca las ventas ni compras de animales: solo van sin dato de
+                dinero. No incluye facturas de gastos/ventas ni los informes del ejercicio por
+                movimientos de plata. Podés pasar a Con Finanzas cuando quieras.
               </p>
             )}
           </div>
