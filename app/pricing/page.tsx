@@ -271,7 +271,7 @@ export default function PricingPage() {
                     </div>
 
                     <div className="grid grid-cols-3 gap-1.5 mb-4">
-                      {(['agricultura', 'ganaderia', 'mixto'] as TipoCampo[]).map((t) => {
+                      {(['ganaderia', 'mixto', 'agricultura'] as TipoCampo[]).map((t) => {
                         const on = c.tipo === t
                         return (
                           <button
