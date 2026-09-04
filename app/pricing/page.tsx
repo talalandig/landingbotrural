@@ -166,7 +166,7 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f7] text-gray-900">
+    <div className="min-h-screen bg-[#faf9f7] text-gray-900 pb-20 sm:pb-16">
       <Header />
 
       <section className="relative overflow-hidden border-b border-[#2D5C64]/10">
@@ -200,7 +200,7 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-10 md:py-14 grid grid-cols-1 xl:grid-cols-[minmax(0,1.15fr)_minmax(280px,340px)_340px] gap-6 lg:gap-7">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 xl:pr-20 py-10 md:py-14 grid grid-cols-1 xl:grid-cols-[minmax(0,1.15fr)_minmax(280px,340px)_340px] gap-6 lg:gap-7">
         <div className="space-y-5 min-w-0">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-5 md:p-7">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
