@@ -24,13 +24,13 @@ type PrecioCampo =
 const OVINO_EQ = 0.16
 const WHATSAPP_NUMBER = '59899465242'
 
-const BANDS: { max: number; con: number; sin: number; labelHa: string; labelAn: string }[] = [
-  { max: 500, con: 34.99, sin: 24.49, labelHa: '0 – 500 ha', labelAn: '0 – 500 animales' },
-  { max: 1000, con: 54.99, sin: 38.49, labelHa: '500 – 1.000 ha', labelAn: '500 – 1.000 animales' },
-  { max: 2000, con: 69.99, sin: 48.99, labelHa: '1.000 – 2.000 ha', labelAn: '1.000 – 2.000 animales' },
-  { max: 5000, con: 84.99, sin: 59.49, labelHa: '2.000 – 5.000 ha', labelAn: '2.000 – 5.000 animales' },
-  { max: 7500, con: 99.99, sin: 69.99, labelHa: '5.000 – 7.500 ha', labelAn: '5.000 – 7.500 animales' },
-  { max: 10000, con: 114.99, sin: 80.49, labelHa: '7.500 – 10.000 ha', labelAn: '7.500 – 10.000 animales' },
+const BANDS: { max: number; con: number; sin: number; rango: string; labelHa: string; labelAn: string }[] = [
+  { max: 500, con: 34.99, sin: 24.49, rango: '0 – 500', labelHa: '0 – 500 ha', labelAn: '0 – 500 animales' },
+  { max: 1000, con: 54.99, sin: 38.49, rango: '500 – 1.000', labelHa: '500 – 1.000 ha', labelAn: '500 – 1.000 animales' },
+  { max: 2000, con: 69.99, sin: 48.99, rango: '1.000 – 2.000', labelHa: '1.000 – 2.000 ha', labelAn: '1.000 – 2.000 animales' },
+  { max: 5000, con: 84.99, sin: 59.49, rango: '2.000 – 5.000', labelHa: '2.000 – 5.000 ha', labelAn: '2.000 – 5.000 animales' },
+  { max: 7500, con: 99.99, sin: 69.99, rango: '5.000 – 7.500', labelHa: '5.000 – 7.500 ha', labelAn: '5.000 – 7.500 animales' },
+  { max: 10000, con: 114.99, sin: 80.49, rango: '7.500 – 10.000', labelHa: '7.500 – 10.000 ha', labelAn: '7.500 – 10.000 animales' },
 ]
 
 const INCLUDED_BASE = [
@@ -199,8 +199,8 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-14 grid lg:grid-cols-[1fr_360px] gap-6 lg:gap-8">
-        <div className="space-y-5">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-10 md:py-14 grid grid-cols-1 xl:grid-cols-[minmax(0,1.15fr)_minmax(280px,340px)_340px] gap-6 lg:gap-7">
+        <div className="space-y-5 min-w-0">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-5 md:p-7">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div>
@@ -402,7 +402,70 @@ export default function PricingPage() {
           </div>
         </div>
 
-        <div className="lg:sticky lg:top-24 self-start">
+        <div className="xl:sticky xl:top-24 self-start space-y-4">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-5">
+            <h3 className="font-bold text-gray-900">Rangos</h3>
+            <p className="text-xs text-gray-500 mt-1 mb-4">
+              Mismos tramos para hectáreas (Agricultura) y animales equivalentes (Ganadería / Mixto).
+            </p>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="text-left text-gray-500">
+                    <th className="font-medium pb-2 pr-2">Rango</th>
+                    <th
+                      className={`font-medium pb-2 pr-2 text-right ${
+                        modalidad === 'con' ? 'text-[#2D5C64]' : ''
+                      }`}
+                    >
+                      Con finanzas
+                    </th>
+                    <th
+                      className={`font-medium pb-2 text-right ${
+                        modalidad === 'sin' ? 'text-[#2D5C64]' : ''
+                      }`}
+                    >
+                      Sin finanzas
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {BANDS.map((b) => (
+                    <tr key={b.max} className="border-t border-gray-100">
+                      <td className="py-2 pr-2 text-gray-700 whitespace-nowrap">{b.rango}</td>
+                      <td
+                        className={`py-2 pr-2 text-right tabular-nums ${
+                          modalidad === 'con' ? 'font-semibold text-gray-900' : 'text-gray-500'
+                        }`}
+                      >
+                        USD {fmtUsd(b.con)}
+                      </td>
+                      <td
+                        className={`py-2 text-right tabular-nums ${
+                          modalidad === 'sin' ? 'font-semibold text-gray-900' : 'text-gray-500'
+                        }`}
+                      >
+                        USD {fmtUsd(b.sin)}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="border-t border-gray-100">
+                    <td className="py-2 pr-2 text-gray-700 whitespace-nowrap">+10.000</td>
+                    <td colSpan={2} className="py-2 text-right font-semibold text-[#2D5C64]">
+                      Contáctanos
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-[11px] text-gray-400 mt-3 leading-relaxed">
+              Precios por campo, por mes. El anual aplica 2 meses gratis sobre el total.
+            </p>
+          </div>
+        </div>
+
+        <div className="xl:sticky xl:top-24 self-start">
           <div className="bg-white rounded-2xl shadow-md border border-gray-200/80 overflow-hidden">
             <div className="h-1 bg-gradient-to-r from-[#2D5C64] via-[#02C951] to-[#2D5C64]" />
             <div className="p-6">
