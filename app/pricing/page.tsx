@@ -22,12 +22,24 @@ type PrecioPool =
   | {
       kind: 'usd'
       monthly: number
+      parteCon: number
+      extraSin: number
+      unidadesCon: number
+      unidadesSin: number
       bandLabel: string
       unidades: number
       unidad: string
       detalle: string
     }
-  | { kind: 'contact'; bandLabel: string; unidades: number; unidad: string; detalle: string }
+  | {
+      kind: 'contact'
+      bandLabel: string
+      unidades: number
+      unidad: string
+      detalle: string
+      unidadesCon: number
+      unidadesSin: number
+    }
 
 const OVINO_EQ = 0.16
 const WHATSAPP_NUMBER = '59899465242'
@@ -127,18 +139,29 @@ function cotizarPool(
       unidades,
       unidad,
       detalle,
+      unidadesCon,
+      unidadesSin,
     }
   }
-  const monthly = Math.round((pCon + (pSinTotal - pSinBase)) * 100) / 100
+  const extraSin = Math.round((pSinTotal - pSinBase) * 100) / 100
+  const monthly = Math.round((pCon + extraSin) * 100) / 100
   const bandTotal = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
   return {
     kind: 'usd',
     monthly,
+    parteCon: pCon,
+    extraSin,
+    unidadesCon,
+    unidadesSin,
     bandLabel: esHa ? bandTotal.labelHa : bandTotal.labelAn,
     unidades,
     unidad,
     detalle,
   }
+}
+
+function escala(n: number, cycle: Cycle): number {
+  return cycle === 'monthly' ? n : Math.round(n * 10 * 100) / 100
 }
 
 function montoPool(p: PrecioPool, cycle: Cycle): number | null {
@@ -594,24 +617,53 @@ export default function PricingPage() {
                     </div>
                   )
                 })}
-                {pools.map(({ titulo, quote }, idx) => (
-                  <div
-                    key={titulo}
-                    className={`flex justify-between gap-3 ${idx === 0 ? 'pt-2 border-t border-gray-100' : ''}`}
-                  >
-                    <span className="text-gray-500 min-w-0">
-                      <span className="font-medium text-gray-800 block">Pool {titulo}</span>
-                      <span className="text-xs">
-                        {quote.detalle} · {quote.bandLabel}
-                      </span>
-                    </span>
-                    <span className="font-semibold text-gray-900 text-right shrink-0 tabular-nums">
-                      {quote.kind === 'contact'
-                        ? 'Contáctanos'
-                        : `USD ${fmtUsd(montoPool(quote, cycle)!)}`}
-                    </span>
-                  </div>
-                ))}
+                {pools.map(({ titulo, quote }, idx) => {
+                  const u = quote.unidad === 'ha' ? 'ha' : 'an. eq.'
+                  const mixto = quote.unidadesCon > 0 && quote.unidadesSin > 0
+                  return (
+                    <div
+                      key={titulo}
+                      className={`space-y-1.5 ${idx === 0 ? 'pt-2 border-t border-gray-100' : ''}`}
+                    >
+                      <div className="flex justify-between gap-3">
+                        <span className="text-gray-500 min-w-0">
+                          <span className="font-medium text-gray-800 block">Pool {titulo}</span>
+                          <span className="text-xs">
+                            {fmtNum(quote.unidades)} {u} · {quote.bandLabel}
+                          </span>
+                        </span>
+                        <span className="font-semibold text-gray-900 text-right shrink-0 tabular-nums">
+                          {quote.kind === 'contact'
+                            ? 'Contáctanos'
+                            : `USD ${fmtUsd(montoPool(quote, cycle)!)}`}
+                        </span>
+                      </div>
+                      {quote.kind === 'usd' && mixto && (
+                        <div className="text-[11px] text-gray-500 pl-0 space-y-0.5">
+                          <div className="flex justify-between gap-2">
+                            <span>
+                              {fmtNum(quote.unidadesCon)} {u} Con Finanzas
+                            </span>
+                            <span className="tabular-nums">
+                              USD {fmtUsd(escala(quote.parteCon, cycle))}
+                            </span>
+                          </div>
+                          <div className="flex justify-between gap-2">
+                            <span>
+                              {fmtNum(quote.unidadesSin)} {u} Sin Finanzas
+                              {quote.extraSin === 0 ? ' · mismo rango' : ' · salto de rango'}
+                            </span>
+                            <span className="tabular-nums">
+                              {quote.extraSin === 0
+                                ? 'USD 0.00'
+                                : `USD ${fmtUsd(escala(quote.extraSin, cycle))}`}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
                 <div className="flex justify-between gap-4 pt-1">
                   <span className="text-gray-500">Modalidad</span>
                   <span className="font-semibold text-gray-900 text-right">
