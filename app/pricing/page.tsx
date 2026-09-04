@@ -17,7 +17,7 @@ type CampoDraft = {
   ovinos: string
 }
 
-type PrecioCampo =
+type PrecioPool =
   | { kind: 'usd'; monthly: number; bandLabel: string; unidades: number; unidad: string }
   | { kind: 'contact'; bandLabel: string; unidades: number; unidad: string }
 
@@ -82,20 +82,16 @@ function equivalentes(c: CampoDraft): number {
   return parseNum(c.vacunos) + parseNum(c.ovinos) * OVINO_EQ
 }
 
-function unidadesCampo(c: CampoDraft): { unidades: number; unidad: string } {
-  if (c.tipo === 'agricultura') {
-    return { unidades: parseNum(c.hectareas), unidad: 'ha' }
-  }
-  return { unidades: equivalentes(c), unidad: 'animales eq.' }
-}
-
-function cotizarCampo(c: CampoDraft, modalidad: Modalidad): PrecioCampo {
-  const { unidades, unidad } = unidadesCampo(c)
-  const esHa = c.tipo === 'agricultura'
+function cotizarPool(
+  unidades: number,
+  modalidad: Modalidad,
+  unidad: 'ha' | 'animales eq.'
+): PrecioPool {
+  const esHa = unidad === 'ha'
   if (unidades > 10000) {
     return {
       kind: 'contact',
-      bandLabel: esHa ? '+10.000 ha' : '+10.000 animales',
+      bandLabel: esHa ? '+10.000 ha' : '+10.000 animales eq.',
       unidades,
       unidad,
     }
@@ -110,21 +106,32 @@ function cotizarCampo(c: CampoDraft, modalidad: Modalidad): PrecioCampo {
   }
 }
 
+function montoPool(p: PrecioPool, cycle: Cycle): number | null {
+  if (p.kind !== 'usd') return null
+  return cycle === 'monthly' ? p.monthly : p.monthly * 10
+}
+
 export default function PricingPage() {
   const [campos, setCampos] = useState<CampoDraft[]>(() => [newCampo(1)])
   const [modalidad, setModalidad] = useState<Modalidad>('con')
   const [cycle, setCycle] = useState<Cycle>('monthly')
 
-  const quotes = useMemo(
-    () => campos.map((c) => ({ campo: c, quote: cotizarCampo(c, modalidad) })),
-    [campos, modalidad]
-  )
+  const hayGanaderia = campos.some((c) => c.tipo !== 'agricultura')
+  const hayAgri = campos.some((c) => c.tipo === 'agricultura')
+  const poolAnimales = campos
+    .filter((c) => c.tipo !== 'agricultura')
+    .reduce((s, c) => s + equivalentes(c), 0)
+  const poolHa = campos
+    .filter((c) => c.tipo === 'agricultura')
+    .reduce((s, c) => s + parseNum(c.hectareas), 0)
 
-  const needsContact = quotes.some((q) => q.quote.kind === 'contact')
-  const monthlyTotal = quotes.reduce(
-    (s, q) => s + (q.quote.kind === 'usd' ? q.quote.monthly : 0),
-    0
-  )
+  const quoteAni = hayGanaderia ? cotizarPool(poolAnimales, modalidad, 'animales eq.') : null
+  const quoteHa = hayAgri ? cotizarPool(poolHa, modalidad, 'ha') : null
+
+  const needsContact = quoteAni?.kind === 'contact' || quoteHa?.kind === 'contact'
+  const monthlyTotal =
+    (quoteAni?.kind === 'usd' ? quoteAni.monthly : 0) +
+    (quoteHa?.kind === 'usd' ? quoteHa.monthly : 0)
   const displayTotal = cycle === 'monthly' ? monthlyTotal : monthlyTotal * 10
   const totalLabel = cycle === 'monthly' ? '/mes' : '/año'
 
@@ -133,25 +140,35 @@ export default function PricingPage() {
   const contactUrl = useMemo(() => {
     const billing = cycle === 'monthly' ? 'mensual' : 'anual'
     const fin = modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'
-    const lineas = quotes.map(({ campo, quote }, i) => {
+    const lineasCampos = campos.map((campo, i) => {
       const nom = campo.nombre.trim() || `Campo ${i + 1}`
-      if (quote.kind === 'contact') {
-        return `• ${nom} (${TIPO_LABEL[campo.tipo]}): ${fmtNum(quote.unidades)} ${quote.unidad} — Contáctanos`
-      }
-      const precio = cycle === 'monthly' ? quote.monthly : quote.monthly * 10
-      return `• ${nom} (${TIPO_LABEL[campo.tipo]}): ${fmtNum(quote.unidades)} ${quote.unidad} — USD ${fmtUsd(precio)}${cycle === 'monthly' ? '/mes' : '/año'}`
+      const mag =
+        campo.tipo === 'agricultura'
+          ? `${fmtNum(parseNum(campo.hectareas))} ha`
+          : `${fmtNum(equivalentes(campo))} animales eq.`
+      return `• ${nom} (${TIPO_LABEL[campo.tipo]}): ${mag}`
     })
+    const lineaPool = (q: PrecioPool | null, titulo: string) => {
+      if (!q) return null
+      if (q.kind === 'contact') return `Pool ${titulo}: ${fmtNum(q.unidades)} ${q.unidad} — Contáctanos`
+      const precio = cycle === 'monthly' ? q.monthly : q.monthly * 10
+      return `Pool ${titulo}: ${fmtNum(q.unidades)} ${q.unidad} (${q.bandLabel}) — USD ${fmtUsd(precio)}${totalLabel}`
+    }
     const totalTxt = needsContact
-      ? 'Total: Contáctanos (+10.000 en al menos un campo)'
+      ? 'Total: Contáctanos (+10.000 en el pool)'
       : `Total: USD ${fmtUsd(displayTotal)} ${totalLabel}`
     const message = [
       'Hola, quiero BotRural.',
       `Modalidad: ${fin} · Facturación ${billing}`,
-      ...lineas,
+      ...lineasCampos,
+      lineaPool(quoteAni, 'Ganadería / Mixto'),
+      lineaPool(quoteHa, 'Agricultura'),
       totalTxt,
-    ].join('\n')
+    ]
+      .filter(Boolean)
+      .join('\n')
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-  }, [quotes, cycle, modalidad, needsContact, displayTotal, totalLabel])
+  }, [campos, quoteAni, quoteHa, cycle, modalidad, needsContact, displayTotal, totalLabel])
 
   const updateCampo = (id: string, patch: Partial<CampoDraft>) => {
     setCampos((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c)))
@@ -242,11 +259,8 @@ export default function PricingPage() {
 
             <div className="space-y-4">
               {campos.map((c, i) => {
-                const q = quotes[i].quote
                 const esAgri = c.tipo === 'agricultura'
                 const eq = equivalentes(c)
-                const precioTxt =
-                  q.kind === 'contact' ? 'Contáctanos' : `USD ${fmtUsd(q.monthly)}`
                 return (
                   <div
                     key={c.id}
@@ -344,19 +358,11 @@ export default function PricingPage() {
                       </div>
                     )}
 
-                    <div className="mt-4 flex items-center justify-between gap-3 pt-3 border-t border-gray-200/80">
-                      <span className="text-xs text-gray-500">{q.bandLabel}</span>
-                      <span
-                        className={`text-sm font-bold tabular-nums ${
-                          q.kind === 'contact' ? 'text-[#2D5C64]' : 'text-gray-900'
-                        }`}
-                      >
-                        {precioTxt}
-                        {q.kind === 'usd' && (
-                          <span className="text-xs font-normal text-gray-500 ml-1">/mes</span>
-                        )}
-                      </span>
-                    </div>
+                    <p className="mt-3 pt-3 border-t border-gray-200/80 text-xs text-gray-500">
+                      {esAgri
+                        ? `Suma al pool Agricultura: ${fmtNum(parseNum(c.hectareas))} ha`
+                        : `Suma al pool Ganadería / Mixto: ${fmtNum(eq)} an. eq.`}
+                    </p>
                   </div>
                 )
               })}
@@ -374,8 +380,8 @@ export default function PricingPage() {
             <div className="mt-5 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
               <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
               <p>
-                El total es la suma de cada campo. Si un establecimiento supera 10.000 ha o 10.000
-                animales equivalentes,{' '}
+                El precio sale del pool: se suman los animales eq. de Ganadería/Mixto y las ha de
+                Agricultura, y a cada pool se le aplica un rango. Si un pool supera 10.000,{' '}
                 <a
                   href={contactUrl}
                   target="_blank"
@@ -478,7 +484,7 @@ export default function PricingPage() {
               </table>
             </div>
             <p className="text-[11px] text-gray-400 mt-3 leading-relaxed">
-              Precios por campo, por mes. El anual aplica 2 meses gratis sobre el total.
+              Un rango por pool (no por campo), por mes. El anual aplica 2 meses gratis sobre el total.
             </p>
           </div>
         </div>
@@ -523,12 +529,12 @@ export default function PricingPage() {
               </div>
 
               <div className="space-y-3 text-sm border-b border-gray-100 pb-5 mb-5">
-                {quotes.map(({ campo, quote }, i) => {
+                {campos.map((campo, i) => {
                   const nom = campo.nombre.trim() || `Campo ${i + 1}`
                   const mag =
-                    quote.unidad === 'ha'
-                      ? `${fmtNum(quote.unidades)} ha`
-                      : `${fmtNum(quote.unidades)} animales equivalentes`
+                    campo.tipo === 'agricultura'
+                      ? `${fmtNum(parseNum(campo.hectareas))} ha`
+                      : `${fmtNum(equivalentes(campo))} an. eq.`
                   return (
                     <div key={campo.id} className="flex justify-between gap-3">
                       <span className="text-gray-500 min-w-0">
@@ -537,14 +543,39 @@ export default function PricingPage() {
                           {TIPO_LABEL[campo.tipo]} · {mag}
                         </span>
                       </span>
-                      <span className="font-semibold text-gray-900 text-right shrink-0 tabular-nums">
-                        {quote.kind === 'contact'
-                          ? 'Contáctanos'
-                          : `USD ${fmtUsd(cycle === 'monthly' ? quote.monthly : quote.monthly * 10)}`}
-                      </span>
                     </div>
                   )
                 })}
+                {quoteAni && (
+                  <div className="flex justify-between gap-3 pt-2 border-t border-gray-100">
+                    <span className="text-gray-500 min-w-0">
+                      <span className="font-medium text-gray-800 block">Pool Ganadería / Mixto</span>
+                      <span className="text-xs">
+                        {fmtNum(quoteAni.unidades)} an. eq. · {quoteAni.bandLabel}
+                      </span>
+                    </span>
+                    <span className="font-semibold text-gray-900 text-right shrink-0 tabular-nums">
+                      {quoteAni.kind === 'contact'
+                        ? 'Contáctanos'
+                        : `USD ${fmtUsd(montoPool(quoteAni, cycle)!)}`}
+                    </span>
+                  </div>
+                )}
+                {quoteHa && (
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500 min-w-0">
+                      <span className="font-medium text-gray-800 block">Pool Agricultura</span>
+                      <span className="text-xs">
+                        {fmtNum(quoteHa.unidades)} ha · {quoteHa.bandLabel}
+                      </span>
+                    </span>
+                    <span className="font-semibold text-gray-900 text-right shrink-0 tabular-nums">
+                      {quoteHa.kind === 'contact'
+                        ? 'Contáctanos'
+                        : `USD ${fmtUsd(montoPool(quoteHa, cycle)!)}`}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between gap-4 pt-1">
                   <span className="text-gray-500">Modalidad</span>
                   <span className="font-semibold text-gray-900">
