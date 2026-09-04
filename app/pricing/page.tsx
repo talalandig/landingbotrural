@@ -119,9 +119,7 @@ function cotizarPool(
     }
   }
   const band = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
-  const monthly = Math.round(
-    ((unidadesCon / unidades) * band.con + (unidadesSin / unidades) * band.sin) * 100
-  ) / 100
+  const monthly = unidadesCon > 0 ? band.con : band.sin
   return {
     kind: 'usd',
     monthly,
@@ -418,8 +416,8 @@ export default function PricingPage() {
               <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
               <p>
                 El precio sale del pool: se suman todos los animales eq. de Ganadería/Mixto y
-                todas las ha de Agricultura. Con o Sin Finanzas no parte el pool: el rango es uno
-                solo. Si un pool supera 10.000,{' '}
+                todas las ha de Agricultura (un rango). Si algún campo de ese pool es Con
+                Finanzas, se cobra la tarifa Con Finanzas. Si un pool supera 10.000,{' '}
                 <a
                   href={contactUrl}
                   target="_blank"
