@@ -52,12 +52,12 @@ export default function PricingPage() {
   const cardClass = 'rounded-2xl border border-gray-200/80 bg-white p-4 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.025)]'
 
   return (
-    <div className="min-h-screen bg-[#ffffff] text-black pb-16">
+    <div className="min-h-screen bg-[#f3f5f5] text-black pb-16">
       <Header />
-      <section className="border-b border-gray-100 bg-white px-4 py-7 text-center text-black sm:py-9">
-        <span className="inline-flex items-center gap-2 rounded-full bg-[#2D5C64]/[0.06] px-3 py-1.5 text-xs font-semibold text-[#2D5C64]">Precios BotRural</span>
+      <section className="border-b border-black/10 bg-[#172c30] px-4 py-7 text-center text-white sm:py-9">
+        <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#00DD59]">Precios BotRural</span>
         <h1 className="mt-3 text-2xl font-bold tracking-tight sm:text-4xl">Tu empresa, tu plan, tu precio.</h1>
-        <p className="mx-auto mt-2 max-w-xl text-sm text-gray-500">Contanos cómo trabajás y calculá tu precio en tres pasos.</p>
+        <p className="mx-auto mt-2 max-w-xl text-sm text-white/70">Contanos cómo trabajás y calculá tu precio en tres pasos.</p>
       </section>
 
       <main className="mx-auto grid max-w-6xl items-start gap-4 px-4 pt-5 pb-28 md:grid-cols-[minmax(0,1fr)_300px] lg:gap-6 lg:pt-7">
@@ -67,7 +67,7 @@ export default function PricingPage() {
           <h2 className="mt-1 text-lg font-bold sm:text-xl">¿Cómo querés pagar?</h2>
           <p className="mt-1.5 text-sm text-gray-500">Elegí cómo pagar la suscripción de tu empresa.</p>
           <div className="mt-4 grid grid-cols-2 gap-2">
-            {[false, true].map(value => <button key={String(value)} type="button" aria-pressed={anual === value} onClick={() => setAnual(value)} className={`relative rounded-xl border-2 px-3 py-3 text-left transition sm:px-4 ${anual === value ? 'border-[#2D5C64] bg-[#2D5C64]/[0.04]' : 'border-gray-200 hover:border-[#2D5C64]/50'}`}><span className="block text-base font-semibold">{value ? 'Anual' : 'Mensual'}</span><span className="mt-1 block text-xs leading-relaxed text-gray-600">{value ? 'Un pago por todo el año.' : 'Se cobra todos los meses.'}</span>{value && <span className="mt-2 inline-block rounded-full bg-[#00DD59]/15 px-2 py-0.5 text-xs font-semibold text-[#2D5C64]">Ahorrás un 20%</span>}{anual === value && <Check size={20} className="absolute right-3 top-3 text-[#2D5C64]" />}</button>)}
+            {[false, true].map(value => <button key={String(value)} type="button" aria-pressed={anual === value} onClick={() => setAnual(value)} className={`relative rounded-xl border-2 px-3 py-3 text-left transition sm:px-4 ${anual === value ? 'border-[#2D5C64] bg-[#2D5C64]/10' : 'border-gray-200 hover:border-[#2D5C64]/50'}`}><span className="block text-base font-semibold">{value ? 'Anual' : 'Mensual'}</span><span className="mt-1 block text-xs leading-relaxed text-gray-600">{value ? 'Un pago por todo el año.' : 'Se cobra todos los meses.'}</span>{value && <span className="mt-2 inline-block rounded-full bg-[#00DD59]/15 px-2 py-0.5 text-xs font-semibold text-[#2D5C64]">Ahorrás un 20%</span>}{anual === value && <Check size={20} className="absolute right-3 top-3 text-[#2D5C64]" />}</button>)}
           </div>
         </section>
 
@@ -75,7 +75,7 @@ export default function PricingPage() {
           <p className="text-xs font-semibold tracking-wide text-[#2D5C64]">PASO 2</p>
           <h2 className="mt-1 text-lg font-bold sm:text-xl">¿Qué tipo de empresa tenés?</h2>
           <p className="mt-1.5 text-sm text-gray-500">Así te pedimos solo los datos que corresponden.</p>
-          <div className="mt-4 grid grid-cols-3 gap-2">{tipos.map(t => <button key={t.value} type="button" aria-pressed={empresa.tipo === t.value} onClick={() => update({ tipo: t.value })} className={`min-w-0 rounded-xl border-2 px-2 py-3 text-left sm:px-3 ${empresa.tipo === t.value ? 'border-[#2D5C64] bg-[#2D5C64]/[0.04]' : 'border-gray-200'}`}><span className="block text-sm font-semibold">{t.label}</span><span className="mt-1 block text-[11px] leading-relaxed text-gray-500">{t.description}</span></button>)}</div>
+          <div className="mt-4 grid grid-cols-3 gap-2">{tipos.map(t => <button key={t.value} type="button" aria-pressed={empresa.tipo === t.value} onClick={() => update({ tipo: t.value })} className={`min-w-0 rounded-xl border-2 px-2 py-3 text-left sm:px-3 ${empresa.tipo === t.value ? 'border-[#2D5C64] bg-[#2D5C64]/10' : 'border-gray-200'}`}><span className="block text-sm font-semibold">{t.label}</span><span className="mt-1 block text-[11px] leading-relaxed text-gray-500">{t.description}</span></button>)}</div>
         </section>
 
         <div className="mt-3 space-y-3">
@@ -88,7 +88,7 @@ export default function PricingPage() {
               {empresa.tipo !== 'ganadera' && <label className="mt-4 block text-sm font-semibold">Hectáreas de cosecha<div className="relative"><input type="number" min="0" step="any" inputMode="decimal" placeholder="0" value={empresa.hectareas} onChange={e => update({ hectareas: e.target.value })} className={`${inputClass} pr-24`} /><span className="absolute right-3 top-5 text-sm font-normal text-gray-400">hectáreas</span></div><span className="mt-2 block text-xs font-normal leading-relaxed text-gray-500">Solo las que destinás para cosecha. No cuentan pasturas ni verdeos para el ganado.</span></label>}
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <p className="text-sm font-semibold text-[#2D5C64]">BotRural incluye toda la gestión de tu empresa</p>
-                <label className={`mt-3 flex cursor-pointer items-start gap-3 rounded-xl border-2 p-3 transition ${empresa.plus ? 'border-[#2D5C64] bg-[#2D5C64]/[0.04]' : 'border-gray-200 bg-white hover:border-[#2D5C64]/40'}`}>
+                <label className={`mt-3 flex cursor-pointer items-start gap-3 rounded-xl border-2 p-3 transition ${empresa.plus ? 'border-[#2D5C64] bg-[#2D5C64]/10' : 'border-gray-200 bg-white hover:border-[#2D5C64]/40'}`}>
                   <input type="checkbox" checked={empresa.plus} onChange={e => update({ plus: e.target.checked })} className="mt-1 h-5 w-5 shrink-0 accent-[#2D5C64]" />
                   <span className="flex-1"><span className="flex flex-wrap items-center justify-between gap-2"><strong className="text-base">Agregar finanzas</strong><span className="rounded-full bg-[#2D5C64] px-2.5 py-1 text-xs font-semibold text-white">BotRural Plus</span></span><span className="mt-2 block text-sm leading-relaxed text-gray-500">Sumá facturas de gastos y ventas e informes financieros para toda tu empresa.</span>{empresa.plus && <span className="mt-2 flex items-center gap-1 text-xs font-semibold text-[#2D5C64]"><Check size={14} /> Finanzas agregadas · BotRural Plus activado</span>}</span>
                 </label>
@@ -102,10 +102,10 @@ export default function PricingPage() {
         </div>
         <aside aria-label="Resumen de tu suscripción" className="self-start md:sticky md:top-24">
           <div className="overflow-hidden rounded-2xl border border-[#2D5C64]/15 bg-white shadow-sm">
-            <div className="bg-[#2D5C64]/[0.04] p-4">
-              <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#2D5C64]"><ShieldCheck size={16} /> Tu suscripción</span>
-              <div className="mt-3 flex items-center justify-between gap-2"><h2 className="text-2xl font-bold text-[#2D5C64]">BotRural{empresa.plus ? ' Plus' : ''}</h2><span className="rounded-full border border-[#2D5C64]/20 bg-white px-3 py-1 text-xs font-semibold text-[#2D5C64]">{anual ? 'Anual' : 'Mensual'}</span></div>
-              <p className="mt-1.5 text-sm text-gray-500">Una suscripción para toda tu empresa.</p>
+            <div className="border-b-2 border-[#00DD59] bg-[#2D5C64] p-4">
+              <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/70"><ShieldCheck size={16} /> Tu suscripción</span>
+              <div className="mt-3 flex items-center justify-between gap-2"><h2 className="text-2xl font-bold text-white">BotRural{empresa.plus ? ' Plus' : ''}</h2><span className="rounded-full border border-[#2D5C64]/20 bg-white px-3 py-1 text-xs font-semibold text-[#2D5C64]">{anual ? 'Anual' : 'Mensual'}</span></div>
+              <p className="mt-1.5 text-sm text-white/70">Una suscripción para toda tu empresa.</p>
             </div>
             <div className="p-4">
               <dl className="space-y-2 text-sm">
