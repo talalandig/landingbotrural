@@ -80,9 +80,8 @@ export default function PricingPage() {
 
         <div className="mt-3 space-y-3">
           <section className={cardClass}>
-            <p className="text-xs font-semibold tracking-wide text-[#2D5C64]">PASO 3</p>
-            <h2 className="mt-1 text-lg font-bold sm:text-xl">Contanos cuánto producís</h2>
-            <p className="mt-1.5 text-sm text-gray-500">Ingresá los totales de tu empresa o grupo de campos una sola vez.</p>
+            <h2 className="mt-1 text-lg font-bold sm:text-xl">El tamaño de tu operación</h2>
+            <p className="mt-1.5 text-sm text-gray-500">Sumamos las cantidades para ubicarte en un rango de precio.</p>
             <div className="mt-4 rounded-xl bg-[#fafbf9] p-3 sm:p-4">
               {empresa.tipo !== 'agricola' && <><div className="grid grid-cols-2 gap-3">{(['vacunos', 'ovinos'] as const).map(key => <label key={key} className="text-sm font-semibold">{key === 'vacunos' ? 'Cantidad promedio de vacunos' : 'Ovinos'}<input type="number" min="0" step="1" inputMode="numeric" placeholder="0" value={empresa[key]} onChange={e => update({ [key]: e.target.value })} className={inputClass} /></label>)}</div><p className="mt-2 text-xs text-gray-500">1 vacuno = 1 unidad · 5 ovinos = 1 unidad.</p></>}
               {empresa.tipo !== 'ganadera' && <label className="mt-4 block text-sm font-semibold">Hectáreas de cosecha<div className="relative"><input type="number" min="0" step="any" inputMode="decimal" placeholder="0" value={empresa.hectareas} onChange={e => update({ hectareas: e.target.value })} className={`${inputClass} pr-24`} /><span className="absolute right-3 top-5 text-sm font-normal text-gray-400">hectáreas</span></div><span className="mt-2 block text-xs font-normal leading-relaxed text-gray-500">Solo las que destinás para cosecha. No cuentan pasturas ni verdeos para el ganado.</span></label>}
