@@ -64,7 +64,7 @@ export default function PricingPage() {
       <main className={styles.workspace}>
         <div>
         <section className={cardClass}>
-          <p className={styles.step}><span>01</span><span>Paso 1</span></p>
+          <p className={styles.step}>Paso 1</p>
           <h2 className="mt-1 text-lg font-bold sm:text-xl">¿Cómo querés pagar?</h2>
           <p className="mt-1.5 text-sm text-gray-500">Elegí cómo pagar la suscripción de tu empresa.</p>
           <div className={styles.billing}>
@@ -73,7 +73,7 @@ export default function PricingPage() {
         </section>
 
         <section className={`${cardClass} mt-3`}>
-          <p className={styles.step}><span>02</span><span>Paso 2</span></p>
+          <p className={styles.step}>Paso 2</p>
           <h2 className="mt-1 text-lg font-bold sm:text-xl">¿Qué tipo de empresa tenés?</h2>
           <p className="mt-1.5 text-sm text-gray-500">Así te pedimos solo los datos que corresponden.</p>
           <div className="mt-4 grid grid-cols-3 gap-2">{tipos.map(t => <button key={t.value} type="button" aria-pressed={empresa.tipo === t.value} onClick={() => update({ tipo: t.value })} className={`${styles.option} min-w-0 rounded-xl border-2 px-2 py-3 text-left sm:px-3 ${empresa.tipo === t.value ? 'border-[#2D5C64] bg-[#2D5C64]/10' : 'border-gray-200'}`}><span className="block text-sm font-semibold">{t.label}</span><span className="mt-1 block text-[11px] leading-relaxed text-gray-500">{t.description}</span></button>)}</div>
@@ -81,7 +81,7 @@ export default function PricingPage() {
 
         <div className="mt-3 space-y-3">
           <section className={cardClass}>
-            <p className={styles.step}><span>03</span><span>Paso 3</span></p>
+            <p className={styles.step}>Paso 3</p>
             <h2 className="mt-1 text-lg font-bold sm:text-xl">El tamaño de tu operación</h2>
             <p className="mt-1.5 text-sm text-gray-500">Sumamos las cantidades para ubicarte en un rango de precio.</p>
             <div className={styles.quantities}>
@@ -94,12 +94,12 @@ export default function PricingPage() {
         </div>
 
         <section className={cardClass}>
-          <p className={styles.step}><span>04</span><span>Paso 4</span></p>
+          <p className={styles.step}>Paso 4</p>
           <h2 className="mt-1 text-lg font-bold sm:text-xl">Elegí tu plan</h2>
           <p className="mt-1.5 text-sm text-gray-500">La única diferencia es finanzas. Todo lo demás está incluido en ambos.</p>
           <div className={styles.planGrid} role="group" aria-label="Elegí tu plan">
             {[false, true].map(plus => <button key={String(plus)} type="button" aria-pressed={empresa.plus === plus} onClick={() => update({ plus })} className={styles.planCard}>
-              <span className={styles.planTitle}><strong>BotRural{plus ? ' Plus' : ''}</strong>{plus && <span className={styles.planBadge}>FINANZAS</span>}<span className={styles.planIndicator} aria-hidden="true">{empresa.plus === plus && <Check size={12} strokeWidth={3} />}</span></span>
+              <span className={styles.planTitle}><strong>BotRural</strong>{plus && <span className={styles.planBadge}>Plus</span>}<span className={styles.planIndicator} aria-hidden="true">{empresa.plus === plus && <Check size={12} strokeWidth={3} />}</span></span>
               <span className={styles.planDescription}>{plus ? 'Todas las funciones de BotRural + finanzas: gastos, ingresos y resultados.' : 'Ganadería, agricultura, tareas, inventario, mapas y trazabilidad individual.'}</span>
             </button>)}
           </div>
