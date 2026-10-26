@@ -1,722 +1,127 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { Check, Info, Plus, Shield, Sparkles, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowLeft, ArrowRight, Check, Plus, ShieldCheck, Sparkles, Trash2 } from 'lucide-react'
 import Header from '../components/Header'
 
-type TipoCampo = 'agricultura' | 'ganaderia' | 'mixto'
-type Modalidad = 'con' | 'sin'
-type Cycle = 'monthly' | 'annual'
-
-type CampoDraft = {
-  id: string
-  nombre: string
-  tipo: TipoCampo
-  modalidad: Modalidad
-  hectareas: string
-  vacunos: string
-  ovinos: string
-}
-
-type PrecioPool =
-  | {
-      kind: 'usd'
-      monthly: number
-      parteCon: number
-      parteSin: number
-      extraSin: number
-      labelCon: string
-      labelSin: string
-      unidadesCon: number
-      unidadesSin: number
-      bandLabel: string
-      unidades: number
-      unidad: string
-      detalle: string
-    }
-  | {
-      kind: 'contact'
-      bandLabel: string
-      unidades: number
-      unidad: string
-      detalle: string
-      unidadesCon: number
-      unidadesSin: number
-    }
-
-const OVINO_EQ = 0.16
-const WHATSAPP_NUMBER = '59899465242'
-
-const BANDS: { max: number; con: number; sin: number; rango: string; labelHa: string; labelAn: string }[] = [
-  { max: 500, con: 34.99, sin: 24.49, rango: '0 – 500', labelHa: '0 – 500 ha', labelAn: '0 – 500 animales' },
-  { max: 1000, con: 54.99, sin: 38.49, rango: '500 – 1.000', labelHa: '500 – 1.000 ha', labelAn: '500 – 1.000 animales' },
-  { max: 2000, con: 64.99, sin: 45.49, rango: '1.000 – 2.000', labelHa: '1.000 – 2.000 ha', labelAn: '1.000 – 2.000 animales' },
-  { max: 5000, con: 74.99, sin: 52.49, rango: '2.000 – 5.000', labelHa: '2.000 – 5.000 ha', labelAn: '2.000 – 5.000 animales' },
-  { max: 7500, con: 84.99, sin: 59.49, rango: '5.000 – 7.500', labelHa: '5.000 – 7.500 ha', labelAn: '5.000 – 7.500 animales' },
-  { max: 10000, con: 94.99, sin: 66.49, rango: '7.500 – 10.000', labelHa: '7.500 – 10.000 ha', labelAn: '7.500 – 10.000 animales' },
+type Tipo = 'ganadera' | 'mixta' | 'agricola'
+type Campo = { id: number; nombre: string; tipo: Tipo; plus: boolean; vacunos: string; ovinos: string; hectareas: string }
+const bands = [
+  { max: 500, base: 32.99, plus: 46.99 },
+  { max: 1000, base: 34.99, plus: 49.99 },
+  { max: 1500, base: 46.99, plus: 66.99 },
+  { max: 2500, base: 63.99, plus: 91.99 },
+  { max: 4000, base: 78.99, plus: 111.99 },
+  { max: 6000, base: 96.99, plus: 133.99 },
+  { max: 10000, base: 108.99, plus: 153.99 },
 ]
-
-const INCLUDED_BASE = [
-  'Bot de WhatsApp con IA para registrar datos',
-  'Gestión de potreros, animales y cultivos',
-  'Pastoreo rotativo y cálculo de descansos',
-  'Eventos de siembra, cosecha y sanidad',
-  'Registro de lluvias y clima',
-  'Reportes y exportación a Excel / PDF',
-  'Equipo con roles y permisos',
+const tipos: { value: Tipo; label: string; description: string }[] = [
+  { value: 'ganadera', label: 'Ganadera', description: 'Vacunos y ovinos' },
+  { value: 'mixta', label: 'Mixta', description: 'Ganadería y cosecha' },
+  { value: 'agricola', label: 'Agrícola', description: 'Hectáreas de cosecha' },
 ]
+const features = ['Campos ilimitados', 'Usuarios ilimitados', 'Datos ilimitados', 'Bot de WhatsApp', 'Ganadería y agricultura', 'Tareas, órdenes y recordatorios', 'Inventario', 'Mapa', 'Trazabilidad individual']
+const nuevoCampo = (id: number): Campo => ({ id, nombre: `Campo ${id}`, tipo: 'ganadera', plus: false, vacunos: '', ovinos: '', hectareas: '' })
+const numero = (value: string) => Math.max(0, Number(value.replace(',', '.')) || 0)
+const usd = (value: number) => value.toLocaleString('es-UY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+const cantidad = (value: number) => value.toLocaleString('es-UY', { maximumFractionDigits: 2 })
 
-const INCLUDED_FINANZAS =
-  'Finanzas: facturas de gastos y ventas, e informes de dinero del ejercicio'
-
-const TIPO_LABEL: Record<TipoCampo, string> = {
-  agricultura: 'Agricultura',
-  ganaderia: 'Ganadería',
-  mixto: 'Mixto',
-}
-
-function newCampo(index: number): CampoDraft {
-  return {
-    id: `c-${Date.now()}-${index}`,
-    nombre: `Campo ${index}`,
-    tipo: 'ganaderia',
-    modalidad: 'con',
-    hectareas: '',
-    vacunos: '',
-    ovinos: '',
+function cotizar(campos: Campo[]) {
+  const pools = [
+    { nombre: 'Ganadería', base: 0, plus: 0, unidad: 'unidades ganaderas' },
+    { nombre: 'Cosecha', base: 0, plus: 0, unidad: 'hectáreas de cosecha' },
+  ]
+  for (const campo of campos) {
+    const plan = campo.plus ? 'plus' : 'base'
+    if (campo.tipo !== 'agricola') pools[0][plan] += numero(campo.vacunos) + numero(campo.ovinos) / 5
+    if (campo.tipo !== 'ganadera') pools[1][plan] += numero(campo.hectareas)
   }
-}
-
-function parseNum(raw: string): number {
-  const t = raw.trim().replace(/\s/g, '').replace(',', '.')
-  if (!t) return 0
-  const n = Number(t)
-  return Number.isFinite(n) && n > 0 ? n : 0
-}
-
-function fmtUsd(n: number): string {
-  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-}
-
-function fmtNum(n: number): string {
-  return n.toLocaleString('es-UY', { maximumFractionDigits: n % 1 === 0 ? 0 : 2 })
-}
-
-function equivalentes(c: CampoDraft): number {
-  return parseNum(c.vacunos) + parseNum(c.ovinos) * OVINO_EQ
-}
-
-function detalleMix(con: number, sin: number, u: string): string {
-  const total = con + sin
-  if (con > 0 && sin > 0) {
-    return `${fmtNum(total)} ${u} (${fmtNum(con)} Con + ${fmtNum(sin)} Sin)`
-  }
-  if (con > 0) return `${fmtNum(con)} ${u} · Con Finanzas`
-  if (sin > 0) return `${fmtNum(sin)} ${u} · Sin Finanzas`
-  return `0 ${u}`
-}
-
-function precioTabla(unidades: number, con: boolean): number | 'contact' {
-  if (unidades <= 0) return 0
-  if (unidades > 10000) return 'contact'
-  const band = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
-  return con ? band.con : band.sin
-}
-
-function cotizarPool(
-  unidadesCon: number,
-  unidadesSin: number,
-  unidad: 'ha' | 'animales eq.'
-): PrecioPool | null {
-  const unidades = unidadesCon + unidadesSin
-  if (unidades <= 0) return null
-  const esHa = unidad === 'ha'
-  const detalle = detalleMix(unidadesCon, unidadesSin, esHa ? 'ha' : 'an. eq.')
-  const pPoolCon = precioTabla(unidades, true)
-  const pPoolSin = precioTabla(unidades, false)
-  if (pPoolCon === 'contact' || pPoolSin === 'contact') {
-    return {
-      kind: 'contact',
-      bandLabel: esHa ? '+10.000 ha' : '+10.000 animales eq.',
-      unidades,
-      unidad,
-      detalle,
-      unidadesCon,
-      unidadesSin,
-    }
-  }
-  const parteCon = Math.round((unidadesCon / unidades) * pPoolCon * 100) / 100
-  const parteSin = Math.round((unidadesSin / unidades) * pPoolSin * 100) / 100
-  const monthly = Math.round((parteCon + parteSin) * 100) / 100
-  const bandTotal = BANDS.find((b) => unidades <= b.max) ?? BANDS[BANDS.length - 1]
-  const rango = esHa ? bandTotal.labelHa : bandTotal.labelAn
-  return {
-    kind: 'usd',
-    monthly,
-    parteCon,
-    parteSin,
-    extraSin: parteSin,
-    labelCon: rango,
-    labelSin: rango,
-    unidadesCon,
-    unidadesSin,
-    bandLabel: rango,
-    unidades,
-    unidad,
-    detalle,
-  }
-}
-
-function escala(n: number, cycle: Cycle): number {
-  return cycle === 'monthly' ? n : Math.round(n * 10 * 100) / 100
-}
-
-function montoPool(p: PrecioPool, cycle: Cycle): number | null {
-  if (p.kind !== 'usd') return null
-  return cycle === 'monthly' ? p.monthly : p.monthly * 10
-}
-
-type PoolLinea = { titulo: string; quote: PrecioPool }
-
-function armarPools(campos: CampoDraft[]): PoolLinea[] {
-  let aniCon = 0
-  let aniSin = 0
-  let haCon = 0
-  let haSin = 0
-  for (const c of campos) {
-    if (c.tipo === 'agricultura') {
-      const u = parseNum(c.hectareas)
-      if (c.modalidad === 'con') haCon += u
-      else haSin += u
-    } else {
-      const u = equivalentes(c)
-      if (c.modalidad === 'con') aniCon += u
-      else aniSin += u
-    }
-  }
-  const out: PoolLinea[] = []
-  const ani = cotizarPool(aniCon, aniSin, 'animales eq.')
-  if (ani) out.push({ titulo: 'Ganadería / Mixto', quote: ani })
-  const ha = cotizarPool(haCon, haSin, 'ha')
-  if (ha) out.push({ titulo: 'Agricultura', quote: ha })
-  return out
+  return pools.filter(p => p.base + p.plus > 0).map(p => {
+    const total = p.base + p.plus
+    const band = bands.find(b => total <= b.max)
+    return { ...p, total, mensual: band ? Math.round((p.base * band.base + p.plus * band.plus) / total * 100) / 100 : null }
+  })
 }
 
 export default function PricingPage() {
-  const [campos, setCampos] = useState<CampoDraft[]>(() => [newCampo(1)])
-  const [cycle, setCycle] = useState<Cycle>('monthly')
-
-  const pools = armarPools(campos)
-  const hayCon = campos.some((c) => c.modalidad === 'con')
-  const haySin = campos.some((c) => c.modalidad === 'sin')
-  const needsContact = pools.some((p) => p.quote.kind === 'contact')
-  const monthlyTotal = pools.reduce(
-    (s, p) => s + (p.quote.kind === 'usd' ? p.quote.monthly : 0),
-    0
-  )
-  const displayTotal = cycle === 'monthly' ? monthlyTotal : monthlyTotal * 10
-  const totalLabel = cycle === 'monthly' ? '/mes' : '/año'
-
-  const included = hayCon ? [...INCLUDED_BASE, INCLUDED_FINANZAS] : INCLUDED_BASE
-
-  const contactUrl = useMemo(() => {
-    const billing = cycle === 'monthly' ? 'mensual' : 'anual'
-    const lineasCampos = campos.map((campo, i) => {
-      const nom = campo.nombre.trim() || `Campo ${i + 1}`
-      const mag =
-        campo.tipo === 'agricultura'
-          ? `${fmtNum(parseNum(campo.hectareas))} ha`
-          : `${fmtNum(equivalentes(campo))} animales eq.`
-      const mod = campo.modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'
-      return `• ${nom} (${TIPO_LABEL[campo.tipo]}, ${mod}): ${mag}`
-    })
-    const lineasPool = pools.map(({ titulo, quote }) => {
-      if (quote.kind === 'contact') {
-        return `Pool ${titulo}: ${fmtNum(quote.unidades)} ${quote.unidad} — Contáctanos`
-      }
-      const precio = cycle === 'monthly' ? quote.monthly : quote.monthly * 10
-      return `Pool ${titulo}: ${quote.detalle} (${quote.bandLabel}) — USD ${fmtUsd(precio)}${totalLabel}`
-    })
-    const totalTxt = needsContact
-      ? 'Total: Contáctanos (+10.000 en el pool)'
-      : `Total: USD ${fmtUsd(displayTotal)} ${totalLabel}`
-    const message = [
-      'Hola, quiero BotRural.',
-      `Facturación ${billing}`,
-      ...lineasCampos,
-      ...lineasPool,
-      totalTxt,
-    ].join('\n')
-    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-  }, [campos, pools, cycle, needsContact, displayTotal, totalLabel])
-
-  const updateCampo = (id: string, patch: Partial<CampoDraft>) => {
-    setCampos((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c)))
-  }
-
-  const addCampo = () => {
-    setCampos((prev) => [...prev, newCampo(prev.length + 1)])
-  }
-
-  const removeCampo = (id: string) => {
-    setCampos((prev) => (prev.length <= 1 ? prev : prev.filter((c) => c.id !== id)))
-  }
+  const [paso, setPaso] = useState(1)
+  const [anual, setAnual] = useState(false)
+  const [campos, setCampos] = useState<Campo[]>([nuevoCampo(1)])
+  const [resultado, setResultado] = useState(false)
+  const update = (id: number, patch: Partial<Campo>) => { setCampos(prev => prev.map(c => c.id === id ? { ...c, ...patch } : c)); setResultado(false) }
+  const pools = cotizar(campos)
+  const contacto = pools.some(p => p.mensual === null)
+  const mensual = Math.round(pools.reduce((total, p) => total + (p.mensual ?? 0), 0) * 100) / 100
+  const total = Math.round(mensual * (anual ? 12 * 0.8 : 1) * 100) / 100
+  const valido = campos.every(c => (c.tipo !== 'agricola' ? numero(c.vacunos) + numero(c.ovinos) : 0) + (c.tipo !== 'ganadera' ? numero(c.hectareas) : 0) > 0)
+  const mensaje = ['Hola, quiero contratar BotRural.', `Pago ${anual ? 'anual (20% de descuento)' : 'mensual'}.`, ...campos.map(c => `${c.nombre}: ${c.plus ? 'BotRural Plus' : 'BotRural'}; ${c.tipo}.${c.tipo !== 'agricola' ? ` ${numero(c.vacunos)} vacunos y ${numero(c.ovinos)} ovinos.` : ''}${c.tipo !== 'ganadera' ? ` ${numero(c.hectareas)} hectáreas de cosecha.` : ''}`), contacto ? 'Quiero una cotización personalizada.' : `Total: USD ${usd(total)}/${anual ? 'año' : 'mes'}.`].join('\n')
+  const inputClass = 'mt-2 w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-lg outline-none focus:border-[#2D5C64] focus:ring-2 focus:ring-[#2D5C64]/15'
+  const cardClass = 'rounded-2xl border border-gray-200 bg-white p-5 sm:p-8 shadow-sm'
 
   return (
-    <div className="min-h-screen bg-[#faf9f7] text-gray-900 pb-20 sm:pb-16">
+    <div className="min-h-screen bg-[#faf9f7] text-gray-900 pb-16">
       <Header />
-
-      <section className="relative overflow-hidden border-b border-[#2D5C64]/10">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2D5C64] via-[#2D5C64] to-[#1e4349]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(2,201,81,0.15)_0%,_transparent_55%)]" />
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-[#F0E8D8]/10 rounded-full blur-3xl" />
-
-        <div className="relative max-w-7xl mx-auto px-4 md:px-6 py-14 md:py-20 text-center">
-          <span className="inline-flex items-center gap-1.5 bg-white/10 text-[#F0E8D8] px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide mb-6 border border-white/10">
-            <Sparkles className="w-3.5 h-3.5 text-[#02C951]" />
-            Precios BotRural
-          </span>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white mb-4 max-w-3xl mx-auto leading-tight">
-            Configurá tus campos y ves el precio
-          </h1>
-          <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto">
-            Cada establecimiento se cobra por su actividad: hectáreas en Agricultura, o animales equivalentes en Ganadería y Mixto.
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm">
-            {['Empezá con un campo', 'Agregá más cuando quieras', 'Pago mensual o anual'].map((item) => (
-              <span
-                key={item}
-                className="inline-flex items-center gap-1.5 bg-white/10 text-white/90 px-3 py-1.5 rounded-full border border-white/10"
-              >
-                <Check className="w-3.5 h-3.5 text-[#02C951]" strokeWidth={3} />
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
+      <section className="bg-[#234b52] px-5 py-12 text-center text-white sm:py-16">
+        <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm"><Sparkles size={16} className="text-[#02C951]" /> Precios BotRural</span>
+        <h1 className="mt-5 text-3xl font-bold tracking-tight sm:text-5xl">Tu campo, tu plan, tu precio.</h1>
+        <p className="mx-auto mt-4 max-w-xl text-white/75">Contanos cómo trabajás y calculá tu precio en tres pasos.</p>
       </section>
 
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 xl:pr-20 py-10 md:py-14 grid grid-cols-1 xl:grid-cols-[minmax(0,1.15fr)_minmax(280px,340px)_340px] gap-6 lg:gap-7">
-        <div className="space-y-5 min-w-0">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-5 md:p-7">
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Tus campos</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Podés contratar uno solo y sumar establecimientos después. Con o Sin Finanzas se elige en cada campo.
-              </p>
-            </div>
+      <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+        <nav aria-label="Pasos de la calculadora" className="mb-8 grid grid-cols-3 gap-2">
+          {['Cómo pagar', 'Tu empresa', 'Cantidades'].map((label, i) => <button key={label} type="button" disabled={i + 1 > paso} onClick={() => { setPaso(i + 1); setResultado(false) }} aria-current={paso === i + 1 ? 'step' : undefined} className={`flex items-center justify-center gap-2 rounded-xl px-2 py-3 text-xs font-semibold sm:text-sm ${paso === i + 1 ? 'bg-[#2D5C64] text-white' : 'bg-[#eaece7] text-[#2D5C64]'} disabled:opacity-40`}><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-current">{i + 1}</span>{label}</button>)}
+        </nav>
 
-            <div className="space-y-4">
-              {campos.map((c, i) => {
-                const esAgri = c.tipo === 'agricultura'
-                const eq = equivalentes(c)
-                return (
-                  <div
-                    key={c.id}
-                    className="rounded-xl border border-gray-200 bg-gray-50/40 p-4 md:p-5"
-                  >
-                    <div className="flex items-start justify-between gap-3 mb-4">
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-[#2D5C64] mb-1.5">
-                          Campo {i + 1}
-                        </p>
-                        <input
-                          value={c.nombre}
-                          onChange={(e) => updateCampo(c.id, { nombre: e.target.value })}
-                          placeholder={`Campo ${i + 1}`}
-                          className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#02C951]/30 focus:border-[#02C951]"
-                        />
-                      </div>
-                      {campos.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeCampo(c.id)}
-                          className="shrink-0 p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition"
-                          aria-label={`Quitar ${c.nombre || `Campo ${i + 1}`}`}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-1.5 mb-3">
-                      {(['ganaderia', 'mixto', 'agricultura'] as TipoCampo[]).map((t) => {
-                        const on = c.tipo === t
-                        return (
-                          <button
-                            key={t}
-                            type="button"
-                            onClick={() => updateCampo(c.id, { tipo: t })}
-                            className={`px-2 py-2 rounded-lg text-xs sm:text-sm font-semibold border-2 transition ${
-                              on
-                                ? 'border-[#02C951] bg-[#F0E8D8]/50 text-[#2D5C64]'
-                                : 'border-gray-200 bg-white text-gray-600 hover:border-[#2D5C64]/25'
-                            }`}
-                          >
-                            {TIPO_LABEL[t]}
-                          </button>
-                        )
-                      })}
-                    </div>
-
-                    <div className="inline-flex w-full sm:w-auto items-center bg-white rounded-full p-1 text-xs font-medium border border-gray-200 mb-4">
-                      <button
-                        type="button"
-                        onClick={() => updateCampo(c.id, { modalidad: 'con' })}
-                        className={`flex-1 sm:flex-none px-3 py-1.5 rounded-full transition ${
-                          c.modalidad === 'con' ? 'bg-[#F0E8D8] text-[#2D5C64] shadow-sm' : 'text-gray-500 hover:text-gray-700'
-                        }`}
-                      >
-                        Con Finanzas
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => updateCampo(c.id, { modalidad: 'sin' })}
-                        className={`flex-1 sm:flex-none px-3 py-1.5 rounded-full transition ${
-                          c.modalidad === 'sin' ? 'bg-[#F0E8D8] text-[#2D5C64] shadow-sm' : 'text-gray-500 hover:text-gray-700'
-                        }`}
-                      >
-                        Sin Finanzas
-                      </button>
-                    </div>
-                    {c.modalidad === 'sin' && (
-                      <p className="text-[11px] text-gray-500 -mt-2 mb-3">
-                        Ventas y compras de animales sin montos. No incluye facturas ni informes de dinero del ejercicio.
-                      </p>
-                    )}
-
-                    {esAgri ? (
-                      <label className="block">
-                        <span className="text-xs font-medium text-gray-600">Hectáreas totales (ha)</span>
-                        <input
-                          inputMode="decimal"
-                          value={c.hectareas}
-                          onChange={(e) => updateCampo(c.id, { hectareas: e.target.value })}
-                          placeholder="Ej: 350"
-                          className="mt-1.5 w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#02C951]/30 focus:border-[#02C951]"
-                        />
-                      </label>
-                    ) : (
-                      <div>
-                        <p className="text-xs font-medium text-gray-600 mb-1.5">
-                          Animales equivalentes
-                          <span className="font-normal text-gray-500">
-                            {' '}
-                            · 1 vacuno = 1 · 1 ovino = 0,16
-                          </span>
-                        </p>
-                        <div className="grid sm:grid-cols-2 gap-3">
-                          <label className="block">
-                            <span className="text-[11px] text-gray-500">Vacunos</span>
-                            <input
-                              inputMode="decimal"
-                              value={c.vacunos}
-                              onChange={(e) => updateCampo(c.id, { vacunos: e.target.value })}
-                              placeholder="0"
-                              className="mt-1 w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#02C951]/30 focus:border-[#02C951]"
-                            />
-                          </label>
-                          <label className="block">
-                            <span className="text-[11px] text-gray-500">Ovinos</span>
-                            <input
-                              inputMode="decimal"
-                              value={c.ovinos}
-                              onChange={(e) => updateCampo(c.id, { ovinos: e.target.value })}
-                              placeholder="0"
-                              className="mt-1 w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#02C951]/30 focus:border-[#02C951]"
-                            />
-                          </label>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-2">
-                          Equivale a <strong className="text-gray-800">{fmtNum(eq)}</strong> animales
-                        </p>
-                      </div>
-                    )}
-
-                    <p className="mt-3 pt-3 border-t border-gray-200/80 text-xs text-gray-500">
-                      {esAgri
-                        ? `Suma al pool Agricultura: ${fmtNum(parseNum(c.hectareas))} ha`
-                        : `Suma al pool Ganadería / Mixto: ${fmtNum(eq)} an. eq.`}
-                    </p>
-                  </div>
-                )
-              })}
-            </div>
-
-            <button
-              type="button"
-              onClick={addCampo}
-              className="mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#2D5C64]/25 bg-white px-4 py-3 text-sm font-semibold text-[#2D5C64] hover:border-[#02C951] hover:bg-[#F0E8D8]/40 transition"
-            >
-              <Plus className="w-4 h-4" />
-              Agregar campo
-            </button>
-
-            <div className="mt-5 flex items-start gap-2.5 text-sm text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100">
-              <Info className="w-4 h-4 text-[#2D5C64] flex-shrink-0 mt-0.5" />
-              <p>
-                Agricultura y Ganadería/Mixto son dos pools. En cada uno se suman Con y Sin (un
-                rango). Lo Con paga su parte de la tabla Con; lo Sin, su parte de la tabla Sin.
-                Si un pool supera 10.000,{' '}
-                <a
-                  href={contactUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#2D5C64] font-semibold hover:underline"
-                >
-                  Contáctanos
-                </a>
-                .
-              </p>
-            </div>
+        {paso === 1 && <section className={cardClass}>
+          <p className="text-sm font-semibold text-[#2D5C64]">PASO 1</p>
+          <h2 className="mt-2 text-2xl font-bold">¿Cómo querés pagar?</h2>
+          <p className="mt-2 text-sm text-gray-500">Elegí la modalidad para todos tus campos.</p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {[false, true].map(value => <button key={String(value)} type="button" aria-pressed={anual === value} onClick={() => setAnual(value)} className={`relative rounded-2xl border-2 p-6 text-left transition ${anual === value ? 'border-[#2D5C64] bg-[#f0f5f1]' : 'border-gray-200 hover:border-[#2D5C64]/50'}`}><span className="block text-xl font-bold">{value ? 'Anual' : 'Mensual'}</span><span className="mt-2 block text-sm text-gray-600">{value ? 'Un pago por todo el año.' : 'Se cobra todos los meses.'}</span>{value && <span className="mt-4 inline-block rounded-full bg-[#02C951]/15 px-3 py-1 text-sm font-bold text-[#21613b]">Ahorrás un 20%</span>}{anual === value && <Check size={20} className="absolute right-4 top-5 text-[#2D5C64]" />}</button>)}
           </div>
+          <button type="button" onClick={() => setPaso(2)} className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2D5C64] py-3.5 font-semibold text-white">Continuar <ArrowRight size={18} /></button>
+        </section>}
 
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-6 md:p-8">
-            <h3 className="font-bold text-gray-900 mb-4">Todo lo que incluye</h3>
-            <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-gray-700">
-              {included.map((b) => (
-                <li key={b} className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#02C951] flex-shrink-0 mt-0.5" />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-            {haySin && (
-              <p className="text-xs text-gray-500 mt-4">
-                En los campos Sin Finanzas las ventas y compras de animales van sin montos. No
-                incluye facturas de gastos/ventas ni los informes de dinero del ejercicio. Podés
-                pasar ese campo a Con Finanzas cuando quieras.
-              </p>
-            )}
-          </div>
-        </div>
+        {paso === 2 && <section className={cardClass}>
+          <p className="text-sm font-semibold text-[#2D5C64]">PASO 2</p>
+          <h2 className="mt-2 text-2xl font-bold">¿Qué tipo de empresa tenés?</h2>
+          <p className="mt-2 text-sm text-gray-500">Así te pedimos solo los datos que corresponden.</p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">{tipos.map(t => <button key={t.value} type="button" aria-pressed={campos[0].tipo === t.value} onClick={() => update(campos[0].id, { tipo: t.value })} className={`rounded-xl border-2 p-5 text-left ${campos[0].tipo === t.value ? 'border-[#2D5C64] bg-[#f0f5f1]' : 'border-gray-200'}`}><span className="block text-lg font-bold">{t.label}</span><span className="mt-2 block text-sm text-gray-500">{t.description}</span></button>)}</div>
+          <button type="button" onClick={() => setPaso(3)} className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2D5C64] py-3.5 font-semibold text-white">Continuar <ArrowRight size={18} /></button>
+        </section>}
 
-        <div className="xl:sticky xl:top-24 self-start space-y-4">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-5">
-            <h3 className="font-bold text-gray-900">Rangos</h3>
-            <p className="text-xs text-gray-500 mt-1 mb-4">
-              Ganadería / Mixto en <strong className="font-semibold text-gray-700">animales eq.</strong>
-              {' · '}
-              Agricultura en <strong className="font-semibold text-gray-700">ha</strong>.
-            </p>
+        {paso === 3 && <div className="space-y-5">
+          <section className={cardClass}>
+            <p className="text-sm font-semibold text-[#2D5C64]">PASO 3</p>
+            <h2 className="mt-2 text-2xl font-bold">Contanos cuánto producís</h2>
+            <p className="mt-2 text-sm text-gray-500">Ingresá las cantidades y elegí el plan de cada campo.</p>
+            <div className="mt-6 space-y-5">{campos.map((c, i) => <div key={c.id} className="rounded-2xl border border-gray-200 bg-[#fafbf9] p-4 sm:p-5">
+              <div className="mb-4 flex items-center gap-3"><label className="flex-1 text-xs font-medium text-gray-500">Nombre del campo<input value={c.nombre} onChange={e => update(c.id, { nombre: e.target.value })} className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-base font-semibold text-gray-900" /></label>{campos.length > 1 && <button type="button" aria-label={`Quitar ${c.nombre}`} onClick={() => { setCampos(prev => prev.filter(item => item.id !== c.id)); setResultado(false) }} className="rounded-lg p-2 text-gray-500 hover:bg-red-50 hover:text-red-600"><Trash2 size={18} /></button>}</div>
+              {i > 0 && <label className="mb-4 block text-sm font-medium">Tipo de campo<select value={c.tipo} onChange={e => update(c.id, { tipo: e.target.value as Tipo })} className="ml-3 rounded-lg border border-gray-200 bg-white p-2">{tipos.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}</select></label>}
+              {c.tipo !== 'agricola' && <><div className="grid grid-cols-2 gap-3">{(['vacunos', 'ovinos'] as const).map(key => <label key={key} className="text-sm font-semibold">{key === 'vacunos' ? 'Vacunos' : 'Ovinos'}<input type="number" min="0" step="1" inputMode="numeric" placeholder="0" value={c[key]} onChange={e => update(c.id, { [key]: e.target.value })} className={inputClass} /></label>)}</div><p className="mt-2 text-xs text-gray-500">1 vacuno = 1 unidad · 5 ovinos = 1 unidad.</p></>}
+              {c.tipo !== 'ganadera' && <label className="mt-5 block text-sm font-semibold">Hectáreas de cosecha<div className="relative"><input type="number" min="0" step="any" inputMode="decimal" placeholder="0" value={c.hectareas} onChange={e => update(c.id, { hectareas: e.target.value })} className={`${inputClass} pr-24`} /><span className="absolute right-4 top-6 text-sm font-normal text-gray-400">hectáreas</span></div><span className="mt-2 block text-xs font-normal leading-relaxed text-gray-500">Solo las que destinás para cosecha. No cuentan pasturas ni verdeos para el ganado.</span></label>}
+              <fieldset className="mt-5"><legend className="mb-2 text-sm font-semibold">Elegí tu plan</legend><div className="grid gap-3 sm:grid-cols-2">{[false, true].map(plus => <label key={String(plus)} className={`flex cursor-pointer items-start gap-2 rounded-xl border-2 p-3 ${c.plus === plus ? 'border-[#2D5C64] bg-[#f0f5f1]' : 'border-gray-200 bg-white'}`}><input type="radio" name={`plan-${c.id}`} checked={c.plus === plus} onChange={() => update(c.id, { plus })} className="mt-1 accent-[#2D5C64]" /><span><strong className="block text-sm">BotRural{plus ? ' Plus' : ''}</strong><span className="mt-1 block text-xs text-gray-500">{plus ? 'Todo BotRural + finanzas' : 'Toda la gestión de tu campo'}</span></span></label>)}</div></fieldset>
+            </div>)}</div>
+            <button type="button" onClick={() => { setCampos(prev => [...prev, nuevoCampo(Math.max(...prev.map(c => c.id)) + 1)]); setResultado(false) }} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#2D5C64]/30 py-3 text-sm font-semibold text-[#2D5C64]"><Plus size={16} /> Agregar otro campo</button>
+            <p className="mt-3 text-xs text-gray-500">Los animales se suman entre campos. Las hectáreas de cosecha se calculan por separado.</p>
+            <button type="button" disabled={!valido} onClick={() => setResultado(true)} className="mt-6 w-full rounded-xl bg-[#02C951] py-4 font-bold text-[#123b22] disabled:cursor-not-allowed disabled:opacity-40">Calcular mi precio</button>
+            {!valido && <p className="mt-2 text-center text-xs text-gray-500">Ingresá al menos una cantidad mayor a cero en cada campo.</p>}
+          </section>
+          {resultado && <section aria-live="polite" className="rounded-2xl bg-[#234b52] p-6 text-white sm:p-8">
+            <span className="flex items-center gap-2 text-sm text-white/70"><ShieldCheck size={18} /> Tu cotización personalizada</span>
+            <h2 className="mt-4 text-3xl font-bold sm:text-4xl">{contacto ? 'Hablemos de tu empresa' : `USD ${usd(total)}`} {!contacto && <span className="text-base font-normal text-white/60">/{anual ? 'año' : 'mes'}</span>}</h2>
+            {contacto ? <p className="mt-3 text-sm text-white/75">Superás las 10.000 unidades ganaderas o hectáreas de cosecha. Te preparamos una propuesta a medida.</p> : anual ? <p className="mt-3 text-sm text-white/80">Un pago anual · Equivale a USD {usd(total / 12)}/mes.<br /><span className="text-[#7ce8a6]">Ahorrás USD {usd(mensual * 12 - total)} al año (20%).</span></p> : <p className="mt-3 text-sm text-white/75">Se cobra todos los meses.</p>}
+            <div className="mt-6 space-y-3 border-t border-white/15 pt-5">{pools.map(p => <div key={p.nombre} className="flex flex-wrap justify-between gap-2 text-sm"><span>{cantidad(p.total)} {p.unidad}</span><span className="font-semibold">{p.mensual === null ? 'Contactanos' : `USD ${usd(p.mensual * (anual ? 9.6 : 1))}/${anual ? 'año' : 'mes'}`}</span></div>)}</div>
+            <p className="mt-4 text-xs text-white/60">{campos.map(c => `${c.nombre}: BotRural${c.plus ? ' Plus' : ''}`).join(' · ')}</p>
+            {!contacto && <p className="mt-3 text-xs text-white/60">Más impuestos aplicables.</p>}
+            <a href={`https://wa.me/59899465242?text=${encodeURIComponent(mensaje)}`} target="_blank" rel="noopener noreferrer" className="mt-6 block rounded-xl bg-[#02C951] px-4 py-4 text-center font-bold text-[#123b22]">{contacto ? 'Pedir mi propuesta por WhatsApp' : 'Continuar por WhatsApp'}</a>
+          </section>}
+        </div>}
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="text-left text-gray-500">
-                    <th className="font-medium pb-2 pr-2">
-                      Rango
-                      <span className="block font-normal text-[10px] text-gray-400">an. eq. / ha</span>
-                    </th>
-                    <th
-                      className={`font-medium pb-2 pr-2 text-right ${
-                        hayCon ? 'text-[#2D5C64]' : ''
-                      }`}
-                    >
-                      Con finanzas
-                    </th>
-                    <th
-                      className={`font-medium pb-2 text-right ${
-                        haySin ? 'text-[#2D5C64]' : ''
-                      }`}
-                    >
-                      Sin finanzas
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {BANDS.map((b) => (
-                    <tr key={b.max} className="border-t border-gray-100">
-                      <td className="py-2 pr-2 text-gray-700">
-                        <span className="whitespace-nowrap">{b.rango} an. eq.</span>
-                        <span className="block text-[10px] text-gray-400 whitespace-nowrap">{b.rango} ha</span>
-                      </td>
-                      <td
-                        className={`py-2 pr-2 text-right tabular-nums ${
-                          hayCon ? 'font-semibold text-gray-900' : 'text-gray-500'
-                        }`}
-                      >
-                        USD {fmtUsd(b.con)}
-                      </td>
-                      <td
-                        className={`py-2 text-right tabular-nums ${
-                          haySin ? 'font-semibold text-gray-900' : 'text-gray-500'
-                        }`}
-                      >
-                        USD {fmtUsd(b.sin)}
-                      </td>
-                    </tr>
-                  ))}
-                  <tr className="border-t border-gray-100">
-                    <td className="py-2 pr-2 text-gray-700">
-                      <span className="whitespace-nowrap">+10.000 an. eq.</span>
-                      <span className="block text-[10px] text-gray-400 whitespace-nowrap">+10.000 ha</span>
-                    </td>
-                    <td colSpan={2} className="py-2 text-right font-semibold text-[#2D5C64]">
-                      Contáctanos
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p className="text-[11px] text-gray-400 mt-3 leading-relaxed">
-              Un rango por pool (no por campo), por mes. El anual aplica 2 meses gratis sobre el total.
-            </p>
-          </div>
-        </div>
-
-        <div className="xl:sticky xl:top-24 self-start">
-          <div className="bg-white rounded-2xl shadow-md border border-gray-200/80 overflow-hidden">
-            <div className="h-1 bg-gradient-to-r from-[#2D5C64] via-[#02C951] to-[#2D5C64]" />
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-1">
-                <Shield className="w-4 h-4 text-[#2D5C64]" />
-                <h3 className="text-lg font-bold text-gray-900">Resumen</h3>
-              </div>
-              <p className="text-sm text-gray-500 mb-4">
-                {campos.length === 1 ? '1 campo' : `${campos.length} campos`}
-              </p>
-
-              <div className="mb-5">
-                <p className="text-xs font-medium text-gray-500 mb-2">Facturación (todos los campos)</p>
-                <div className="inline-flex w-full items-center bg-gray-100 rounded-full p-1 text-sm font-medium">
-                  <button
-                    type="button"
-                    onClick={() => setCycle('monthly')}
-                    className={`flex-1 px-3 py-1.5 rounded-full transition ${
-                      cycle === 'monthly' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    Mensual
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCycle('annual')}
-                    className={`flex-1 px-3 py-1.5 rounded-full transition flex items-center justify-center gap-1.5 ${
-                      cycle === 'annual' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    Anual
-                    <span className="text-[10px] bg-[#F0E8D8] text-[#2D5C64] px-1.5 py-0.5 rounded-full font-semibold">
-                      2 meses gratis
-                    </span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="space-y-3 text-sm border-b border-gray-100 pb-5 mb-5">
-                {campos.map((campo, i) => {
-                  const nom = campo.nombre.trim() || `Campo ${i + 1}`
-                  const mag =
-                    campo.tipo === 'agricultura'
-                      ? `${fmtNum(parseNum(campo.hectareas))} ha`
-                      : `${fmtNum(equivalentes(campo))} an. eq.`
-                  return (
-                    <div key={campo.id} className="flex justify-between gap-3">
-                      <span className="text-gray-500 min-w-0">
-                        <span className="font-medium text-gray-800 block truncate">{nom}</span>
-                        <span className="text-xs">
-                          {TIPO_LABEL[campo.tipo]} · {campo.modalidad === 'con' ? 'Con Finanzas' : 'Sin Finanzas'} · {mag}
-                        </span>
-                      </span>
-                    </div>
-                  )
-                })}
-                {pools.map(({ titulo, quote }, idx) => {
-                  const u = quote.unidad === 'ha' ? 'ha' : 'an. eq.'
-                  const mixto = quote.unidadesCon > 0 && quote.unidadesSin > 0
-                  return (
-                    <div
-                      key={titulo}
-                      className={`space-y-1.5 ${idx === 0 ? 'pt-2 border-t border-gray-100' : ''}`}
-                    >
-                      <div className="flex justify-between gap-3">
-                        <span className="text-gray-500 min-w-0">
-                          <span className="font-medium text-gray-800 block">Pool {titulo}</span>
-                          <span className="text-xs">
-                            {fmtNum(quote.unidades)} {u} · {quote.bandLabel}
-                          </span>
-                        </span>
-                        <span className="font-semibold text-gray-900 text-right shrink-0 tabular-nums">
-                          {quote.kind === 'contact'
-                            ? 'Contáctanos'
-                            : `USD ${fmtUsd(montoPool(quote, cycle)!)}`}
-                        </span>
-                      </div>
-                      {quote.kind === 'usd' && mixto && (
-                        <div className="text-[11px] text-gray-500 space-y-0.5">
-                          <div className="flex justify-between gap-2">
-                            <span>
-                              {fmtNum(quote.unidadesCon)} {u} Con Finanzas
-                            </span>
-                            <span className="tabular-nums">
-                              USD {fmtUsd(escala(quote.parteCon, cycle))}
-                            </span>
-                          </div>
-                          <div className="flex justify-between gap-2">
-                            <span>
-                              {fmtNum(quote.unidadesSin)} {u} Sin Finanzas
-                            </span>
-                            <span className="tabular-nums">
-                              USD {fmtUsd(escala(quote.parteSin, cycle))}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
-                <div className="flex justify-between gap-4 pt-1">
-                  <span className="text-gray-500">Modalidad</span>
-                  <span className="font-semibold text-gray-900 text-right">
-                    {hayCon && haySin ? 'Mixto por campo' : hayCon ? 'Con Finanzas' : 'Sin Finanzas'}
-                  </span>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <span className="text-gray-500">Facturación</span>
-                  <span className="font-semibold text-gray-900 text-right">
-                    {cycle === 'monthly' ? 'Mensual' : 'Anual · 2 meses gratis'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <div className="flex justify-between items-baseline gap-3">
-                  <span className="text-gray-600 font-medium">Total</span>
-                  {needsContact ? (
-                    <span className="text-2xl font-bold text-[#2D5C64]">Contáctanos</span>
-                  ) : (
-                    <span className="text-3xl font-bold text-[#2D5C64] tabular-nums">
-                      USD {fmtUsd(displayTotal)}
-                      <span className="text-sm font-normal text-gray-500 ml-1">{totalLabel}</span>
-                    </span>
-                  )}
-                </div>
-                {!needsContact && cycle === 'annual' && (
-                  <p className="text-xs text-gray-500 text-right mt-1.5">
-                    Equivale a USD {fmtUsd(displayTotal / 12)}/mes
-                  </p>
-                )}
-                <p className="text-xs text-gray-400 mt-2">Más impuestos aplicables</p>
-              </div>
-
-              <a
-                href={contactUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full block text-center bg-[#02C951] hover:bg-[#02b84a] text-white py-3.5 rounded-xl font-semibold transition shadow-sm"
-              >
-                {needsContact ? 'Contáctanos' : 'Continuar por WhatsApp'}
-              </a>
-
-              <p className="text-xs text-center text-gray-400 mt-4 leading-relaxed">
-                Pago seguro · Sin permanencia · Cancelás cuando quieras
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+        {paso > 1 && <button type="button" onClick={() => { setPaso(paso - 1); setResultado(false) }} className="mt-5 inline-flex items-center gap-2 py-2 text-sm font-semibold text-[#2D5C64]"><ArrowLeft size={16} /> Volver</button>}
+        <section className={`${cardClass} mt-8`}><h2 className="text-xl font-bold">Todo esto ya está incluido</h2><p className="mt-2 text-sm text-gray-500">En BotRural y BotRural Plus, para toda tu empresa.</p><ul className="mt-5 grid gap-3 sm:grid-cols-2">{features.map(feature => <li key={feature} className="flex items-center gap-2 text-sm"><Check size={16} className="shrink-0 text-[#16864a]" />{feature}</li>)}</ul><div className="mt-6 rounded-xl bg-[#f0f5f1] p-4 text-sm text-[#2D5C64]"><strong>¿También querés finanzas?</strong> Elegí BotRural Plus en los campos donde lo necesites.</div></section>
+        <div className="mt-6 rounded-xl border border-[#2D5C64]/15 p-5 text-sm leading-relaxed text-gray-600"><strong className="text-[#2D5C64]">Tu producción puede crecer.</strong> Si te pasás de rango, no se bloquea el servicio. Te avisamos y ajustamos el precio al renovar.</div>
+      </main>
     </div>
   )
 }

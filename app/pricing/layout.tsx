@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Precios — BotRural',
   description:
-    'Precio por campo: Agricultura en hectáreas o Ganadería/Mixto en animales equivalentes. Con o sin finanzas. Pago mensual o anual (2 meses gratis).',
+    'Calculá tu precio BotRural según tus vacunos, ovinos y hectáreas de cosecha. BotRural Plus incluye finanzas. Pago mensual o anual con 20% de descuento.',
   alternates: {
     canonical: 'https://pricing.botrural.app',
   },
