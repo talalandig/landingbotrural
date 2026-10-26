@@ -47,7 +47,6 @@ export default function PricingPage() {
   const mensual = Math.round(pools.reduce((total, p) => total + (p.mensual ?? 0), 0) * 100) / 100
   const total = Math.round(mensual * (anual ? 12 * 0.8 : 1) * 100) / 100
   const valido = pools.length > 0
-  const mensaje = ['Hola, quiero contratar BotRural para mi empresa.', `Pago ${anual ? 'anual (20% de descuento)' : 'mensual'}.`, `Plan: ${empresa.plus ? 'BotRural Plus con finanzas' : 'BotRural'}. Empresa ${empresa.tipo}.`, empresa.tipo !== 'agricola' ? `Total: ${numero(empresa.vacunos)} vacunos y ${numero(empresa.ovinos)} ovinos.` : '', empresa.tipo !== 'ganadera' ? `Total: ${numero(empresa.hectareas)} hectáreas de cosecha.` : '', contacto ? 'Quiero una cotización personalizada.' : `Total: USD ${usd(total)}/${anual ? 'año' : 'mes'}.`].filter(Boolean).join('\n')
 
   const inputClass = styles.input
   const cardClass = styles.panel
@@ -132,11 +131,11 @@ export default function PricingPage() {
               <div aria-live="polite" aria-atomic="true" className="mt-4 border-t border-gray-100 pt-4">
                 {!valido ? <><p className="text-xl font-bold text-[#2D5C64]">Tu precio aparece acá</p><p className="mt-2 text-sm leading-relaxed text-gray-500">Ingresá tus cantidades. El total se actualiza automáticamente.</p></> : contacto ? <><p className="text-2xl font-bold text-[#2D5C64]">Una propuesta a tu medida</p><p className="mt-1.5 text-sm text-gray-500">Superás las 10.000 unidades ganaderas o hectáreas de cosecha. Contactanos para cotizar.</p></> : <><p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{anual ? 'Tu precio con pago anual' : 'Tu precio mensual'}</p><p className={styles.price}>US$ {usd(anual ? total / 12 : total)}<span className="ml-1 text-sm font-normal text-gray-500">/mes</span></p>{anual ? <><p className={styles.billingNote}>Se cobra <strong>US$ {usd(total)}</strong> una vez por año.</p><p className="mt-3 inline-flex items-center gap-1 rounded-lg bg-[#00DD59]/15 px-3 py-2 text-xs font-semibold text-[#2D5C64]"><Check size={14} /> Ahorrás USD {usd(mensual * 12 - total)} al año · 20%</p></> : <p className={styles.billingNote}>Se cobra todos los meses.</p>}<p className="mt-3 text-xs text-gray-400">Más impuestos aplicables.</p></>}
               </div>
-              {valido ? <a href={`https://wa.me/59899465242?text=${encodeURIComponent(mensaje)}`} target="_blank" rel="noopener noreferrer" className={styles.cta}>{contacto ? 'Pedir una propuesta' : 'Continuar por WhatsApp'}</a> : <button type="button" disabled className="mt-4 w-full rounded-xl bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-400">Completá tus cantidades</button>}
+              {valido ? <a href="https://app.botrural.app/register" className={styles.cta}>Probar 25 días gratis</a> : <button type="button" disabled className="mt-4 w-full rounded-xl bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-400">Completá tus cantidades</button>}
             </div>
           </div>
         </aside>
-        <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-[#2D5C64]/15 bg-white px-4 py-3 shadow-lg md:hidden"><div><p className="text-xs text-gray-500">BotRural{empresa.plus ? ' Plus' : ''} · {anual ? 'Anual' : 'Mensual'}</p><p className="mt-1 font-bold text-[#2D5C64]">{!valido ? 'Ingresá tus cantidades' : contacto ? 'Contactanos' : `USD ${usd(anual ? total / 12 : total)}/mes`}</p></div>{valido && <a href={`https://wa.me/59899465242?text=${encodeURIComponent(mensaje)}`} target="_blank" rel="noopener noreferrer" className="rounded-xl bg-[#00DD59] px-4 py-3 text-sm font-semibold text-black">{contacto ? 'Consultar' : 'Continuar'}</a>}</div>
+        <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-[#2D5C64]/15 bg-white px-4 py-3 shadow-lg md:hidden"><div><p className="text-xs text-gray-500">BotRural{empresa.plus ? ' Plus' : ''} · {anual ? 'Anual' : 'Mensual'}</p><p className="mt-1 font-bold text-[#2D5C64]">{!valido ? 'Ingresá tus cantidades' : contacto ? 'Contactanos' : `USD ${usd(anual ? total / 12 : total)}/mes`}</p></div>{valido && <a href="https://app.botrural.app/register" className="rounded-xl bg-[#00DD59] px-4 py-3 text-sm font-semibold text-black">Probar 25 días gratis</a>}</div>
       </main>
     </div>
   )
