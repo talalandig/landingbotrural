@@ -100,7 +100,7 @@ export default function PricingPage() {
           <div className={styles.planGrid} role="group" aria-label="Elegí tu plan">
             {[false, true].map(plus => <button key={String(plus)} type="button" aria-pressed={empresa.plus === plus} onClick={() => update({ plus })} className={styles.planCard}>
               <span className={styles.planTitle}><strong>BotRural</strong>{plus && <span className={styles.planBadge}>Plus</span>}<span className={styles.planIndicator} aria-hidden="true">{empresa.plus === plus && <Check size={12} strokeWidth={3} />}</span></span>
-              <span className={styles.planDescription}>{plus ? 'Todo BotRural + finanzas. Organizá facturas, pagos y cobros, y conocé el resultado económico de tu operación.' : 'Ganadería, agricultura, tareas, inventario, mapas y trazabilidad individual.'}</span>
+              <span className={styles.planDescription}>{plus ? 'Todo BotRural + finanzas. Organizá facturas, pagos y cobros, y conocé el resultado económico de tu operación.' : 'Ganadería, agricultura, recordatorios por WhatsApp, inventario, mapas y trazabilidad individual.'}</span>
             </button>)}
           </div>
         </section>
