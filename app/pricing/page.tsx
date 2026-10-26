@@ -58,7 +58,7 @@ export default function PricingPage() {
       <section className={styles.hero}>
         <span className={styles.eyebrow}>Precios BotRural</span>
         <h1 className="mt-3 text-2xl font-bold tracking-tight sm:text-4xl">Tu empresa, tu plan, tu precio.</h1>
-        <p className="mx-auto mt-2 max-w-xl text-sm text-white/70">Contanos cómo trabajás y calculá tu precio en tres pasos.</p>
+        <p className="mx-auto mt-2 max-w-xl text-sm text-white/70">Contanos cómo trabajás y calculá tu precio en cuatro pasos.</p>
       </section>
 
       <main className={styles.workspace}>
@@ -87,17 +87,23 @@ export default function PricingPage() {
             <div className={styles.quantities}>
               {empresa.tipo !== 'agricola' && <><div className={styles.animalGrid}>{(['vacunos', 'ovinos'] as const).map(key => <label key={key} className="text-sm font-semibold"><span className={styles.inputLabel}><span>{key === 'vacunos' ? 'Cantidad promedio de vacunos' : 'Ovinos'}</span>{key === 'ovinos' && <span className={styles.equivalence}><span>1 vacuno = 1 unidad</span><span>5 ovinos = 1 unidad</span></span>}</span><input type="number" min="0" step="1" inputMode="numeric" placeholder="0" value={empresa[key]} onChange={e => update({ [key]: e.target.value })} className={inputClass} /></label>)}</div></>}
               {empresa.tipo !== 'ganadera' && <label className="mt-4 block text-sm font-semibold">Hectáreas de cosecha<div className="relative"><input type="number" min="0" step="any" inputMode="decimal" placeholder="0" value={empresa.hectareas} onChange={e => update({ hectareas: e.target.value })} className={`${inputClass} pr-24`} /><span className="absolute right-3 top-5 text-sm font-normal text-gray-400">hectáreas</span></div><span className="mt-2 block text-xs font-normal leading-relaxed text-gray-500">Solo las que destinás para cosecha. No cuentan pasturas ni verdeos para el ganado.</span></label>}
-              <div className="mt-4 border-t border-gray-200 pt-4">
-                <p className="text-sm font-semibold text-[#2D5C64]">BotRural incluye toda la gestión de tu empresa</p>
-                <label className={`${styles.finance} mt-3 flex cursor-pointer items-start gap-3 rounded-xl border-2 p-3 transition ${empresa.plus ? 'border-[#2D5C64] bg-[#2D5C64]/10' : 'border-gray-200 bg-white hover:border-[#2D5C64]/40'}`}>
-                  <input type="checkbox" checked={empresa.plus} onChange={e => update({ plus: e.target.checked })} className="mt-1 h-5 w-5 shrink-0 accent-[#2D5C64]" />
-                  <span className="flex-1"><span className="flex flex-wrap items-center justify-between gap-2"><strong className="text-base">Agregar finanzas</strong><span className="rounded-full bg-[#2D5C64] px-2.5 py-1 text-xs font-semibold text-white">BotRural Plus</span></span><span className="mt-2 block text-sm leading-relaxed text-gray-500">Llevá el control de los gastos e ingresos de tu empresa y conocé tus resultados.</span>{empresa.plus && <span className="mt-2 flex items-center gap-1 text-xs font-semibold text-[#2D5C64]"><Check size={14} /> Finanzas agregadas · BotRural Plus activado</span>}</span>
-                </label>
-              </div>
+
             </div>
           </section>
 
         </div>
+
+        <section className={cardClass}>
+          <p className={styles.step}><span>04</span><span>Paso 4</span></p>
+          <h2 className="mt-1 text-lg font-bold sm:text-xl">Elegí tu plan</h2>
+          <p className="mt-1.5 text-sm text-gray-500">La única diferencia es finanzas. Todo lo demás está incluido en ambos.</p>
+          <div className={styles.planGrid} role="group" aria-label="Elegí tu plan">
+            {[false, true].map(plus => <button key={String(plus)} type="button" aria-pressed={empresa.plus === plus} onClick={() => update({ plus })} className={styles.planCard}>
+              <span className={styles.planTitle}><strong>BotRural{plus ? ' Plus' : ''}</strong>{plus && <span className={styles.planBadge}>FINANZAS</span>}<span className={styles.planIndicator} aria-hidden="true">{empresa.plus === plus && <Check size={12} strokeWidth={3} />}</span></span>
+              <span className={styles.planDescription}>{plus ? 'Todas las funciones de BotRural + finanzas: gastos, ingresos y resultados.' : 'Ganadería, agricultura, tareas, inventario, mapas y trazabilidad individual.'}</span>
+            </button>)}
+          </div>
+        </section>
 
         <section className={`${cardClass} mt-4`}>
           <h2 className="text-lg font-bold">Todo lo que incluye tu plan</h2>

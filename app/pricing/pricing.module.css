@@ -73,3 +73,16 @@
 .summaryBody [aria-live] .billingNote { margin-top: 10px; font-size: 13px; line-height: 1.7; color: #687772; }
 .billingNote strong { font-weight: 600; color: #253a34; }
 @media (max-width: 959px) and (min-width: 768px) { .summaryBody .price { font-size: 34px; } }
+
+.planGrid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-top: 17px; }
+.planCard { padding: 18px 16px; border: 1px solid #dce3e0; border-radius: 10px; background: #fff; text-align: left; transition: background .15s, border-color .15s, box-shadow .15s; }
+.planCard:hover { border-color: #7c9996; }
+.planCard[aria-pressed='true'] { border-color: #2d5c64; background: #f1f8f4; box-shadow: 0 0 0 2px #2d5c6410; }
+.planCard:focus-visible { outline: 3px solid #00dd59; outline-offset: 3px; }
+.planTitle { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.planTitle strong { font-size: 16px; font-weight: 600; letter-spacing: -.035em; }
+.planBadge { border-radius: 4px; background: #2d5c64; color: white; padding: 3px 5px; font-size: 8px; font-weight: 600; letter-spacing: .055em; }
+.planIndicator { display: inline-flex; justify-content: center; align-items: center; margin-left: auto; width: 17px; height: 17px; border-radius: 50%; border: 1px solid #c9d5d0; }
+.planCard[aria-pressed='true'] .planIndicator { background: #00dd59; border-color: #00dd59; color: #102c1b; }
+.planDescription { display: block; margin-top: 9px; font-size: 12px; line-height: 1.65; color: #687772; }
+@media (max-width: 479px) { .planGrid { grid-template-columns: 1fr; gap: 9px; } .planCard { padding: 15px; } }
