@@ -27,7 +27,7 @@ export default function WhatsAppFloat() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactanos por WhatsApp"
-        className={`${EDGE} flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-transform`}
+        className={`${EDGE} hidden md:flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-transform`}
       >
         <WhatsAppIcon />
       </a>
