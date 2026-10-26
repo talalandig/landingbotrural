@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowLeft, ArrowRight, Check, Plus, ShieldCheck, Sparkles, Trash2 } from 'lucide-react'
+import { Check, Plus, ShieldCheck, Sparkles, Trash2 } from 'lucide-react'
 import Header from '../components/Header'
 
 type Tipo = 'ganadera' | 'mixta' | 'agricola'
@@ -44,11 +44,10 @@ function cotizar(campos: Campo[]) {
 }
 
 export default function PricingPage() {
-  const [paso, setPaso] = useState(1)
   const [anual, setAnual] = useState(false)
   const [campos, setCampos] = useState<Campo[]>([nuevoCampo(1)])
   const [resultado, setResultado] = useState(false)
-  const update = (id: number, patch: Partial<Campo>) => { setCampos(prev => prev.map(c => c.id === id ? { ...c, ...patch } : c)); setResultado(false) }
+  const update = (id: number, patch: Partial<Campo>) => { setCampos(prev => prev.map(c => c.id === id ? { ...c, ...patch } : c)) }
   const pools = cotizar(campos)
   const contacto = pools.some(p => p.mensual === null)
   const mensual = Math.round(pools.reduce((total, p) => total + (p.mensual ?? 0), 0) * 100) / 100
@@ -68,46 +67,46 @@ export default function PricingPage() {
       </section>
 
       <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
-        <nav aria-label="Pasos de la calculadora" className="mb-8 grid grid-cols-3 gap-2">
-          {['Cómo pagar', 'Tu empresa', 'Cantidades'].map((label, i) => <button key={label} type="button" disabled={i + 1 > paso} onClick={() => { setPaso(i + 1); setResultado(false) }} aria-current={paso === i + 1 ? 'step' : undefined} className={`flex items-center justify-center gap-2 rounded-xl px-2 py-3 text-xs font-semibold sm:text-sm ${paso === i + 1 ? 'bg-[#2D5C64] text-white' : 'bg-[#eaece7] text-[#2D5C64]'} disabled:opacity-40`}><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-current">{i + 1}</span>{label}</button>)}
-        </nav>
-
-        {paso === 1 && <section className={cardClass}>
+        <section className={cardClass}>
           <p className="text-sm font-semibold text-[#2D5C64]">PASO 1</p>
           <h2 className="mt-2 text-2xl font-bold">¿Cómo querés pagar?</h2>
           <p className="mt-2 text-sm text-gray-500">Elegí la modalidad para todos tus campos.</p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {[false, true].map(value => <button key={String(value)} type="button" aria-pressed={anual === value} onClick={() => setAnual(value)} className={`relative rounded-2xl border-2 p-6 text-left transition ${anual === value ? 'border-[#2D5C64] bg-[#f0f5f1]' : 'border-gray-200 hover:border-[#2D5C64]/50'}`}><span className="block text-xl font-bold">{value ? 'Anual' : 'Mensual'}</span><span className="mt-2 block text-sm text-gray-600">{value ? 'Un pago por todo el año.' : 'Se cobra todos los meses.'}</span>{value && <span className="mt-4 inline-block rounded-full bg-[#02C951]/15 px-3 py-1 text-sm font-bold text-[#21613b]">Ahorrás un 20%</span>}{anual === value && <Check size={20} className="absolute right-4 top-5 text-[#2D5C64]" />}</button>)}
           </div>
-          <button type="button" onClick={() => setPaso(2)} className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2D5C64] py-3.5 font-semibold text-white">Continuar <ArrowRight size={18} /></button>
-        </section>}
+        </section>
 
-        {paso === 2 && <section className={cardClass}>
+        <section className={`${cardClass} mt-5`}>
           <p className="text-sm font-semibold text-[#2D5C64]">PASO 2</p>
           <h2 className="mt-2 text-2xl font-bold">¿Qué tipo de empresa tenés?</h2>
           <p className="mt-2 text-sm text-gray-500">Así te pedimos solo los datos que corresponden.</p>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">{tipos.map(t => <button key={t.value} type="button" aria-pressed={campos[0].tipo === t.value} onClick={() => update(campos[0].id, { tipo: t.value })} className={`rounded-xl border-2 p-5 text-left ${campos[0].tipo === t.value ? 'border-[#2D5C64] bg-[#f0f5f1]' : 'border-gray-200'}`}><span className="block text-lg font-bold">{t.label}</span><span className="mt-2 block text-sm text-gray-500">{t.description}</span></button>)}</div>
-          <button type="button" onClick={() => setPaso(3)} className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2D5C64] py-3.5 font-semibold text-white">Continuar <ArrowRight size={18} /></button>
-        </section>}
+        </section>
 
-        {paso === 3 && <div className="space-y-5">
+        <div className="mt-5 space-y-5">
           <section className={cardClass}>
             <p className="text-sm font-semibold text-[#2D5C64]">PASO 3</p>
             <h2 className="mt-2 text-2xl font-bold">Contanos cuánto producís</h2>
-            <p className="mt-2 text-sm text-gray-500">Ingresá las cantidades y elegí el plan de cada campo.</p>
+            <p className="mt-2 text-sm text-gray-500">Ingresá las cantidades de cada campo. Si querés, agregá finanzas.</p>
             <div className="mt-6 space-y-5">{campos.map((c, i) => <div key={c.id} className="rounded-2xl border border-gray-200 bg-[#fafbf9] p-4 sm:p-5">
               <div className="mb-4 flex items-center gap-3"><label className="flex-1 text-xs font-medium text-gray-500">Nombre del campo<input value={c.nombre} onChange={e => update(c.id, { nombre: e.target.value })} className="mt-1 block w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-base font-semibold text-gray-900" /></label>{campos.length > 1 && <button type="button" aria-label={`Quitar ${c.nombre}`} onClick={() => { setCampos(prev => prev.filter(item => item.id !== c.id)); setResultado(false) }} className="rounded-lg p-2 text-gray-500 hover:bg-red-50 hover:text-red-600"><Trash2 size={18} /></button>}</div>
               {i > 0 && <label className="mb-4 block text-sm font-medium">Tipo de campo<select value={c.tipo} onChange={e => update(c.id, { tipo: e.target.value as Tipo })} className="ml-3 rounded-lg border border-gray-200 bg-white p-2">{tipos.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}</select></label>}
               {c.tipo !== 'agricola' && <><div className="grid grid-cols-2 gap-3">{(['vacunos', 'ovinos'] as const).map(key => <label key={key} className="text-sm font-semibold">{key === 'vacunos' ? 'Vacunos' : 'Ovinos'}<input type="number" min="0" step="1" inputMode="numeric" placeholder="0" value={c[key]} onChange={e => update(c.id, { [key]: e.target.value })} className={inputClass} /></label>)}</div><p className="mt-2 text-xs text-gray-500">1 vacuno = 1 unidad · 5 ovinos = 1 unidad.</p></>}
               {c.tipo !== 'ganadera' && <label className="mt-5 block text-sm font-semibold">Hectáreas de cosecha<div className="relative"><input type="number" min="0" step="any" inputMode="decimal" placeholder="0" value={c.hectareas} onChange={e => update(c.id, { hectareas: e.target.value })} className={`${inputClass} pr-24`} /><span className="absolute right-4 top-6 text-sm font-normal text-gray-400">hectáreas</span></div><span className="mt-2 block text-xs font-normal leading-relaxed text-gray-500">Solo las que destinás para cosecha. No cuentan pasturas ni verdeos para el ganado.</span></label>}
-              <fieldset className="mt-5"><legend className="mb-2 text-sm font-semibold">Elegí tu plan</legend><div className="grid gap-3 sm:grid-cols-2">{[false, true].map(plus => <label key={String(plus)} className={`flex cursor-pointer items-start gap-2 rounded-xl border-2 p-3 ${c.plus === plus ? 'border-[#2D5C64] bg-[#f0f5f1]' : 'border-gray-200 bg-white'}`}><input type="radio" name={`plan-${c.id}`} checked={c.plus === plus} onChange={() => update(c.id, { plus })} className="mt-1 accent-[#2D5C64]" /><span><strong className="block text-sm">BotRural{plus ? ' Plus' : ''}</strong><span className="mt-1 block text-xs text-gray-500">{plus ? 'Todo BotRural + finanzas' : 'Toda la gestión de tu campo'}</span></span></label>)}</div></fieldset>
+              <div className="mt-5 border-t border-gray-200 pt-5">
+                <p className="text-sm font-semibold text-[#2D5C64]">BotRural incluye toda la gestión de tu campo</p>
+                <label className={`mt-3 flex cursor-pointer items-start gap-3 rounded-xl border-2 p-4 transition ${c.plus ? 'border-[#2D5C64] bg-[#edf5ee]' : 'border-gray-200 bg-white hover:border-[#2D5C64]/40'}`}>
+                  <input type="checkbox" checked={c.plus} onChange={e => update(c.id, { plus: e.target.checked })} className="mt-1 h-5 w-5 shrink-0 accent-[#2D5C64]" />
+                  <span className="flex-1"><span className="flex flex-wrap items-center justify-between gap-2"><strong className="text-base">Agregar finanzas</strong><span className="rounded-full bg-[#2D5C64] px-2.5 py-1 text-xs font-semibold text-white">BotRural Plus</span></span><span className="mt-2 block text-sm leading-relaxed text-gray-500">Sumá facturas de gastos y ventas e informes financieros a este campo.</span>{c.plus && <span className="mt-2 flex items-center gap-1 text-xs font-semibold text-[#21613b]"><Check size={14} /> Finanzas agregado · BotRural Plus activado</span>}</span>
+                </label>
+              </div>
             </div>)}</div>
             <button type="button" onClick={() => { setCampos(prev => [...prev, nuevoCampo(Math.max(...prev.map(c => c.id)) + 1)]); setResultado(false) }} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#2D5C64]/30 py-3 text-sm font-semibold text-[#2D5C64]"><Plus size={16} /> Agregar otro campo</button>
             <p className="mt-3 text-xs text-gray-500">Los animales se suman entre campos. Las hectáreas de cosecha se calculan por separado.</p>
             <button type="button" disabled={!valido} onClick={() => setResultado(true)} className="mt-6 w-full rounded-xl bg-[#02C951] py-4 font-bold text-[#123b22] disabled:cursor-not-allowed disabled:opacity-40">Calcular mi precio</button>
             {!valido && <p className="mt-2 text-center text-xs text-gray-500">Ingresá al menos una cantidad mayor a cero en cada campo.</p>}
           </section>
-          {resultado && <section aria-live="polite" className="rounded-2xl bg-[#234b52] p-6 text-white sm:p-8">
+          {resultado && valido && <section aria-live="polite" className="rounded-2xl bg-[#234b52] p-6 text-white sm:p-8">
             <span className="flex items-center gap-2 text-sm text-white/70"><ShieldCheck size={18} /> Tu cotización personalizada</span>
             <h2 className="mt-4 text-3xl font-bold sm:text-4xl">{contacto ? 'Hablemos de tu empresa' : `USD ${usd(total)}`} {!contacto && <span className="text-base font-normal text-white/60">/{anual ? 'año' : 'mes'}</span>}</h2>
             {contacto ? <p className="mt-3 text-sm text-white/75">Superás las 10.000 unidades ganaderas o hectáreas de cosecha. Te preparamos una propuesta a medida.</p> : anual ? <p className="mt-3 text-sm text-white/80">Un pago anual · Equivale a USD {usd(total / 12)}/mes.<br /><span className="text-[#7ce8a6]">Ahorrás USD {usd(mensual * 12 - total)} al año (20%).</span></p> : <p className="mt-3 text-sm text-white/75">Se cobra todos los meses.</p>}
@@ -116,10 +115,9 @@ export default function PricingPage() {
             {!contacto && <p className="mt-3 text-xs text-white/60">Más impuestos aplicables.</p>}
             <a href={`https://wa.me/59899465242?text=${encodeURIComponent(mensaje)}`} target="_blank" rel="noopener noreferrer" className="mt-6 block rounded-xl bg-[#02C951] px-4 py-4 text-center font-bold text-[#123b22]">{contacto ? 'Pedir mi propuesta por WhatsApp' : 'Continuar por WhatsApp'}</a>
           </section>}
-        </div>}
+        </div>
 
-        {paso > 1 && <button type="button" onClick={() => { setPaso(paso - 1); setResultado(false) }} className="mt-5 inline-flex items-center gap-2 py-2 text-sm font-semibold text-[#2D5C64]"><ArrowLeft size={16} /> Volver</button>}
-        <section className={`${cardClass} mt-8`}><h2 className="text-xl font-bold">Todo esto ya está incluido</h2><p className="mt-2 text-sm text-gray-500">En BotRural y BotRural Plus, para toda tu empresa.</p><ul className="mt-5 grid gap-3 sm:grid-cols-2">{features.map(feature => <li key={feature} className="flex items-center gap-2 text-sm"><Check size={16} className="shrink-0 text-[#16864a]" />{feature}</li>)}</ul><div className="mt-6 rounded-xl bg-[#f0f5f1] p-4 text-sm text-[#2D5C64]"><strong>¿También querés finanzas?</strong> Elegí BotRural Plus en los campos donde lo necesites.</div></section>
+        <section className={`${cardClass} mt-8`}><h2 className="text-xl font-bold">Todo esto ya está incluido</h2><p className="mt-2 text-sm text-gray-500">En BotRural y BotRural Plus, para toda tu empresa.</p><ul className="mt-5 grid gap-3 sm:grid-cols-2">{features.map(feature => <li key={feature} className="flex items-center gap-2 text-sm"><Check size={16} className="shrink-0 text-[#16864a]" />{feature}</li>)}</ul><div className="mt-6 rounded-xl bg-[#f0f5f1] p-4 text-sm text-[#2D5C64]"><span className="flex items-center gap-2 font-semibold"><Check size={18} /> Finanzas con BotRural Plus</span><span className="mt-2 block text-gray-600">Un agregado opcional: marcá «Agregar finanzas» en los campos donde lo necesites.</span></div></section>
         <div className="mt-6 rounded-xl border border-[#2D5C64]/15 p-5 text-sm leading-relaxed text-gray-600"><strong className="text-[#2D5C64]">Tu producción puede crecer.</strong> Si te pasás de rango, no se bloquea el servicio. Te avisamos y ajustamos el precio al renovar.</div>
       </main>
     </div>
