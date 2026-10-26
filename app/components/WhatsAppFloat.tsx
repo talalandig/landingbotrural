@@ -14,7 +14,7 @@ function WhatsAppIcon({ className = 'w-6 h-6' }: { className?: string }) {
 }
 
 const EDGE =
-  'fixed z-50 right-[max(0.5rem,env(safe-area-inset-right))] bottom-[max(0.75rem,env(safe-area-inset-bottom))] md:right-[max(0.75rem,env(safe-area-inset-right))] md:bottom-[max(1rem,env(safe-area-inset-bottom))]'
+  'fixed z-50 right-[max(0.5rem,env(safe-area-inset-right))] bottom-[calc(6rem+env(safe-area-inset-bottom))] md:right-[max(0.75rem,env(safe-area-inset-right))] md:bottom-[max(1rem,env(safe-area-inset-bottom))]'
 
 export default function WhatsAppFloat() {
   const pathname = usePathname()
@@ -27,7 +27,7 @@ export default function WhatsAppFloat() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactanos por WhatsApp"
-        className={`${EDGE} hidden md:flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-transform`}
+        className={`${EDGE} flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-transform`}
       >
         <WhatsAppIcon />
       </a>
