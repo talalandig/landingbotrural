@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, ShieldCheck } from 'lucide-react'
+import { Check } from 'lucide-react'
 import Header from '../components/Header'
 import styles from './pricing.module.css'
 
@@ -113,9 +113,9 @@ export default function PricingPage() {
         <aside aria-label="Resumen de tu suscripción" className={styles.summary}>
           <div className={styles.summaryCard}>
             <div className={styles.summaryHeader}>
-              <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/70"><ShieldCheck size={16} /> Tu suscripción</span>
-              <div className="mt-3 flex items-center justify-between gap-2"><h2 className="text-2xl font-bold text-white">BotRural{empresa.plus ? ' Plus' : ''}</h2><span className="rounded-full border border-[#2D5C64]/20 bg-white px-3 py-1 text-xs font-semibold text-[#2D5C64]">{anual ? 'Anual' : 'Mensual'}</span></div>
-              <p className="mt-1.5 text-sm text-white/70">Una suscripción para toda tu empresa.</p>
+              <div className={styles.summaryTopline}><span>Tu suscripción</span><span className={styles.cycleTag}>{anual ? 'Pago anual' : 'Pago mensual'}</span></div>
+              <h2 className={styles.summaryPlan}>BotRural{empresa.plus && <span className={styles.summaryPlus}>Plus</span>}</h2>
+
             </div>
             <div className={styles.summaryBody}>
               <dl className="space-y-2 text-sm">
