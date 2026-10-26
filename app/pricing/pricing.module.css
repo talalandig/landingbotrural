@@ -97,3 +97,5 @@
 .summaryTopline > .cycleTag { border: 1px solid #ffffff24; background: #ffffff08; padding: 4px 8px; border-radius: 5px; color: #e6eeec; font-size: 10px; font-weight: 500; }
 .summaryHeader > .summaryPlan { display: flex; align-items: center; gap: 10px; margin: 17px 0 0; font-size: 30px; font-weight: 550; line-height: 1.2; letter-spacing: -.045em; color: white; }
 .summaryPlus { display: inline-flex; align-items: center; border: 1px solid #00dd5950; border-radius: 5px; background: #00dd5914; padding: 4px 9px; color: #6aee9c; font-size: 17px; font-weight: 500; letter-spacing: -.025em; line-height: 1.1; }
+
+.panel > .step { font-size: 14px; font-weight: 650; padding: 6px 12px; margin-bottom: 12px; border-left-width: 3px; }
