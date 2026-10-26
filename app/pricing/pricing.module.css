@@ -101,3 +101,5 @@
 .panel > .step { font-size: 14px; font-weight: 650; padding: 6px 12px; margin-bottom: 12px; border-left-width: 3px; }
 
 .panel > .step { background: #fff1df; border-left-color: #e98a22; color: #924a0b; font-size: 14px; font-weight: 650; }
+
+.panel > .step { background: #ffb55c; color: #23170c; border: 1px solid #ee9b38; border-left-width: 1px; border-radius: 6px; padding: 6px 13px; font-size: 15px; font-weight: 750; line-height: 1.5; letter-spacing: 0; margin-bottom: 13px; }
