@@ -17,7 +17,7 @@ const bands = [
   { max: 10000, base: 108.99, plus: 153.99 },
 ]
 const tipos: { value: Tipo; label: string; description: string }[] = [
-  { value: 'ganadera', label: 'Ganadera', description: 'Vacunos y ovinos' },
+  { value: 'ganadera', label: 'Ganadería', description: '' },
   { value: 'mixta', label: 'Mixta', description: 'Ganadería y cosecha' },
   { value: 'agricola', label: 'Agrícola', description: 'Hectáreas de cosecha' },
 ]
@@ -75,7 +75,7 @@ export default function PricingPage() {
           <p className={styles.step}>Paso 2</p>
           <h2 className="mt-1 text-lg font-bold sm:text-xl">¿Qué tipo de empresa tenés?</h2>
           <p className="mt-1.5 text-sm text-gray-500">Así te pedimos solo los datos que corresponden.</p>
-          <div className="mt-4 grid grid-cols-3 gap-2">{tipos.map(t => <button key={t.value} type="button" aria-pressed={empresa.tipo === t.value} onClick={() => update({ tipo: t.value })} className={`${styles.option} min-w-0 rounded-xl border-2 px-2 py-3 text-left sm:px-3 ${empresa.tipo === t.value ? 'border-[#2D5C64] bg-[#2D5C64]/10' : 'border-gray-200'}`}><span className="block text-sm font-semibold">{t.label}</span><span className="mt-1 block text-[11px] leading-relaxed text-gray-500">{t.description}</span></button>)}</div>
+          <div className="mt-4 grid grid-cols-3 gap-2">{tipos.map(t => <button key={t.value} type="button" aria-pressed={empresa.tipo === t.value} onClick={() => update({ tipo: t.value })} className={`${styles.option} min-w-0 rounded-xl border-2 px-2 py-3 text-left sm:px-3 ${empresa.tipo === t.value ? 'border-[#2D5C64] bg-[#2D5C64]/10' : 'border-gray-200'}`}><span className="block text-sm font-semibold">{t.label}</span>{t.description && <span className="mt-1 block text-[11px] leading-relaxed text-gray-500">{t.description}</span>}</button>)}</div>
         </section>
 
         <div className="mt-3 space-y-3">
