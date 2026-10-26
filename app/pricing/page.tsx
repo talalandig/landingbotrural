@@ -40,7 +40,6 @@ function cotizar(empresa: Empresa) {
 export default function PricingPage() {
   const [anual, setAnual] = useState(false)
   const [empresa, setEmpresa] = useState<Empresa>(nuevaEmpresa)
-  const [resultado, setResultado] = useState(false)
   const update = (patch: Partial<Empresa>) => setEmpresa(prev => ({ ...prev, ...patch }))
   const pools = cotizar(empresa)
   const contacto = pools.some(p => p.mensual === null)
@@ -61,7 +60,8 @@ export default function PricingPage() {
         <p className="mx-auto mt-4 max-w-xl text-white/75">Contanos cómo trabajás y calculá tu precio en tres pasos.</p>
       </section>
 
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <main className="mx-auto grid max-w-6xl items-start gap-7 px-4 py-8 pb-28 lg:grid-cols-[minmax(0,1fr)_340px] sm:py-12">
+        <div>
         <section className={cardClass}>
           <p className="text-sm font-semibold text-[#2D5C64]">PASO 1</p>
           <h2 className="mt-2 text-2xl font-bold">¿Cómo querés pagar?</h2>
@@ -95,22 +95,37 @@ export default function PricingPage() {
               </div>
             </div>
             <p className="mt-3 text-xs leading-relaxed text-gray-500">Sumá los vacunos, ovinos y hectáreas de cosecha de toda tu empresa. Después podés administrar tus campos y tu equipo dentro de BotRural. Las hectáreas de cosecha se calculan por separado.</p>
-            <button type="button" disabled={!valido} onClick={() => setResultado(true)} className="mt-6 w-full rounded-xl bg-[#02C951] py-4 font-bold text-[#123b22] disabled:cursor-not-allowed disabled:opacity-40">Calcular mi precio</button>
-            {!valido && <p className="mt-2 text-center text-xs text-gray-500">Ingresá al menos una cantidad mayor a cero para tu empresa.</p>}
+            {!valido && <p className="mt-4 text-sm text-gray-500">Completá tus cantidades y vas a ver tu precio al instante.</p>}
           </section>
-          {resultado && valido && <section aria-live="polite" className="rounded-2xl bg-[#234b52] p-6 text-white sm:p-8">
-            <span className="flex items-center gap-2 text-sm text-white/70"><ShieldCheck size={18} /> Tu cotización personalizada</span>
-            <h2 className="mt-4 text-3xl font-bold sm:text-4xl">{contacto ? 'Hablemos de tu empresa' : `USD ${usd(total)}`} {!contacto && <span className="text-base font-normal text-white/60">/{anual ? 'año' : 'mes'}</span>}</h2>
-            {contacto ? <p className="mt-3 text-sm text-white/75">Superás las 10.000 unidades ganaderas o hectáreas de cosecha. Te preparamos una propuesta a medida.</p> : anual ? <p className="mt-3 text-sm text-white/80">Un pago anual · Equivale a USD {usd(total / 12)}/mes.<br /><span className="text-[#7ce8a6]">Ahorrás USD {usd(mensual * 12 - total)} al año (20%).</span></p> : <p className="mt-3 text-sm text-white/75">Se cobra todos los meses.</p>}
-            <div className="mt-6 space-y-3 border-t border-white/15 pt-5">{pools.map(p => <div key={p.nombre} className="flex flex-wrap justify-between gap-2 text-sm"><span>{cantidad(p.total)} {p.unidad}</span><span className="font-semibold">{p.mensual === null ? 'Contactanos' : `USD ${usd(p.mensual * (anual ? 9.6 : 1))}/${anual ? 'año' : 'mes'}`}</span></div>)}</div>
-            <p className="mt-4 text-xs text-white/60">{empresa.plus ? 'BotRural Plus · Finanzas incluidas' : 'BotRural'} · Para toda tu empresa</p>
-            {!contacto && <p className="mt-3 text-xs text-white/60">Más impuestos aplicables.</p>}
-            <a href={`https://wa.me/59899465242?text=${encodeURIComponent(mensaje)}`} target="_blank" rel="noopener noreferrer" className="mt-6 block rounded-xl bg-[#02C951] px-4 py-4 text-center font-bold text-[#123b22]">{contacto ? 'Pedir mi propuesta por WhatsApp' : 'Continuar por WhatsApp'}</a>
-          </section>}
+
         </div>
 
         <section className={`${cardClass} mt-8`}><h2 className="text-xl font-bold">Todo esto ya está incluido</h2><p className="mt-2 text-sm text-gray-500">En BotRural y BotRural Plus, para toda tu empresa.</p><ul className="mt-5 grid gap-3 sm:grid-cols-2">{features.map(feature => <li key={feature} className="flex items-center gap-2 text-sm"><Check size={16} className="shrink-0 text-[#16864a]" />{feature}</li>)}</ul><div className="mt-6 rounded-xl bg-[#f0f5f1] p-4 text-sm text-[#2D5C64]"><span className="flex items-center gap-2 font-semibold"><Check size={18} /> Finanzas con BotRural Plus</span><span className="mt-2 block text-gray-600">Un agregado opcional: marcá «Agregar finanzas» para toda tu empresa.</span></div></section>
         <div className="mt-6 rounded-xl border border-[#2D5C64]/15 p-5 text-sm leading-relaxed text-gray-600"><strong className="text-[#2D5C64]">Tu producción puede crecer.</strong> Si te pasás de rango, no se bloquea el servicio. Te avisamos y ajustamos el precio al renovar.</div>
+        </div>
+        <aside aria-label="Resumen de tu suscripción" className="self-start lg:sticky lg:top-24">
+          <div className="overflow-hidden rounded-3xl border border-[#2D5C64]/15 bg-white shadow-lg shadow-[#234b52]/5">
+            <div className="bg-[#f0f5f1] p-6">
+              <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#2D5C64]"><ShieldCheck size={16} /> Tu suscripción</span>
+              <div className="mt-4 flex items-center justify-between gap-2"><h2 className="text-2xl font-bold text-[#234b52]">BotRural{empresa.plus ? ' Plus' : ''}</h2><span className="rounded-full border border-[#2D5C64]/20 bg-white px-3 py-1 text-xs font-semibold text-[#2D5C64]">{anual ? 'Anual' : 'Mensual'}</span></div>
+              <p className="mt-2 text-sm text-gray-500">Una suscripción para toda tu empresa.</p>
+            </div>
+            <div className="p-6">
+              <dl className="space-y-3 text-sm">
+                <div className="flex justify-between"><dt className="text-gray-500">Empresa</dt><dd className="font-semibold">{tipos.find(t => t.value === empresa.tipo)?.label}</dd></div>
+                {empresa.tipo !== 'agricola' && <><div className="flex justify-between"><dt className="text-gray-500">Vacunos</dt><dd className="font-semibold tabular-nums">{cantidad(numero(empresa.vacunos))}</dd></div><div className="flex justify-between"><dt className="text-gray-500">Ovinos</dt><dd className="font-semibold tabular-nums">{cantidad(numero(empresa.ovinos))}</dd></div></>}
+                {empresa.tipo !== 'ganadera' && <div className="flex justify-between"><dt className="text-gray-500">Hectáreas de cosecha</dt><dd className="font-semibold tabular-nums">{cantidad(numero(empresa.hectareas))}</dd></div>}
+                <div className="flex justify-between"><dt className="text-gray-500">Finanzas</dt><dd className="font-semibold text-[#2D5C64]">{empresa.plus ? 'Incluidas' : 'Sin agregar'}</dd></div>
+              </dl>
+              {valido && <div className="mt-5 space-y-2 border-t border-gray-100 pt-4">{pools.map(pool => <p key={pool.nombre} className="flex justify-between gap-2 text-xs text-gray-500"><span>{pool.nombre}</span><span>{cantidad(pool.total)} {pool.unidad}</span></p>)}</div>}
+              <div aria-live="polite" aria-atomic="true" className="mt-6 border-t border-gray-100 pt-5">
+                {!valido ? <><p className="text-xl font-bold text-[#234b52]">Tu precio aparece acá</p><p className="mt-2 text-sm leading-relaxed text-gray-500">Ingresá tus cantidades. El total se actualiza automáticamente.</p></> : contacto ? <><p className="text-2xl font-bold text-[#234b52]">Una propuesta a tu medida</p><p className="mt-2 text-sm text-gray-500">Superás las 10.000 unidades ganaderas o hectáreas de cosecha. Contactanos para cotizar.</p></> : <><p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{anual ? 'Equivalente mensual' : 'Total mensual'}</p><p className="mt-2 text-4xl font-bold tracking-tight text-[#234b52]">USD {usd(anual ? total / 12 : total)}<span className="ml-1 text-sm font-normal text-gray-500">/mes</span></p>{anual ? <><p className="mt-3 text-sm text-gray-600">Un pago de <strong>USD {usd(total)}</strong> por año.</p><p className="mt-3 inline-flex items-center gap-1 rounded-lg bg-[#eaf6ed] px-3 py-2 text-xs font-semibold text-[#21613b]"><Check size={14} /> Ahorrás USD {usd(mensual * 12 - total)} al año · 20%</p></> : <p className="mt-3 text-sm text-gray-500">Se cobra todos los meses.</p>}<p className="mt-3 text-xs text-gray-400">Más impuestos aplicables.</p></>}
+              </div>
+              {valido ? <a href={`https://wa.me/59899465242?text=${encodeURIComponent(mensaje)}`} target="_blank" rel="noopener noreferrer" className="mt-6 block rounded-xl bg-[#2D5C64] px-4 py-3.5 text-center text-sm font-semibold text-white hover:bg-[#234b52]">{contacto ? 'Pedir una propuesta' : 'Continuar por WhatsApp'}</a> : <button type="button" disabled className="mt-6 w-full rounded-xl bg-gray-100 px-4 py-3.5 text-sm font-semibold text-gray-400">Completá tus cantidades</button>}
+            </div>
+          </div>
+        </aside>
+        <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-[#2D5C64]/15 bg-white px-4 py-3 shadow-lg lg:hidden"><div><p className="text-xs text-gray-500">BotRural{empresa.plus ? ' Plus' : ''} · {anual ? 'Anual' : 'Mensual'}</p><p className="mt-1 font-bold text-[#234b52]">{!valido ? 'Ingresá tus cantidades' : contacto ? 'Contactanos' : `USD ${usd(anual ? total / 12 : total)}/mes`}</p></div>{valido && <a href={`https://wa.me/59899465242?text=${encodeURIComponent(mensaje)}`} target="_blank" rel="noopener noreferrer" className="rounded-xl bg-[#2D5C64] px-4 py-3 text-sm font-semibold text-white">{contacto ? 'Consultar' : 'Continuar'}</a>}</div>
       </main>
     </div>
   )
