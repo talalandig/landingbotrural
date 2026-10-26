@@ -21,7 +21,7 @@ const tipos: { value: Tipo; label: string; description: string }[] = [
   { value: 'mixta', label: 'Mixta', description: 'Ganadería y cosecha' },
   { value: 'agricola', label: 'Agrícola', description: 'Hectáreas de cosecha' },
 ]
-const features = ['Campos ilimitados', 'Usuarios ilimitados', 'Bot de WhatsApp', 'Ganadería', 'Agricultura', 'Tareas, órdenes y recordatorios', 'Inventario', 'Mapa', 'Trazabilidad individual']
+const features = ['Campos ilimitados', 'Usuarios ilimitados', 'Bot de WhatsApp', 'Ganadería', 'Agricultura', 'Tareas, órdenes y recordatorios', 'Registro de jornales por WhatsApp', 'Inventario', 'Mapa', 'Trazabilidad individual']
 const nuevaEmpresa: Empresa = { tipo: 'ganadera', plus: false, vacunos: '', ovinos: '', hectareas: '' }
 const numero = (value: string) => Math.max(0, Number(value.replace(',', '.')) || 0)
 const usd = (value: number) => value.toLocaleString('es-UY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
