@@ -64,7 +64,7 @@ export default function PricingPage() {
       <main className={styles.workspace}>
         <div>
         <section className={cardClass}>
-          <p className="text-xs font-semibold tracking-wide text-[#2D5C64]">PASO 1</p>
+          <p className={styles.step}><span>01</span><span>Paso 1</span></p>
           <h2 className="mt-1 text-lg font-bold sm:text-xl">¿Cómo querés pagar?</h2>
           <p className="mt-1.5 text-sm text-gray-500">Elegí cómo pagar la suscripción de tu empresa.</p>
           <div className={styles.billing}>
@@ -73,7 +73,7 @@ export default function PricingPage() {
         </section>
 
         <section className={`${cardClass} mt-3`}>
-          <p className="text-xs font-semibold tracking-wide text-[#2D5C64]">PASO 2</p>
+          <p className={styles.step}><span>02</span><span>Paso 2</span></p>
           <h2 className="mt-1 text-lg font-bold sm:text-xl">¿Qué tipo de empresa tenés?</h2>
           <p className="mt-1.5 text-sm text-gray-500">Así te pedimos solo los datos que corresponden.</p>
           <div className="mt-4 grid grid-cols-3 gap-2">{tipos.map(t => <button key={t.value} type="button" aria-pressed={empresa.tipo === t.value} onClick={() => update({ tipo: t.value })} className={`${styles.option} min-w-0 rounded-xl border-2 px-2 py-3 text-left sm:px-3 ${empresa.tipo === t.value ? 'border-[#2D5C64] bg-[#2D5C64]/10' : 'border-gray-200'}`}><span className="block text-sm font-semibold">{t.label}</span><span className="mt-1 block text-[11px] leading-relaxed text-gray-500">{t.description}</span></button>)}</div>
@@ -81,11 +81,11 @@ export default function PricingPage() {
 
         <div className="mt-3 space-y-3">
           <section className={cardClass}>
-            <p className="text-xs font-semibold tracking-wide text-[#2D5C64]">PASO 3</p>
+            <p className={styles.step}><span>03</span><span>Paso 3</span></p>
             <h2 className="mt-1 text-lg font-bold sm:text-xl">El tamaño de tu operación</h2>
             <p className="mt-1.5 text-sm text-gray-500">Sumamos las cantidades para ubicarte en un rango de precio.</p>
             <div className={styles.quantities}>
-              {empresa.tipo !== 'agricola' && <><div className={styles.animalGrid}>{(['vacunos', 'ovinos'] as const).map(key => <label key={key} className="text-sm font-semibold"><span className={styles.inputLabel}><span>{key === 'vacunos' ? 'Cantidad promedio de vacunos' : 'Ovinos'}</span>{key === 'ovinos' && <span className="rounded-md bg-[#2D5C64]/[0.06] px-2 py-1 text-[10px] font-semibold leading-relaxed text-[#2D5C64] underline decoration-[#00DD59] decoration-2 underline-offset-4">1 vacuno = 1 unidad · 5 ovinos = 1 unidad.</span>}</span><input type="number" min="0" step="1" inputMode="numeric" placeholder="0" value={empresa[key]} onChange={e => update({ [key]: e.target.value })} className={inputClass} /></label>)}</div></>}
+              {empresa.tipo !== 'agricola' && <><div className={styles.animalGrid}>{(['vacunos', 'ovinos'] as const).map(key => <label key={key} className="text-sm font-semibold"><span className={styles.inputLabel}><span>{key === 'vacunos' ? 'Cantidad promedio de vacunos' : 'Ovinos'}</span>{key === 'ovinos' && <span className={styles.equivalence}><span>1 vacuno = 1 unidad</span><span>5 ovinos = 1 unidad</span></span>}</span><input type="number" min="0" step="1" inputMode="numeric" placeholder="0" value={empresa[key]} onChange={e => update({ [key]: e.target.value })} className={inputClass} /></label>)}</div></>}
               {empresa.tipo !== 'ganadera' && <label className="mt-4 block text-sm font-semibold">Hectáreas de cosecha<div className="relative"><input type="number" min="0" step="any" inputMode="decimal" placeholder="0" value={empresa.hectareas} onChange={e => update({ hectareas: e.target.value })} className={`${inputClass} pr-24`} /><span className="absolute right-3 top-5 text-sm font-normal text-gray-400">hectáreas</span></div><span className="mt-2 block text-xs font-normal leading-relaxed text-gray-500">Solo las que destinás para cosecha. No cuentan pasturas ni verdeos para el ganado.</span></label>}
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <p className="text-sm font-semibold text-[#2D5C64]">BotRural incluye toda la gestión de tu empresa</p>
@@ -124,7 +124,7 @@ export default function PricingPage() {
                 return <div key={pool.nombre}><div className="flex items-baseline justify-between gap-2"><span className="text-sm font-semibold">{pool.nombre === 'Ganadería' ? 'Unidades' : 'Hectáreas de cosecha'}</span><span className="text-xl font-bold tabular-nums">{cantidad(pool.total)}</span></div><p className="mt-1 text-xs text-gray-500">{range}</p></div>
               })}</div>}
               <div aria-live="polite" aria-atomic="true" className="mt-4 border-t border-gray-100 pt-4">
-                {!valido ? <><p className="text-xl font-bold text-[#2D5C64]">Tu precio aparece acá</p><p className="mt-2 text-sm leading-relaxed text-gray-500">Ingresá tus cantidades. El total se actualiza automáticamente.</p></> : contacto ? <><p className="text-2xl font-bold text-[#2D5C64]">Una propuesta a tu medida</p><p className="mt-1.5 text-sm text-gray-500">Superás las 10.000 unidades ganaderas o hectáreas de cosecha. Contactanos para cotizar.</p></> : <><p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{anual ? 'Equivalente mensual' : 'Total mensual'}</p><p className={styles.price}>USD {usd(anual ? total / 12 : total)}<span className="ml-1 text-sm font-normal text-gray-500">/mes</span></p>{anual ? <><p className="mt-3 text-sm text-gray-600">Un pago de <strong>USD {usd(total)}</strong> por año.</p><p className="mt-3 inline-flex items-center gap-1 rounded-lg bg-[#00DD59]/15 px-3 py-2 text-xs font-semibold text-[#2D5C64]"><Check size={14} /> Ahorrás USD {usd(mensual * 12 - total)} al año · 20%</p></> : <p className="mt-3 text-sm text-gray-500">Se cobra todos los meses.</p>}<p className="mt-3 text-xs text-gray-400">Más impuestos aplicables.</p></>}
+                {!valido ? <><p className="text-xl font-bold text-[#2D5C64]">Tu precio aparece acá</p><p className="mt-2 text-sm leading-relaxed text-gray-500">Ingresá tus cantidades. El total se actualiza automáticamente.</p></> : contacto ? <><p className="text-2xl font-bold text-[#2D5C64]">Una propuesta a tu medida</p><p className="mt-1.5 text-sm text-gray-500">Superás las 10.000 unidades ganaderas o hectáreas de cosecha. Contactanos para cotizar.</p></> : <><p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{anual ? 'Tu precio con pago anual' : 'Tu precio mensual'}</p><p className={styles.price}>US$ {usd(anual ? total / 12 : total)}<span className="ml-1 text-sm font-normal text-gray-500">/mes</span></p>{anual ? <><p className={styles.billingNote}>Se cobra <strong>US$ {usd(total)}</strong> una vez por año.</p><p className="mt-3 inline-flex items-center gap-1 rounded-lg bg-[#00DD59]/15 px-3 py-2 text-xs font-semibold text-[#2D5C64]"><Check size={14} /> Ahorrás USD {usd(mensual * 12 - total)} al año · 20%</p></> : <p className={styles.billingNote}>Se cobra todos los meses.</p>}<p className="mt-3 text-xs text-gray-400">Más impuestos aplicables.</p></>}
               </div>
               {valido ? <a href={`https://wa.me/59899465242?text=${encodeURIComponent(mensaje)}`} target="_blank" rel="noopener noreferrer" className={styles.cta}>{contacto ? 'Pedir una propuesta' : 'Continuar por WhatsApp'}</a> : <button type="button" disabled className="mt-4 w-full rounded-xl bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-400">Completá tus cantidades</button>}
             </div>

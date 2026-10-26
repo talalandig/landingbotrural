@@ -59,3 +59,17 @@
 @media (prefers-reduced-motion: reduce) { .page * { transition: none; } }
 @media (max-width: 959px) and (min-width: 768px) { .workspace { grid-template-columns: minmax(0,1fr) 290px; gap: 18px; padding-inline: 18px; } .panel { padding: 22px 20px; } .summaryBody,.summaryHeader { padding-inline: 20px; } }
 @media (max-width: 767px) { .hero { padding: 27px 20px 29px; } .hero h1 { max-width: 300px; font-size: 31px; } .hero > p { max-width: 310px; font-size: 12px; line-height: 1.7; } .workspace { display: flex; flex-direction: column; gap: 20px; padding: 18px 14px 105px; } .workspace > div:first-child,.summary { width: 100%; } .panel { padding: 20px 18px; } .panel h2 { font-size: 18px; } .summary { position: static; } .option { padding: 11px 9px; } .animalGrid { gap: 10px; } .inputLabel { min-height: 53px; } .summaryBody .price { font-size: 38px; } }
+
+/* Visible step hierarchy and a quiet, readable conversion note. */
+.panel > .step { display: flex; align-items: center; gap: 9px; margin: 0 0 12px; color: #2d5c64; font-size: 12px; font-weight: 600; letter-spacing: .015em; }
+.step > span:first-child { display: flex; align-items: center; justify-content: center; width: 31px; height: 31px; border-radius: 8px; background: #2d5c64; color: white; font-size: 12px; font-weight: 600; letter-spacing: .02em; }
+.step > span:last-child { color: #2d5c64; font-size: 12px; }
+.inputLabel > .equivalence:last-child:not(:first-child) { display: flex; flex-direction: column; gap: 2px; border-left: 2px solid #00dd59; border-radius: 0; padding: 2px 0 2px 8px; color: #45615d; font-size: 10px; font-weight: 500; line-height: 1.45; background: transparent; text-decoration: none; }
+.equivalence > span { white-space: nowrap; }
+@media (max-width: 767px) { .panel > .step { margin-bottom: 10px; } .inputLabel > .equivalence:last-child:not(:first-child) { font-size: 9px; padding-left: 6px; } }
+
+.summaryBody .price { display: flex; align-items: baseline; gap: 5px; font-size: clamp(34px, 3.2vw, 43px); font-weight: 650; letter-spacing: -.055em; margin-top: 12px; }
+.summaryBody .price > span { font-size: 14px; font-weight: 400; letter-spacing: 0; }
+.summaryBody [aria-live] .billingNote { margin-top: 10px; font-size: 13px; line-height: 1.7; color: #687772; }
+.billingNote strong { font-weight: 600; color: #253a34; }
+@media (max-width: 959px) and (min-width: 768px) { .summaryBody .price { font-size: 34px; } }
